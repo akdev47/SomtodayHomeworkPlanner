@@ -1,0 +1,295 @@
+/* SIDEBAR STYLING ---------------------------------------------------------------------*/
+
+*{
+    margin: 0;
+}
+
+.red {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #DB133D;
+    color: #fff;
+}
+.red > div > ul > li > i > svg,
+.red > div i > svg {
+    fill: #fff;
+}
+
+.yellow {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #F5E709;
+    color: #262F35;
+}
+.yellow > div > ul > li > i > svg,
+.yellow > div i > svg {
+    fill: #262F35;
+}
+
+.side-bar{
+    width: 300px;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-1 > img{
+    width: 100px;
+    margin: 15px 0 5px;
+}
+
+.container-1 > p{
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: 5px;
+}
+
+.container-2 .navigations{
+    height: 450px;
+    display: flex;
+    align-items: center;
+}
+
+.navigations{
+    width: 130px;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+}
+
+.nav-item{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item-text{
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.container-3{
+    width: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.container-3 > div{
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/*----------------------------------------------------------------------------- */
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+
+#search-bar {
+    width: 500px;
+    padding: 5px;
+}
+
+.search-results {
+    position: absolute;
+    top: 35px; 
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    width: calc(100% - 230px); 
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+}
+
+.search-results div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-results div:hover {
+    background-color: #f0f0f0;
+}
+.main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 80px;
+}
+
+.back-button button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    max-width: 50px;
+    /* padding: 0; */
+}
+
+.back-button svg {
+    fill: #1984cf; 
+}
+
+.header h1 {
+    font-size: 2em;
+}
+
+.user-settings {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.user-settings input {
+    padding: 5px;
+    margin-right: 10px;
+    width: 500px; 
+    max-width: 100%; 
+    box-sizing: border-box; 
+}
+
+.user-info .language-icon {
+    display: flex;
+    align-items: center;
+
+}
+
+.user-info span {
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.user-info a {
+    margin-left: 5px; 
+}
+
+.language-icon a img {
+    width: 30px; 
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.user-info a img {
+    width: 30px; 
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+
+
+/*----------------------------------------------------------------------------- */
+
+/* Deleting Class Section */
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group select, .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group select {
+    appearance: none;
+}
+
+.message {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #c82333;
+}
