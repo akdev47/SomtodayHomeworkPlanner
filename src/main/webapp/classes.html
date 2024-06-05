@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -207,63 +207,50 @@
                         </label>
                     </div>
                 </div>
-                <div class="card-container">
-                    <div class="card">
-                        <div class="img-section">
+                <div id ="card-container" class="card-container">
 
-                        </div>
-                        <div class="text-section">
-                            <h2>Card 1</h2>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="img-section">
-
-                        </div>
-                        <div class="text-section">
-                            <h2>Card 1</h2>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="img-section">
-
-                        </div>
-                        <div class="text-section">
-                            <h2>Card 1</h2>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="img-section">
-                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="Card 1">
-                        </div>
-                        <div class="text-section">
-                            <h2>Card 1</h2>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="img-section">
-                            <img src="https://images.unsplash.com/photo-1631556097152-c39479bbff93?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="Card 1">
-                        </div>
-                        <div class="text-section">
-                            <h2>Card 1</h2>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="img-section">
-                            <img src="https://images.unsplash.com/photo-1532543307581-8b01a7ff954f?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="Card 1">
-                        </div>
-                        <div class="text-section">
-                            <h2>Card 1</h2>
-                        </div>
-                    </div>
-
+                </div>
+            </section>
 
                     <!-- Repeat the card structure for more items -->
         </main>
+
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardContainer = document.getElementById('card-container');
+            let classes = JSON.parse(localStorage.getItem('classes')) || [];
+
+            classes.forEach(function(classData) {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                const imgSection = document.createElement('div');
+                imgSection.className = 'img-section';
+
+                if (classData.picture) {
+                    const img = document.createElement('img');
+                    img.src = classData.picture;
+                    img.alt = classData.name;
+                    imgSection.appendChild(img);
+                }
+
+                const textSection = document.createElement('div');
+                textSection.className = 'text-section';
+
+                const h2 = document.createElement('h2');
+                h2.textContent = classData.name;
+                textSection.appendChild(h2);
+
+                card.appendChild(imgSection);
+                card.appendChild(textSection);
+
+                cardContainer.appendChild(card);
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -149,18 +149,61 @@
             <div class="form-group">
                 <label for="class-select">Choose a class to delete:</label>
                 <select id="class-select">
-                    <option value="">Classes</option>
-                    <option value="class1">Class 1</option>
-                    <option value="class2">Class 2</option>
+                    <option value="">Select a class</option>
+                    <!-- options will be dynamically added here -->
                 </select>
             </div>
             <div class="message">
                 <p>You are deleting the class with the name “<span class="class-name"></span>”. Are you sure you want to delete this class?</p>
             </div>
             <div class="btn-group">
-                <button class="btn">Delete Class</button>
+                <button id = "delete-class-btn" class="btn">Delete Class</button>
             </div>
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const classSelect = document.getElementById('class-select');
+            const classNameSpan = document.querySelector('.class-name');
+            const deleteClassBtn = document.getElementById('delete-class-btn');
+
+            let classes = JSON.parse(localStorage.getItem('classes')) || [];
+
+            function populateClassSelect() {
+                classSelect.innerHTML = '<option value="">Select a class</option>';
+                classes.forEach((classData, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = classData.name;
+                    classSelect.appendChild(option);
+                });
+            }
+
+            classSelect.addEventListener('change', function() {
+                const selectedIndex = classSelect.value;
+                if (selectedIndex) {
+                    classNameSpan.textContent = classes[selectedIndex].name;
+                } else {
+                    classNameSpan.textContent = '';
+                }
+            });
+
+            deleteClassBtn.addEventListener('click', function() {
+                const selectedIndex = classSelect.value;
+                if (selectedIndex) {
+                    classes.splice(selectedIndex, 1);
+                    localStorage.setItem('classes', JSON.stringify(classes));
+                    alert('Class deleted successfully!');
+                    classNameSpan.textContent = '';
+                    populateClassSelect();
+                } else {
+                    alert('Please select a class to delete.');
+                }
+            });
+
+            populateClassSelect();
+        });
+    </script>
 </body>
 </html>
