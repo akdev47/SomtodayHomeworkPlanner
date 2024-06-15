@@ -13,9 +13,7 @@ public class Person {
     String userPassword;
 
 
-
     public Person() {
-
     }
 
     public Person(String personName, int personID, Date birthDate, char personGender, String emailAddress, String userName, String userPassword) {
