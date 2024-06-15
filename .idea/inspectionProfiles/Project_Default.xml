@@ -46,9 +46,6 @@
       </extension>
     </inspection_tool>
     <inspection_tool class="IncorrectFormatting" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="Style Problem" />
-    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ADDITIONAL_TAGS" value="pre,ensures" />
-    </inspection_tool>
     <inspection_tool class="LambdaParameterNamingConvention" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="Style Problem">
       <option name="m_maxLength" value="255" />
     </inspection_tool>
