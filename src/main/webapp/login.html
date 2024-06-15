@@ -1,46 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style/loginstyle.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="style/loginstyle.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+</head>
 
-    <!--FONTS-->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
+<body>
+<div class="login-page red">
+  <div class="container-1">
+    <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo" />
+    <p class="logo-text">somtoday</p>
+  </div>
+  <div class="container-2">
+    <p class="sign-in">Sign In</p>
+    <form action="login" method="post">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <div class="buttons">
+        <button type="button" onclick="window.location.href='forgot-password.html'">Forgotten password?</button>
+        <button type="submit">Login</button>
+      </div>
+    </form>
 
-  <body>
-    <div class="login-page red">
-      <div class="container-1">
-        <img
-          src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png"
-          alt="Somtoday logo"
-          class="logo"
-        />
-        <p class="logo-text">somtoday</p>
-      </div>
-      <div class="container-2">
-        <p class="sign-in">Sign In</p>
-        <form>
-          <input type="text" name="username" placeholder="Username" required />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-          />
-          <div class="buttons">
-            <button type="forgotten-password">Forgotten password?</button>
-            <button type="button" onclick="window.location.href='dashboard.html'">Login</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </body>
+    <div id="error-message" style="color: red; display: none;">Invalid username or password</div>
+  </div>
+</div>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('error')) {
+    document.getElementById('error-message').style.display = 'block';
+  }
+</script>
+</body>
 </html>
