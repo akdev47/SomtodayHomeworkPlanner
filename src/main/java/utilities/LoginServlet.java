@@ -1,6 +1,7 @@
 package utilities;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -23,28 +25,42 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
         try {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            String sql = "SELECT * FROM person WHERE username = ? AND user_password = ?";
+            String sql = "SELECT person_id, is_teacher FROM topicus6.Person WHERE username = ? AND user_password = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                int personId = resultSet.getInt("person_id");
+                boolean isTeacher = resultSet.getBoolean("is_teacher");
+                String role = isTeacher ? "teacher" : "student";
 
-                response.sendRedirect("dashboard.html");
+                JSONObject jsonResponse = new JSONObject();
+                jsonResponse.put("personId", personId);
+                jsonResponse.put("role", role);
+
+                out.print(jsonResponse.toString());
             } else {
-
-                response.sendRedirect("login.html?error=true");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                out.print("{\"error\":\"Invalid credentials\"}");
             }
 
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred.");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"error\":\"An error occurred\"}");
+        } finally {
+            out.close();
         }
     }
 }

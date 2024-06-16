@@ -11,6 +11,7 @@ public class Person {
     String emailAddress;
     String userName;
     String userPassword;
+    private boolean isTeacher;
 
 
     public Person() {
@@ -83,5 +84,12 @@ public class Person {
         this.userPassword = userPassword;
     }
 
+    public boolean isTeacher() {
+        return isTeacher;
+    }
+
+    public void setTeacher(boolean teacher) {
+        isTeacher = teacher;
+    }
 
 }
