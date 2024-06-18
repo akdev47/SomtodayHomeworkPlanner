@@ -1,0 +1,684 @@
+/* SIDEBAR STYLING ---------------------------------------------------------------------*/
+
+*{
+    margin: 0;
+}
+
+.red {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #DB133D;
+    color: #fff;
+}
+.red > div > ul > li > i > svg,
+.red > div i > svg {
+    fill: #fff;
+}
+
+.yellow {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #F5E709;
+    color: #262F35;
+}
+.yellow > div > ul > li > i > svg,
+.yellow > div i > svg {
+    fill: #262F35;
+}
+
+.side-bar{
+    width: 300px;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-1 > img{
+    width: 100px;
+    margin: 15px 0 5px;
+}
+
+.container-1 > p{
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: 5px;
+}
+
+.container-2 .navigations{
+    height: 450px;
+    display: flex;
+    align-items: center;
+}
+
+.navigations{
+    width: 130px;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+}
+
+.nav-item{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item-text{
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.container-3{
+    width: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.container-3 > div{
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/*----------------------------------------------------------------------------- */
+
+
+/* Dashboard styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+
+#search-bar {
+    width: 500px;
+    padding: 5px;
+}
+
+.search-results {
+    position: absolute;
+    top: 35px; 
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    width: calc(100% - 230px); 
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+}
+
+.search-results div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-results div:hover {
+    background-color: #f0f0f0;
+}
+.main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 80px;
+}
+
+.header h1 {
+    font-size: 2em;
+}
+
+.user-settings {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.user-settings input {
+    padding: 5px;
+    margin-right: 10px;
+    width: 500px; 
+    max-width: 100%; 
+    box-sizing: border-box; 
+}
+
+.user-info .language-icon {
+    display: flex;
+    align-items: center;
+
+}
+
+.user-info span {
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.user-info a {
+    margin-left: 5px; 
+}
+
+.language-icon a img {
+    width: 30px; 
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.user-info a img {
+    width: 30px; 
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 20px;
+}
+
+.panel {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    max-height: 300px;
+    overflow-y: auto; 
+
+}
+
+.panel h2 {
+    margin-bottom: 10px;
+}
+
+.panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+.panel ul li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.panel ul li button {
+    background-color: #FFE54D;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.panel ul li button:hover {
+    background-color: #FFCC00;
+}
+
+.panel ul li span {
+    color: green;
+}
+.calendar {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 98%;
+    min-height: 550px;
+}
+
+.calendar h2 {
+    margin-bottom: 10px;
+}
+
+.calendar-view {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.calendar-view button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #FFE54D;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.calendar-view button:hover {
+    background-color: #FFCC00;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 10px;
+}
+
+.calendar-grid .day {
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    position: relative;
+    height: 100px;
+}
+
+.calendar-grid .day .task {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.calendar-grid .day .task.red {
+    background-color: red;
+}
+
+.calendar-grid .day .task.blue {
+    background-color: blue;
+}
+
+.calendar-grid .day .task.green {
+    background-color: green;
+}
+
+.week-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.week-table th,
+.week-table td {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #f9f9f9;
+}
+
+.week-table td {
+   height: 350px;
+   max-height: 500px;
+   overflow-y: auto; 
+}
+
+.week-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    height: 50px;
+    width: 300px;
+}
+
+.week-table .task {
+    display: block;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    color: #fff;
+    text-align: center;
+}
+
+.week-table .task.red {
+    background-color: red;
+}
+
+.week-table .task.blue {
+    background-color: blue;
+}
+
+.week-table .task.green {
+    background-color: green;
+}
+
+.notification-bell {
+    position: relative;
+}
+
+.notification-bell img {
+    width: 50px;
+    height: 50px;
+}
+
+.notification-bell span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 50%;
+}
+
+.task a {
+    color: white;
+    text-decoration: none;
+}
+
+.task a:hover {
+    text-decoration: underline;
+}
+
+/*----------------------------------------------------------------------------- */
+/* Assignment Description */
+.assignment-description {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 38%;
+}
+
+.assignment-description h2 {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.assignment-description p {
+    margin-bottom: 20px;
+    background-color: rgb(246, 246, 246);
+    font-weight: 300;
+    padding: 10px;
+}
+
+.btn-container{
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-container> button{
+    background-color: #DB133D;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 100%;
+    width: 80px;
+}
+
+.btn-container> p{
+    background: 0;
+    color: forestgreen;
+    height: 100%;
+    font-weight: 400;
+}
+
+.btn-container> button:hover{
+    background-color: #b81031;
+}
+
+/* Assignment Upload */
+.assignment-upload {
+    width: 48.5%;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px dashed #ccc;
+    padding: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    height: 98%;
+    background-color: #D9D9D9;
+    font-weight: 500;
+}
+
+.upload-box>svg {
+    fill: #454545;
+    display: block;
+    opacity: 70%;
+}
+
+.file-upload {
+    display: none;
+}
+
+.upload-label {
+    background-color: #DB133D;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.upload-box p {
+    margin-top: 10px;
+    color: #999;
+}
+
+.homework-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 48%;
+}
+
+
+/* Assignment Goals */
+.assignment-goals {
+    width: 48.5%;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.assignment-goals h2 {
+    margin-bottom: 10px;
+}
+
+.assignment-goals ul {
+    list-style: none;
+    padding: 0;
+    height: 185px;
+    overflow-y: scroll;
+}
+
+.assignment-goals li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.assignment-goals li button{
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    background-color: #DB133D;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.total-goals {
+    height: 30px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-goal-btn {
+    height: 40px;
+    align-self: flex-end;
+    background-color: #F5E709;
+    color: #262F35;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-goal-btn:hover {
+    background-color: #d4c507;
+}
+
+.publish-assignment-btn {
+    background-color: #DB133D;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+
+}
+
+.publish-assignment-btn:hover {
+    background-color: #b81031;
+}
+
+
+
+.pop-up {
+    display: none; /* Hide the form initially */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1000;
+    height: 200px;
+}
+
+.pop-up.visible {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.pop-up.visible > input{
+    padding: 5px;
+}
+
+.pop-up-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.pop-up-overlay.visible {
+    display: block;
+}
+.submit-btn{
+    display: block;
+    height: 40px;
+    align-self: flex-end;
+    background-color: #F5E709;
+    color: #262F35;
+    padding: 2px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+.name-input{
+    width: 35%;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.description-input{
+    resize: none;
+    height: 80px;
+    padding: 5px;
+    width: 100%;
+}
+/*----------------------------------------------------------------------------- */
