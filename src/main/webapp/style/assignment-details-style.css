@@ -2,7 +2,6 @@
 
 *{
     margin: 0;
-    box-sizing: border-box;
 }
 
 .red {
@@ -427,71 +426,232 @@ body {
 }
 
 /*----------------------------------------------------------------------------- */
-.content{
-    height: 100%;
-    margin-top: 20px;
-    background-color: #fff;
-}
-.content > .table-scroll{
-    height: 580px;
-    overflow-y: scroll;
-    margin-top: 5px;
-    margin-left: 20px;
-    width: 96%;
-    text-align: left;
-    border: 0;
+/* Assignment Description */
+.assignment-description {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-.content > .table-scroll > table{
+.assignment-description h2 {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.assignment-description p {
+    margin-bottom: 20px;
+    background-color: rgb(246, 246, 246);
+    font-weight: 300;
+    padding: 10px;
+}
+
+.btn-container{
     width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
-th{
-    height: 40px;
-}
-td{
-    height: 30px;
-    background-color: #f9f9f9;
+.btn-container> button{
+    background-color: #DB133D;
+    color: white;
+    padding: 10px 20px;
     border: none;
-}
-
-th td{
-    border-bottom: 1px solid #ddd;
-}
-td > a{
-    display: block;
-    text-align: center;
-    color: #1e1e1e;
-    text-decoration: none;
-    padding: 5px 10px;
-    background-color: #F5E709;
-    width: 100%;
-    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.page-hdn{
-    position: relative;
-    left: 20px;
-    top: 10px;
+.btn-container> button:hover{
+    background-color: #b81031;
 }
 
-.content > button{
-    font-size: 1rem;
-    border: 0;
-    width: 150px;
-    height: 40px;
-    background: #F5E709;
-    align-self: flex-end;
-    margin-right: 30px;
-    margin-bottom: 10px;
+/* Assignment Upload */
+.assignment-upload {
+    width: 48%;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px dashed #ccc;
+    padding: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    height: 98%;
+    background-color: #D9D9D9;
+    font-weight: 500;
+}
+
+.upload-box>svg {
+    fill: #454545;
+    display: block;
+    opacity: 70%;
+}
+
+.file-upload {
+    display: none;
+}
+
+.upload-label {
+    background-color: #DB133D;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.upload-box p {
     margin-top: 10px;
+    color: #999;
+}
+
+.homework-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* Assignment Goals */
+.assignment-goals {
+    width: 48%;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.assignment-goals h2 {
+    margin-bottom: 10px;
+}
+
+.assignment-goals ul {
+    list-style: none;
+    padding: 0;
+    height: 185px;
+    overflow-y: scroll;
+}
+
+.assignment-goals li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.assignment-goals li button{
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    background-color: #DB133D;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.total-goals {
+    height: 73px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-goal-btn {
+    height: 40px;
+    align-self: flex-end;
+    background-color: #F5E709;
+    color: #262F35;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-goal-btn:hover {
+    background-color: #d4c507;
+}
+
+.publish-assignment-btn {
+    background-color: #DB133D;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px 0 0 auto;
+}
+
+.publish-assignment-btn:hover {
+    background-color: #b81031;
+}
+
+
+
+.pop-up {
+    display: none; /* Hide the form initially */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1000;
+    height: 200px;
+}
+
+.pop-up.visible {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.pop-up.visible > input{
     padding: 5px;
 }
 
-.content > button:hover{
-    background-color: #FFCC00;
+.pop-up-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
 }
-/*----------------------------------------------------------------------------- */
 
-/* CLEAN CSS AND HTML */
+.pop-up-overlay.visible {
+    display: block;
+}
+.submit-btn{
+    display: block;
+    height: 40px;
+    align-self: flex-end;
+    background-color: #F5E709;
+    color: #262F35;
+    padding: 2px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/*----------------------------------------------------------------------------- */

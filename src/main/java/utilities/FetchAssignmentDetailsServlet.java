@@ -76,12 +76,10 @@ public class FetchAssignmentDetailsServlet extends HttpServlet {
     private String toJson(Homework homeW) {
         StringBuilder json = new StringBuilder();
         json.append("[");
-
             json.append("{");
             json.append("\"homework_type\":\"").append(homeW.getHomeworkType()).append("\",");
-            json.append("\"description\":\"").append(homeW.getDescription()).append("\"");
+            json.append("\"hw_description\":\"").append(homeW.getDescription()).append("\"");
             json.append("}");
-
         json.append("]");
         return json.toString();
     }

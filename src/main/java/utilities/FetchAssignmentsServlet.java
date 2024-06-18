@@ -40,14 +40,14 @@ public class FetchAssignmentsServlet extends HttpServlet {
 
             String sql;
             if ("teacher".equals(role)) {
-                sql = "SELECT DISTINCT h.homework_type, h.publish_date, h.due_date " +
+                sql = "SELECT DISTINCT h.homework_id, h.homework_type, h.publish_date, h.due_date " +
                         "FROM homework h, teacher t, lesson l, course c, person p " +
                         "WHERE h.lesson_id = l.lesson_id AND " +
                         "l.course_id = c.course_id AND " +
                         "c.teacher_id = t.teacher_id AND " +
                         "t.person_id = " + personId;
             } else if ("student".equals(role)) {
-                sql = "SELECT DISTINCT h.homework_type, h.publish_date, h.due_date " +
+                sql = "SELECT DISTINCT h.homework_id, h.homework_type, h.publish_date, h.due_date " +
                         "FROM homework h, student s, lesson l, class c, person p " +
                         "WHERE h.lesson_id = l.lesson_id AND " +
                         "l.class_id = c.class_id AND " +
@@ -63,6 +63,7 @@ public class FetchAssignmentsServlet extends HttpServlet {
 
             while (resultSet.next()) {
                 Homework hw = new Homework();
+                hw.setHomeworkID(resultSet.getInt("homework_id"));
                 hw.setHomeworkType(resultSet.getString("homework_type"));
                 hw.setPublishDate(resultSet.getDate("publish_date"));
                 hw.setDueDate(resultSet.getDate("due_date"));
@@ -88,6 +89,7 @@ public class FetchAssignmentsServlet extends HttpServlet {
         for (int i = 0; i < assignmentList.size(); i++) {
             Homework hw = assignmentList.get(i);
             json.append("{");
+            json.append("\"homework_id\":").append(hw.getHomeworkID()).append(",");
             json.append("\"homework_type\":\"").append(hw.getHomeworkType()).append("\",");
             json.append("\"publish_date\":\"").append(hw.getPublishDate()).append("\",");
             json.append("\"due_date\":\"").append(hw.getDueDate()).append("\"");
