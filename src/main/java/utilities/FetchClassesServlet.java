@@ -25,6 +25,9 @@ public class FetchClassesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        System.out.println("Getting classes in fetch servlet...");
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -41,7 +44,8 @@ public class FetchClassesServlet extends HttpServlet {
             if ("teacher".equals(role)) {
                 sql = "SELECT c.class_id, c.class_name, c.class_capacity " +
                         "FROM topicus6.Class c " +
-                        "JOIN topicus6.Course co ON c.class_id = co.course_id " + // Fixed the join condition
+                        "JOIN topicus6.Lesson l ON c.class_id = l.class_id " +
+                        "JOIN topicus6.Course co ON l.course_id = co.course_id " +
                         "JOIN topicus6.Teacher t ON co.teacher_id = t.teacher_id " +
                         "WHERE t.person_id = " + personId;
             } else if ("student".equals(role)) {
