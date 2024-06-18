@@ -22,13 +22,19 @@ public class FetchStudentsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
         try {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT person_id, person_name FROM topicus6.Person WHERE person_id IN (SELECT person_id FROM topicus6.Student)");
+            ResultSet resultSet = statement.executeQuery(
+                    "SELECT s.student_id, p.person_name " +
+                            "FROM topicus6.Student s " +
+                            "JOIN topicus6.Person p ON s.person_id = p.person_id " +
+                            "WHERE s.class_id IS NULL"
+            );
 
             StringBuilder jsonBuilder = new StringBuilder();
             jsonBuilder.append("[");
@@ -41,8 +47,8 @@ public class FetchStudentsServlet extends HttpServlet {
                     first = false;
                 }
                 jsonBuilder.append("{")
-                        .append("\"id\":").append(resultSet.getInt("person_id")).append(",")
-                        .append("\"name\":\"").append(resultSet.getString("person_name")).append("\"")
+                        .append("\"student_id\":").append(resultSet.getInt("student_id")).append(",")
+                        .append("\"person_name\":\"").append(resultSet.getString("person_name")).append("\"")
                         .append("}");
             }
 
