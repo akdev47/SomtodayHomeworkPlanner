@@ -18,7 +18,7 @@ import somtoday.model.Class;
 
 @WebServlet("/fetchClasses")
 public class FetchClassesServlet extends HttpServlet {
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=topicus6";
+    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
     private static final String DB_USER = "dab_di23242b_168";
     private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
 
@@ -43,16 +43,17 @@ public class FetchClassesServlet extends HttpServlet {
             String sql;
             if ("teacher".equals(role)) {
                 sql = "SELECT c.class_id, c.class_name, c.class_capacity " +
-                        "FROM topicus6.Class c " +
-                        "JOIN topicus6.Lesson l ON c.class_id = l.class_id " +
-                        "JOIN topicus6.Course co ON l.course_id = co.course_id " +
-                        "JOIN topicus6.Teacher t ON co.teacher_id = t.teacher_id " +
+                        "FROM somtoday6.Class c " +
+                        "JOIN somtoday6.Lesson l ON c.class_id = l.class_id " +
+                        "JOIN somtoday6.Teacher t ON l.teacher_id = t.teacher_id " +
                         "WHERE t.person_id = " + personId;
             } else if ("student".equals(role)) {
                 sql = "SELECT c.class_id, c.class_name, c.class_capacity " +
-                        "FROM topicus6.Class c " +
-                        "JOIN topicus6.Student s ON c.class_id = s.class_id " +
+                        "FROM somtoday6.Class c " +
+                        "JOIN somtoday6.Student s ON c.class_id = s.class_id " +
                         "WHERE s.person_id = " + personId;
+            } else if ("admin".equals(role)) {
+                sql = "SELECT c.class_id, c.class_name, c.class_capacity FROM somtoday6.Class c";
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
                 return;

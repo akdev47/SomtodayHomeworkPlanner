@@ -19,7 +19,7 @@ import somtoday.model.Homework;
 
 @WebServlet("/fetchAssignmentDetails")
 public class FetchAssignmentDetailsServlet extends HttpServlet {
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=topicus6";
+    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
     private static final String DB_USER = "dab_di23242b_168";
     private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
 

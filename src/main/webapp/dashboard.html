@@ -154,15 +154,7 @@
                 <div class="panel classes">
                     <h2><a href="classes.html">Classes</a></h2>
                     <ul>
-                        <li>Class 12-A <button>Go to page</button></li>
-                        <li>Class 12-B <button>Go to page</button></li>
-                        <li>Class 11-C <button>Go to page</button></li>
-                        <li>Class 12-A <button>Go to page</button></li>
-                        <li>Class 12-B <button>Go to page</button></li>
-                        <li>Class 11-C <button>Go to page</button></li>
-                        <li>Class 12-A <button>Go to page</button></li>
-                        <li>Class 12-B <button>Go to page</button></li>
-                        <li>Class 11-C <button>Go to page</button></li>
+                        <li>Example Class <button>Go to page</button></li>
                     </ul>
                 </div>
                 <div class="panel assignments">
@@ -283,5 +275,48 @@
             </section>
         </main>
     </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const role = sessionStorage.getItem('role');
+        const personId = sessionStorage.getItem('personId');
+
+        //fetch the classes.
+        function fetchUserClasses() {
+            console.log('Fetching user classes...');
+            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+                .then(response => {
+                    console.log('Fetch response:', response);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(classes => {
+                    console.log('Classes fetched:', classes);
+                    const classesList = document.querySelector('.panel.classes ul');
+                    classesList.innerHTML = '';
+                    classes.forEach(classData => {
+                        const li = document.createElement('li');
+                        li.textContent = classData.class_name;
+                        const button = document.createElement('button');
+                        button.textContent = 'Go to page';
+                        button.addEventListener('click', () => {
+                            // Logic to go to the class page
+                            window.location.href = `class.html?classId=${classData.class_id}`;
+                        });
+                        li.appendChild(button);
+                        classesList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error fetching classes:', error));
+        }
+
+        if (role && personId) {
+            fetchUserClasses();
+        } else {
+            console.error('Missing role or personId in session storage');
+        }
+    });
+</script>
 </body>
 </html>

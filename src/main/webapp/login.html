@@ -22,8 +22,8 @@
       <input type="text" id="username" name="username" placeholder="Username" required />
       <input type="password" id="password" name="password" placeholder="Password" required />
       <div class="buttons">
-        <button type="button" onclick="window.location.href='forgot-password.html'">Forgotten password?</button>
-        <button type="submit">Login</button>
+        <button type="button" onclick="window.location.href='forgot-password.html'" aria-label="Forgotten password?">Forgotten password?</button>
+        <button type="submit" aria-label="Login">Login</button>
       </div>
     </form>
 
@@ -48,14 +48,22 @@
         password: password
       })
     })
-            .then(response => response.json())
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Login failed');
+              }
+              return response.json();
+            })
             .then(data => {
+              console.log('Login response data:', data);  // Debugging line to log the response data
               if (data.error) {
+                document.getElementById('error-message').textContent = 'Invalid username or password';
                 document.getElementById('error-message').style.display = 'block';
               } else {
                 sessionStorage.setItem('role', data.role);
                 sessionStorage.setItem('personId', data.personId);
-                window.location.href = 'classes.html';
+                sessionStorage.setItem('personName', data.personName);
+                window.location.href = 'dashboard.html';
               }
             })
             .catch(error => {

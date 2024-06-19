@@ -9,44 +9,4 @@
         <welcome-file>login.html</welcome-file>
     </welcome-file-list>
 
-<!--    <servlet>-->
-<!--        <servlet-name>LoginServlet</servlet-name>-->
-<!--        <servlet-class>utilities.LoginServlet</servlet-class>-->
-<!--    </servlet>-->
-
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>LoginServlet</servlet-name>-->
-<!--        <url-pattern>/login</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-
-
-<!--    <servlet>-->
-<!--        <servlet-name>AddClassServlet</servlet-name>-->
-<!--        <servlet-class>utilities.AddClassServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>AddClassServlet</servlet-name>-->
-<!--        <url-pattern>/addClass</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    <servlet>-->
-<!--        <servlet-name>FetchStudentsServlet</servlet-name>-->
-<!--        <servlet-class>utilities.FetchStudentsServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>FetchStudentsServlet</servlet-name>-->
-<!--        <url-pattern>/fetchStudents</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    <servlet>-->
-<!--        <servlet-name>FetchLessonsServlet</servlet-name>-->
-<!--        <servlet-class>utilities.FetchLessonsServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>FetchLessonsServlet</servlet-name>-->
-<!--        <url-pattern>/fetchLessons</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    -->
 </web-app>

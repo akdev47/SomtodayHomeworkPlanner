@@ -94,3 +94,5 @@ document.addEventListener('DOMContentLoaded', () => {
     weekView.style.display = 'none';
     dayView.style.display = 'none';
 });
+
+

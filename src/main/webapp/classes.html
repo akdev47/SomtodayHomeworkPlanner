@@ -4,37 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Somtoday Dashboard</title>
-    <!-- FONTS -->
     <link rel="stylesheet" href="style/classesstyle.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <script src="javascript/dashboardscript.js"></script>
-    <script>
-        // UPDATE TO RANDOM GRADIENT AND MOVE TO JS FILE
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            if (color === "#F0F0F0" || color === "#FFFFFF") {
-                color = getRandomColor();
-            }
-            return color;
-        }
-
-        function assignRandomColors() {
-            const imgSections = document.querySelectorAll('.img-section');
-            imgSections.forEach(section => {
-                if (section.querySelector('img') === null) {  // Check if the element does not already contain an image
-                    section.style.background = getRandomColor();
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', assignRandomColors);
-    </script>
 </head>
 
 <body class="josefin-sans-regular">
@@ -145,7 +118,7 @@
                 <input type="text" id="search-bar" placeholder="Search">
                 <div id="search-results" class="search-results"></div>
                 <div class="user-info">
-                    <span>Welcome, Student_Name!</span>
+                    <span id="welcome-message">Welcome!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
                 <div class="language-icon">
@@ -156,13 +129,13 @@
         <section class="content">
             <div class="controls">
                 <div class="item-controls">
-                    <button onclick="window.location.href='addclass.html'">
+                    <button id="addClassButton" onclick="window.location.href='addclass.html'">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                             <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
                         </svg>
                     </button>
                     <button onclick="window.location.href='deleteclass.html'">
-                        <p>edit classes</p>
+                        <p>Edit Classes</p>
                     </button>
                 </div>
                 <div class="view-choice">
@@ -182,21 +155,49 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        // if the created class has no profile picture give it a random gradient background color
+        function getRandomGradient() {
+            const colors = [
+                '#ff9a9e', '#fad0c4', '#fad0c4',
+                '#a18cd1', '#fbc2eb', '#a6c1ee',
+                '#84fab0', '#8fd3f4', '#fccb90',
+                '#a1c4fd', '#c2e9fb', '#d4fc79',
+                '#96e6a1', '#fbc2eb', '#e0c3fc'
+            ];
+            const randomIndex = () => Math.floor(Math.random() * colors.length);
+            return `linear-gradient(135deg, ${colors[randomIndex()]} 0%, ${colors[randomIndex()]} 100%)`;
+        }
+
+
         const role = sessionStorage.getItem('role');
         const personId = sessionStorage.getItem('personId');
+        const personName = sessionStorage.getItem('personName');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const addClassButton = document.getElementById('addClassButton');
+
+        // update the welcome message in the top bar
+        if (role === 'admin') {
+            welcomeMessage.textContent = `Welcome, ${personName}!`;
+        } else if (role === 'teacher') {
+            welcomeMessage.textContent = `Welcome, ${personName}!`;
+        } else {
+            welcomeMessage.textContent = `Welcome, ${personName}!`;
+            addClassButton.style.display = 'none'; // Hide the add class button for students
+        }
 
         function fetchClasses() {
-            console.log('fetching classes...');
+            console.log('Fetching classes...');
             fetch(`fetchClasses?role=${role}&personId=${personId}`)
                 .then(response => {
-                    console.log('fetch response:', response);
+                    console.log('Fetch response:', response);
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(classes => {
-                    console.log('classes fetched:', classes);
+                    console.log('Classes fetched:', classes);
                     const cardContainer = document.getElementById('card-container');
                     cardContainer.innerHTML = '';
                     classes.forEach(classData => {
@@ -205,6 +206,15 @@
 
                         const imgSection = document.createElement('div');
                         imgSection.className = 'img-section';
+                        const img = document.createElement('img');
+                        img.src = `getClassPicture?classId=${classData.class_id}`;
+                        img.alt = `${classData.class_name} Profile Picture`;
+                        imgSection.appendChild(img);
+
+                        img.onerror = () => {
+                            imgSection.style.background = getRandomGradient();
+                            img.remove();
+                        };
 
                         const textSection = document.createElement('div');
                         textSection.className = 'text-section';
@@ -219,13 +229,13 @@
                         cardContainer.appendChild(card);
                     });
                 })
-                .catch(error => console.error('error fetching classes:', error));
+                .catch(error => console.error('Error fetching classes:', error));
         }
 
         if (role && personId) {
             setTimeout(fetchClasses, 50);
         } else {
-            console.error('missing role or personId in cookies');
+            console.error('Missing role or personId in session storage');
         }
     });
 </script>

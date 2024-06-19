@@ -120,12 +120,11 @@
                 </button>
             </div>
             <h1>Add Class</h1>
-            <!-- User settings content -->
+
         </header>
         <div class="title">Adding a class</div>
         <div class="class-container">
             <form action="/SomtodayHomeworkPlanner_war/addClass" method="post" enctype="multipart/form-data">
-                <input type="hidden" id="teacher-id" name="teacherId" value="">
                 <div class="form-group">
                     <label for="class-name">Enter a class name:</label>
                     <input type="text" id="class-name" name="className" required>
@@ -148,19 +147,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="all-lessons-select">All Lessons:</label>
-                    <select id="all-lessons-select" multiple>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                    <button type="button" class="yellow-btn" id="add-lesson-btn">Add Lesson</button>
-                </div>
-                <div class="form-group">
-                    <label for="current-lessons-select">Current Lessons in Class:</label>
-                    <select id="current-lessons-select" name="lessons" multiple>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="class-picture">Choose class picture:</label>
                     <input type="file" id="class-picture" name="classPicture">
                 </div>
@@ -174,8 +160,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Fetch students and update frontend
-        fetch('/SomtodayHomeworkPlanner_war/fetchStudents')
+        // fetch all students that DO not have an class and put it into All Students when admin is
+        // creating a new class
+        fetch('/SomtodayHomeworkPlanner_war/fetchStudents?unassigned=true')
             .then(response => response.json())
             .then(students => {
                 const allStudentsSelect = document.getElementById('all-students-select');
@@ -188,21 +175,7 @@
             })
             .catch(error => console.error('Error fetching students:', error));
 
-        // Fetch lessons update frontend
-        fetch('/SomtodayHomeworkPlanner_war/fetchLessons')
-            .then(response => response.json())
-            .then(lessons => {
-                const allLessonsSelect = document.getElementById('all-lessons-select');
-                lessons.forEach(lesson => {
-                    const option = document.createElement('option');
-                    option.value = lesson.lesson_id;
-                    option.textContent = lesson.course_name;
-                    allLessonsSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error fetching lessons:', error));
-
-        // Add student to current students
+        // move the selected student from All Students to current students in class
         document.getElementById('add-student-btn').addEventListener('click', function() {
             const allStudentsSelect = document.getElementById('all-students-select');
             const currentStudentsSelect = document.getElementById('current-students-select');
@@ -210,19 +183,6 @@
                 currentStudentsSelect.appendChild(option);
             });
         });
-
-        // Add lesson to current lessons
-        document.getElementById('add-lesson-btn').addEventListener('click', function() {
-            const allLessonsSelect = document.getElementById('all-lessons-select');
-            const currentLessonsSelect = document.getElementById('current-lessons-select');
-            Array.from(allLessonsSelect.selectedOptions).forEach(option => {
-                currentLessonsSelect.appendChild(option);
-            });
-        });
-
-        // set teacherId value
-        const teacherId = sessionStorage.getItem('personId');
-        document.getElementById('teacher-id').value = teacherId;
     });
 </script>
 </body>

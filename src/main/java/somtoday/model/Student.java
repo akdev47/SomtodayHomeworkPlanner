@@ -5,6 +5,7 @@ import java.util.Date;
 public class Student extends Person {
     private int studentID;
     private int classID;
+    private String personName;
 
     public Student() {
         super();
@@ -30,6 +31,14 @@ public class Student extends Person {
 
     public void setClassID(int classID) {
         this.classID = classID;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
 
