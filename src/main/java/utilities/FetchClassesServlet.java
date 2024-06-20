@@ -42,13 +42,13 @@ public class FetchClassesServlet extends HttpServlet {
 
             String sql;
             if ("teacher".equals(role)) {
-                sql = "SELECT c.class_id, c.class_name, c.class_capacity " +
+                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity " +
                         "FROM somtoday6.Class c " +
                         "JOIN somtoday6.Lesson l ON c.class_id = l.class_id " +
                         "JOIN somtoday6.Teacher t ON l.teacher_id = t.teacher_id " +
                         "WHERE t.person_id = " + personId;
             } else if ("student".equals(role)) {
-                sql = "SELECT c.class_id, c.class_name, c.class_capacity " +
+                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity " +
                         "FROM somtoday6.Class c " +
                         "JOIN somtoday6.Student s ON c.class_id = s.class_id " +
                         "WHERE s.person_id = " + personId;
