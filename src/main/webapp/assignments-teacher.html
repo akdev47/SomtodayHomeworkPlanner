@@ -7,7 +7,7 @@
     <title>Assignments</title>
 
     <!--FONTS-->
-    <link rel="stylesheet" href="style/assignmentsStyle.css">
+    <link rel="stylesheet" href="style/assignmentsTeacherStyle.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="assignments.html" class="nav-link">
+                        <a href="assignments-teacher.html" class="nav-link">
                             <i class="nav-item-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                     <path
@@ -158,7 +158,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <!--<th>Class Name</th>-->
+                                <th>Class Name</th>
                                 <th>Assignment Name</th>
                                 <th>Date Created</th>
                                 <th>Due Date</th>
@@ -166,7 +166,6 @@
                             </tr>
                         </thead>
                         <tbody id="table-body">
-
                         </tbody>
                     </table>
                 </div>
@@ -193,8 +192,11 @@
                         assignments.forEach(assignmentData => {
                             const row = document.createElement('tr');
 
+                            const className = document.createElement('td');
+                            className.innerText = assignmentData.class_name;
+
                             const homeworkType = document.createElement('td');
-                            homeworkType.innerText = assignmentData.homework_type;
+                            homeworkType.innerText = assignmentData.homework_name;
 
                             const publishDate = document.createElement('td');
                             publishDate.innerText = assignmentData.publish_date;
@@ -204,10 +206,11 @@
 
                             const detailsButton = document.createElement("td");
                             const detailsLink = document.createElement("a");
-                            detailsLink.href = `assignment-details.html?id=${assignmentData.homework_id}`;
+                            detailsLink.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
                             detailsLink.innerHTML = "See Details";
                             detailsButton.appendChild(detailsLink);
 
+                            row.appendChild(className);
                             row.appendChild(homeworkType);
                             row.appendChild(publishDate);
                             row.appendChild(dueDate);

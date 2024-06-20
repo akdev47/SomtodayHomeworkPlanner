@@ -32,6 +32,7 @@ public class FetchAssignmentsServlet extends HttpServlet {
         String role = request.getParameter("role");
         String personId = request.getParameter("personId");
 
+        List<Class> classList = new ArrayList<>();
         List<Homework> assignmentList = new ArrayList<>();
 
         try {
@@ -40,20 +41,31 @@ public class FetchAssignmentsServlet extends HttpServlet {
 
             String sql;
             if ("teacher".equals(role)) {
-                sql = "SELECT DISTINCT h.homework_id, h.homework_type, h.publish_date, h.due_date " +
-                        "FROM homework h, teacher t, lesson l, course c, person p " +
-                        "WHERE h.lesson_id = l.lesson_id AND " +
-                        "l.course_id = c.course_id AND " +
-                        "c.teacher_id = t.teacher_id AND " +
-                        "t.person_id = " + personId;
+                sql = "WITH HomeworkCTE AS (\n" +
+                        "    SELECT \n" +
+                        "        h.class_id, \n" +
+                        "        h.homework_name, \n" +
+                        "        h.publish_date, \n" +
+                        "        h.due_date, \n" +
+                        "        h.teacher_id, \n" +
+                        "        h.homework_id,\n" +
+                        "        ROW_NUMBER() OVER (PARTITION BY h.class_id, h.homework_name, h.publish_date, h.due_date, h.teacher_id \n" +
+                        "                           ORDER BY h.homework_id) AS rn\n" +
+                        "    FROM homework h\n" + ")\n" + "SELECT \n" + "    c.class_name, \n" + "    HomeworkCTE.homework_name, \n" + "    HomeworkCTE.publish_date, \n" + "    HomeworkCTE.due_date, \n" + "    HomeworkCTE.homework_id\n" + "FROM HomeworkCTE\n" + "JOIN class c ON HomeworkCTE.class_id = c.class_id\n" + "JOIN teacher t ON HomeworkCTE.teacher_id = t.teacher_id\n" + "JOIN person p ON t.person_id = p.person_id\n" + "WHERE HomeworkCTE.rn = 1\n" + "AND t.person_id = " + personId + " ORDER BY HomeworkCTE.publish_date DESC;";
             } else if ("student".equals(role)) {
-                sql = "SELECT DISTINCT h.homework_id, h.homework_type, h.publish_date, h.due_date " +
-                        "FROM homework h, student s, lesson l, class c, person p " +
-                        "WHERE h.lesson_id = l.lesson_id AND " +
-                        "l.class_id = c.class_id AND " +
-                        "c.class_id = s.class_id AND " +
-                        "s.person_id = " + personId;
-            } else {
+                sql = "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date "  +
+                        "FROM homework h, student s, person p, class c " +
+                        "WHERE h.student_id = s.student_id " +
+                        "AND h.class_id = c.class_id " +
+                        "AND s.person_id = " + personId +
+                        "ORDER BY h.publish_date DESC";
+
+            }  else if ("admin".equals(role)) {
+                sql = "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date " +
+                        "FROM somtoday6.homework h, class c " +
+                        "WHERE h.class_id = c.class_id" +
+                        "ORDER BY h.publish_date DESC";
+            }  else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
                 return;
             }
@@ -62,11 +74,14 @@ public class FetchAssignmentsServlet extends HttpServlet {
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
+                Class c = new Class();
+                c.setClassName(resultSet.getString("class_name"));
                 Homework hw = new Homework();
                 hw.setHomeworkID(resultSet.getInt("homework_id"));
-                hw.setHomeworkType(resultSet.getString("homework_type"));
+                hw.setHomeworkName(resultSet.getString("homework_name"));
                 hw.setPublishDate(resultSet.getDate("publish_date"));
                 hw.setDueDate(resultSet.getDate("due_date"));
+                classList.add(c);
                 assignmentList.add(hw);
             }
 
@@ -78,19 +93,21 @@ public class FetchAssignmentsServlet extends HttpServlet {
         }
 
         PrintWriter out = response.getWriter();
-        out.write(toJson(assignmentList));
+        out.write(toJson(classList,assignmentList));
         out.close();
     }
 
-    private String toJson(List<Homework> assignmentList) {
+    private String toJson(List<Class> classList,List<Homework> assignmentList) {
         StringBuilder json = new StringBuilder();
         json.append("[");
-
+        if (classList.size() == assignmentList.size()){
         for (int i = 0; i < assignmentList.size(); i++) {
             Homework hw = assignmentList.get(i);
+            Class c = classList.get(i);
             json.append("{");
+            json.append("\"class_name\":\"").append(c.getClassName()).append("\",");
             json.append("\"homework_id\":").append(hw.getHomeworkID()).append(",");
-            json.append("\"homework_type\":\"").append(hw.getHomeworkType()).append("\",");
+            json.append("\"homework_name\":\"").append(hw.getHomeworkName()).append("\",");
             json.append("\"publish_date\":\"").append(hw.getPublishDate()).append("\",");
             json.append("\"due_date\":\"").append(hw.getDueDate()).append("\"");
             json.append("}");
@@ -102,5 +119,8 @@ public class FetchAssignmentsServlet extends HttpServlet {
 
         json.append("]");
         return json.toString();
+        } else {
+            return "ERROR IN THE SERVER";
+        }
     }
 }

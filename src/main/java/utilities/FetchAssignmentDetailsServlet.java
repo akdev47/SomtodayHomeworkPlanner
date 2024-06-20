@@ -41,11 +41,11 @@ public class FetchAssignmentDetailsServlet extends HttpServlet {
 
             String sql;
             if ("teacher".equals(role)) {
-                sql = "SELECT DISTINCT h.homework_type, h.description " +
+                sql = "SELECT DISTINCT h.homework_name, h.description " +
                         "FROM homework h " +
                         "WHERE h.homework_id = " + assignmentId;
             } else if ("student".equals(role)) {
-                sql = "SELECT DISTINCT h.homework_type, h.description " +
+                sql = "SELECT DISTINCT h.homework_name, h.description " +
                         "FROM homework h " +
                         "WHERE h.homework_id = " + assignmentId; // No goals and their time indication are added yet!
             } else {
@@ -57,7 +57,7 @@ public class FetchAssignmentDetailsServlet extends HttpServlet {
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                homeW.setHomeworkType(resultSet.getString("homework_type"));
+                homeW.setHomeworkName(resultSet.getString("homework_name"));
                 homeW.setDescription(resultSet.getString("description"));
             }
 
@@ -77,7 +77,7 @@ public class FetchAssignmentDetailsServlet extends HttpServlet {
         StringBuilder json = new StringBuilder();
         json.append("[");
             json.append("{");
-            json.append("\"homework_type\":\"").append(homeW.getHomeworkType()).append("\",");
+            json.append("\"homework_name\":\"").append(homeW.getHomeworkName()).append("\",");
             json.append("\"hw_description\":\"").append(homeW.getDescription()).append("\"");
             json.append("}");
         json.append("]");
