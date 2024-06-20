@@ -3,12 +3,11 @@ package somtoday.model;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
-import org.w3c.dom.Text;
 
 public class Homework {
 
     private int homeworkID;
-    private String homeworkType;
+    private String homeworkName;
 
     private Date dueDate;
 
@@ -19,28 +18,38 @@ public class Homework {
     private int splitCount;
 
     private String description;
-    private byte[] file;
+
     private int lessonID;
 
-    private int parentHomeworkID;
+    private int classID;
     private int studentID;
+
+    private int teacherID;
+
+    private Boolean homeworkSplittable;
+
+    private Boolean homeworkSubmittable;
 
     private List<Goal> goalList;
 
     public Homework() { }
 
-    public Homework(int homeworkID, String homeworkType, Date dueDate, Date publishDate, Time timeIndication, int splitCount, String description, byte[] file, int lessonID, int parentHomeworkID, int studentID, List<Goal> goalList) {
+    public Homework(int homeworkID, String homeworkName, Date dueDate, Date publishDate, Time timeIndication,
+                    int splitCount, String description, int lessonID, int classID, int studentID, int teacherID,
+                    Boolean homeworkSplittable, Boolean homeworkSubmittable, List<Goal> goalList) {
         this.homeworkID = homeworkID;
-        this.homeworkType = homeworkType;
+        this.homeworkName = homeworkName;
         this.dueDate = dueDate;
         this.publishDate = publishDate;
         this.timeIndication = timeIndication;
         this.splitCount = splitCount;
         this.description = description;
-        this.file = file;
         this.lessonID = lessonID;
-        this.parentHomeworkID = parentHomeworkID;
+        this.classID = classID;
         this.studentID = studentID;
+        this.teacherID = teacherID;
+        this.homeworkSplittable = homeworkSplittable;
+        this.homeworkSubmittable = homeworkSubmittable;
         this.goalList = goalList;
     }
 
@@ -52,12 +61,12 @@ public class Homework {
         this.homeworkID = homeworkID;
     }
 
-    public String getHomeworkType() {
-        return homeworkType;
+    public String getHomeworkName() {
+        return homeworkName;
     }
 
-    public void setHomeworkType(String homeworkType) {
-        this.homeworkType = homeworkType;
+    public void setHomeworkName(String homeworkName) {
+        this.homeworkName = homeworkName;
     }
 
     public Date getDueDate() {
@@ -100,14 +109,6 @@ public class Homework {
         this.description = description;
     }
 
-    public byte[] getFile() {
-        return file;
-    }
-
-    public void setFile(byte[] file) {
-        this.file = file;
-    }
-
     public int getLessonID() {
         return lessonID;
     }
@@ -116,12 +117,12 @@ public class Homework {
         this.lessonID = lessonID;
     }
 
-    public int getParentHomeworkID() {
-        return parentHomeworkID;
+    public int getClassID() {
+        return classID;
     }
 
-    public void setParentHomeworkID(int parentHomeworkID) {
-        this.parentHomeworkID = parentHomeworkID;
+    public void setClassID(int classID) {
+        this.classID = classID;
     }
 
     public int getStudentID() {
@@ -132,6 +133,30 @@ public class Homework {
         this.studentID = studentID;
     }
 
+    public int getTeacherID() {
+        return teacherID;
+    }
+
+    public void setTeacherID(int teacherID) {
+        this.teacherID = teacherID;
+    }
+
+    public Boolean getHomeworkSplittable() {
+        return homeworkSplittable;
+    }
+
+    public void setHomeworkSplittable(Boolean homeworkSplittable) {
+        this.homeworkSplittable = homeworkSplittable;
+    }
+
+    public Boolean getHomeworkSubmittable() {
+        return homeworkSubmittable;
+    }
+
+    public void setHomeworkSubmittable(Boolean homeworkSubmittable) {
+        this.homeworkSubmittable = homeworkSubmittable;
+    }
+
     public List<Goal> getGoalList() {
         return goalList;
     }
@@ -139,4 +164,5 @@ public class Homework {
     public void setGoalList(List<Goal> goalList) {
         this.goalList = goalList;
     }
+
 }
