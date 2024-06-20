@@ -7,9 +7,10 @@
 .red {
     font-family: "Josefin Sans", sans-serif;
     font-optical-sizing: auto;
-    background-color: #DB133D;
+    background-color: #DB133D !important;
     color: #fff;
 }
+
 .red > div > ul > li > i > svg,
 .red > div i > svg {
     fill: #fff;
@@ -18,12 +19,25 @@
 .yellow {
     font-family: "Josefin Sans", sans-serif;
     font-optical-sizing: auto;
-    background-color: #F5E709;
+    background-color: #F5E709 !important;
     color: #262F35;
 }
+
 .yellow > div > ul > li > i > svg,
 .yellow > div i > svg {
     fill: #262F35;
+}
+
+.green {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #4CAF50 !important;
+    color: #fff;
+}
+
+.green > div > ul > li > i > svg,
+.green > div i > svg {
+    fill: #fff;
 }
 
 .side-bar{

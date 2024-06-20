@@ -11,7 +11,7 @@
 </head>
 <body class="josefin-sans-regular">
 <div class="container">
-    <div class="side-bar red">
+    <div class="side-bar red" id="sidebar">
         <div class="container-1">
             <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo">
             <p class="logo-text">somtoday</p>
@@ -120,7 +120,6 @@
                 </button>
             </div>
             <h1>Add Class</h1>
-
         </header>
         <div class="title">Adding a class</div>
         <div class="class-container">
@@ -160,8 +159,23 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // fetch all students that DO not have an class and put it into All Students when admin is
-        // creating a new class
+        const sidebar = document.getElementById('sidebar');
+        const role = sessionStorage.getItem('role');
+        // const personId = sessionStorage.getItem('personId');
+        // const personName = sessionStorage.getItem('personName');
+
+
+        sidebar.classList.remove('red', 'yellow', 'green');
+        if (role === 'admin') {
+            sidebar.classList.add('green');
+        } else if (role === 'teacher') {
+            sidebar.classList.add('yellow');
+        } else {
+            sidebar.classList.add('red');
+        }
+
+        console.log("add class test")
+
         fetch('/SomtodayHomeworkPlanner_war/fetchStudents?unassigned=true')
             .then(response => response.json())
             .then(students => {

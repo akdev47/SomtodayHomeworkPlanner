@@ -10,9 +10,10 @@
 .red {
     font-family: "Josefin Sans", sans-serif;
     font-optical-sizing: auto;
-    background-color: #DB133D;
+    background-color: #DB133D !important;
     color: #fff;
 }
+
 .red > div > ul > li > i > svg,
 .red > div i > svg {
     fill: #fff;
@@ -21,23 +22,25 @@
 .yellow {
     font-family: "Josefin Sans", sans-serif;
     font-optical-sizing: auto;
-    background-color: #F5E709;
+    background-color: #F5E709 !important;
     color: #262F35;
 }
+
 .yellow > div > ul > li > i > svg,
 .yellow > div i > svg {
     fill: #262F35;
 }
 
-.yellow-sidebar {
+.green {
     font-family: "Josefin Sans", sans-serif;
     font-optical-sizing: auto;
-    background-color: #F5E709; /* Yellow background */
-    color: #262F35; /* Dark text color */
+    background-color: #4CAF50 !important;
+    color: #fff;
 }
-.yellow-sidebar > div > ul > li > i > svg,
-.yellow-sidebar > div i > svg {
-    fill: #262F35; /* Dark icon color */
+
+.green > div > ul > li > i > svg,
+.green > div i > svg {
+    fill: #fff;
 }
 
 .side-bar {
@@ -119,7 +122,7 @@
 /* Main content styles */
 .main-content {
     margin-left: 300px; /* Ensure main content is not hidden behind the sidebar */
-    width: calc(100% );
+    width: calc(100% - 300px);
     display: flex;
     flex-direction: column;
     background-color: #f0f0f0;
@@ -133,7 +136,6 @@
     background-color: white;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 10%;
 }
 
 .header h1 {
@@ -319,12 +321,14 @@ body {
     gap: 20px;
 }
 
-.students-section, .lessons-section, .workload-section {
+.students-section, .lessons-section {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     flex: 1;
+    height: 900px;
+    overflow-y: auto;
 }
 
 .students-section {
@@ -333,11 +337,14 @@ body {
 
 .lessons-section {
     min-width: 250px;
+    display: flex;
+    flex-direction: column;
 }
 
 .workload-section {
     min-width: 300px;
     text-align: center;
+    margin-top: auto;
 }
 
 .workload-section .workload-chart {
@@ -360,26 +367,31 @@ body {
 
 .edit-btn {
     display: block;
-    margin: 20px 0;
-    padding: 10px;
+    margin: 10px 0;
+    padding: 10px 15px;
     background: #ffeb3b;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
     text-align: center;
+    color: #262F35;
+    max-width: 150px;
 }
-.delete-class-btn{
+.delete-class-btn {
     display: block;
-    margin: 20px 0;
-    padding: 10px;
+    margin: 20px auto; /* Center horizontally */
+    padding: 10px 20px;
     background: #f60505;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    text-align: end;
+    text-align: center;
+    color: white;
+    width: 150px; /* Adjust the width to make it smaller */
 }
+
 .students-list, .lessons-list {
     list-style: none;
     padding: 0;

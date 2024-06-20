@@ -55,11 +55,11 @@
               return response.json();
             })
             .then(data => {
-              console.log('Login response data:', data);  // Debugging line to log the response data
               if (data.error) {
                 document.getElementById('error-message').textContent = 'Invalid username or password';
                 document.getElementById('error-message').style.display = 'block';
               } else {
+                //save cookies to use later!
                 sessionStorage.setItem('role', data.role);
                 sessionStorage.setItem('personId', data.personId);
                 sessionStorage.setItem('personName', data.personName);

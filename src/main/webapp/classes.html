@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somtoday Dashboard</title>
+    <title>Somtoday Classes</title>
     <link rel="stylesheet" href="style/classesstyle.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
 
 <body class="josefin-sans-regular">
 <div class="container">
-    <div class="side-bar red">
+    <div class="side-bar red" id="sidebar">
         <div class="container-1">
             <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo">
             <p class="logo-text">somtoday</p>
@@ -134,7 +134,7 @@
                             <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
                         </svg>
                     </button>
-                    <button onclick="window.location.href='deleteclass.html'">
+                    <button id="editClassButton" onclick="window.location.href='deleteclass.html'">
                         <p>Edit Classes</p>
                     </button>
                 </div>
@@ -149,14 +149,43 @@
             <div id="card-container" class="card-container">
                 <!-- added here via js -->
             </div>
+            <div id="list-container" class="list-container" style="display: none;">
+                <!-- added here via js -->
+            </div>
         </section>
     </main>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Fetch classes and update frontend
+        const role = sessionStorage.getItem('role');
+        const personId = sessionStorage.getItem('personId');
+        const personName = sessionStorage.getItem('personName');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const addClassButton = document.getElementById('addClassButton');
+        const editClassButton = document.getElementById('editClassButton');
+        const cardContainer = document.getElementById('card-container');
+        const listContainer = document.getElementById('list-container');
+        const sidebar = document.getElementById('sidebar');
 
-        // if the created class has no profile picture give it a random gradient background color
+        // update welcome message
+        if (role === 'admin') {
+            welcomeMessage.textContent = `Welcome, ${personName}!`;
+            sidebar.classList.add('green');
+        } else if (role === 'teacher') {
+            welcomeMessage.textContent = `Welcome, ${personName}!`;
+            editClassButton.style.display = 'none';
+            addClassButton.style.display = 'none';
+            sidebar.classList.add('yellow');
+        } else {
+            welcomeMessage.textContent = `Welcome, ${personName}!`;
+            addClassButton.style.display = 'none';
+            editClassButton.style.display = 'none';
+            sidebar.classList.add('red');
+        }
+
+
         function getRandomGradient() {
             const colors = [
                 '#ff9a9e', '#fad0c4', '#fad0c4',
@@ -169,21 +198,56 @@
             return `linear-gradient(135deg, ${colors[randomIndex()]} 0%, ${colors[randomIndex()]} 100%)`;
         }
 
+        function createCard(classData) {
+            const card = document.createElement('div');
+            card.className = 'card';
 
-        const role = sessionStorage.getItem('role');
-        const personId = sessionStorage.getItem('personId');
-        const personName = sessionStorage.getItem('personName');
-        const welcomeMessage = document.getElementById('welcome-message');
-        const addClassButton = document.getElementById('addClassButton');
+            const imgSection = document.createElement('div');
+            imgSection.className = 'img-section';
+            const img = document.createElement('img');
+            img.src = `getClassPicture?classId=${classData.class_id}`;
+            img.alt = `${classData.class_name} Profile Picture`;
+            imgSection.appendChild(img);
 
-        // update the welcome message in the top bar
-        if (role === 'admin') {
-            welcomeMessage.textContent = `Welcome, ${personName}!`;
-        } else if (role === 'teacher') {
-            welcomeMessage.textContent = `Welcome, ${personName}!`;
-        } else {
-            welcomeMessage.textContent = `Welcome, ${personName}!`;
-            addClassButton.style.display = 'none'; // Hide the add class button for students
+            img.onerror = () => {
+                imgSection.style.background = getRandomGradient();
+                img.remove();
+            };
+
+            const textSection = document.createElement('div');
+            textSection.className = 'text-section';
+
+            const h2 = document.createElement('h2');
+            const link = document.createElement('a');
+            link.href = `class.html?classId=${classData.class_id}`; //link to individual class page!
+            link.textContent = classData.class_name;
+            h2.appendChild(link);
+            textSection.appendChild(h2);
+
+            card.appendChild(imgSection);
+            card.appendChild(textSection);
+
+            return card;
+        }
+
+        function createListItem(classData) {
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+
+            const colorDot = document.createElement('div');
+            colorDot.className = 'color-dot';
+            colorDot.style.background = getRandomGradient();
+            listItem.appendChild(colorDot);
+
+            const listText = document.createElement('div');
+            listText.className = 'list-text';
+            const link = document.createElement('a');
+            link.href = `class.html?classId=${classData.class_id}`; // again link to class page!
+            link.textContent = classData.class_name;
+            listText.appendChild(link);
+            listItem.appendChild(listText);
+
+            return listItem;
         }
 
         function fetchClasses() {
@@ -198,35 +262,14 @@
                 })
                 .then(classes => {
                     console.log('Classes fetched:', classes);
-                    const cardContainer = document.getElementById('card-container');
                     cardContainer.innerHTML = '';
+                    listContainer.innerHTML = '';
                     classes.forEach(classData => {
-                        const card = document.createElement('div');
-                        card.className = 'card';
-
-                        const imgSection = document.createElement('div');
-                        imgSection.className = 'img-section';
-                        const img = document.createElement('img');
-                        img.src = `getClassPicture?classId=${classData.class_id}`;
-                        img.alt = `${classData.class_name} Profile Picture`;
-                        imgSection.appendChild(img);
-
-                        img.onerror = () => {
-                            imgSection.style.background = getRandomGradient();
-                            img.remove();
-                        };
-
-                        const textSection = document.createElement('div');
-                        textSection.className = 'text-section';
-
-                        const h2 = document.createElement('h2');
-                        h2.textContent = classData.class_name;
-                        textSection.appendChild(h2);
-
-                        card.appendChild(imgSection);
-                        card.appendChild(textSection);
-
+                        const card = createCard(classData);
                         cardContainer.appendChild(card);
+
+                        const listItem = createListItem(classData);
+                        listContainer.appendChild(listItem);
                     });
                 })
                 .catch(error => console.error('Error fetching classes:', error));
@@ -237,7 +280,20 @@
         } else {
             console.error('Missing role or personId in session storage');
         }
+
+        // switching between card and list views
+        const toggleCheckbox = document.getElementById('toggle');
+        toggleCheckbox.addEventListener('change', function() {
+            if (toggleCheckbox.checked) {
+                cardContainer.style.display = 'none';
+                listContainer.style.display = 'flex';
+            } else {
+                cardContainer.style.display = 'grid';
+                listContainer.style.display = 'none';
+            }
+        });
     });
+
 </script>
 </body>
 </html>
