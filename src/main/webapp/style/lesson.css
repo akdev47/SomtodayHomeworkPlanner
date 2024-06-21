@@ -1,0 +1,195 @@
+/* SIDEBAR STYLING ---------------------------------------------------------------------*/
+
+*{
+    margin: 0;
+}
+
+.red {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #DB133D;
+    color: #fff;
+}
+.red > div > ul > li > i > svg,
+.red > div i > svg {
+    fill: #fff;
+}
+
+.yellow {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: #F5E709;
+    color: #262F35;
+}
+.yellow > div > ul > li > i > svg,
+.yellow > div i > svg {
+    fill: #262F35;
+}
+
+.side-bar{
+    width: 300px;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-1 > img{
+    width: 100px;
+    margin: 15px 0 5px;
+}
+
+.container-1 > p{
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: 5px;
+}
+
+.container-2 .navigations{
+    height: 450px;
+    display: flex;
+    align-items: center;
+}
+
+.navigations{
+    width: 130px;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+}
+
+.nav-item{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item-text{
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.container-3{
+    width: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.container-3 > div{
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/*----------------------------------------------------------------------------- */
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #CCC;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile span {
+    margin-left: 10px;
+}
+
+.lesson-description {
+    margin-bottom: 20px;
+}
+
+.lesson-description h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.lesson-description p {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.assignments {
+    display: flex;
+    justify-content: space-between;
+}
+
+.assignments h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.assignment-list {
+    background-color: #F0F0F0;
+    padding: 10px;
+    border-radius: 8px;
+    width: 48%;
+}
+
+.assignment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #FFF;
+    border-bottom: 1px solid #CCC;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.assignment-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.assignment-item span {
+    margin-right: 10px;
+}
+
+.assignment-item button {
+    background-color: #F7E24E;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
