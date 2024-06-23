@@ -224,6 +224,7 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
         // Fetch classes and update frontend
         const role = sessionStorage.getItem('role');
         const personId = sessionStorage.getItem('personId');
@@ -292,16 +293,17 @@
         const totalTime = document.getElementById('total-time');
 
         let savedData = {
-            assignmentName: '',
-            dueDate: '',
-            classId: '',
-            lessonId: '',
+            homeworkName: '',
+            dueDate: null,
+            publishDate: null,
+            classId: 0,
+            lessonId: 0,
             description: '',
             goals: []
         };
 
         saveButton.addEventListener('click', function() {
-            savedData.assignmentName = assignmentNameInput.value;
+            savedData.homeworkName = assignmentNameInput.value;
             savedData.dueDate = dueDateInput.value;
             savedData.classId = classSelector.value;
             savedData.lessonId = lessonSelector.value;
@@ -316,30 +318,59 @@
 
             localStorage.setItem('assignmentData', JSON.stringify(savedData));
             document.getElementById('last-saved').textContent = `Last saved: ${new Date().toLocaleTimeString()}`;
+            savedData.publishDate = new Date().toISOString().split('T')[0];
+
+            console.log(JSON.stringify(savedData))
         });
 
         publishButton.addEventListener('click', function() {
-            if (!savedData.classId) {
-                alert('Please select a class before publishing.');
-                return;
-            }
+            console.log(savedData);
+            const dynamicForm = document.createElement('form');
+            dynamicForm.setAttribute('method', 'post');
+            dynamicForm.setAttribute('action', '/SomtodayHomeworkPlanner_war/addAssignment');
+            dynamicForm.style.display = 'none';
 
-            fetch('createAssignment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(savedData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Assignment created:', data);
-                    alert('Assignment published successfully!');
-                })
-                .catch(error => console.error('Error creating assignment:', error));
+            // Collect all inputs and append to the form
+            const inputs = [
+                { name: 'person-id', value: personId},
+                { name: 'homeworkName', value: savedData.homeworkName},
+                { name: 'due-date', value: savedData.dueDate },
+                { name: 'publish-date', value: savedData.publishDate },
+                { name: 'classId', value: savedData.classId },
+                { name: 'lessonId', value: savedData.lessonId },
+                { name: 'description', value: savedData.description }
+            ];
+
+            inputs.forEach(inputData => {
+                const input = document.createElement('input');
+                input.setAttribute('type', 'hidden');
+                input.setAttribute('name', inputData.name);
+                input.setAttribute('value', inputData.value);
+                dynamicForm.appendChild(input);
+            });
+
+/*            // Append goal data
+            goalsList.querySelectorAll('li').forEach((goalItem, index) => {
+                const goalName = goalItem.querySelector('.goal-name').textContent;
+                const goalTime = goalItem.querySelector('.goal-time').textContent;
+                const goalNameInput = document.createElement('input');
+                goalNameInput.setAttribute('type', 'hidden');
+                goalNameInput.setAttribute('name', `goals[${index}][name]`);
+                goalNameInput.setAttribute('value', goalName);
+
+                const goalTimeInput = document.createElement('input');
+                goalTimeInput.setAttribute('type', 'hidden');
+                goalTimeInput.setAttribute('name', `goals[${index}][time]`);
+                goalTimeInput.setAttribute('value', goalTime);
+
+                dynamicForm.appendChild(goalNameInput);
+                dynamicForm.appendChild(goalTimeInput);
+            }); */
+
+            document.body.appendChild(dynamicForm);
+            console.log(dynamicForm);
+            dynamicForm.submit();
+
         });
 
         const goalForm = document.getElementById('add-goal-form');
@@ -354,10 +385,10 @@
             if (goalName && goalTime) {
                 const goalItem = document.createElement('li');
                 goalItem.innerHTML = `
-                    <span class="goal-name">${goalName}</span>
-                    <span class="goal-time">${goalTime} mins</span>
-                    <button type="button" class="remove-goal-btn">x</button>
-                `;
+                <span class="goal-name">${goalName}</span>
+                <span class="goal-time">${goalTime} mins</span>
+                <button type="button" class="remove-goal-btn">x</button>
+            `;
 
                 goalItem.querySelector('.remove-goal-btn').addEventListener('click', function() {
                     goalItem.remove();
