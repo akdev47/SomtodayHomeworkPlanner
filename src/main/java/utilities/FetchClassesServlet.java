@@ -32,6 +32,7 @@ public class FetchClassesServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String role = request.getParameter("role");
+        System.out.println("Current user role: " + role);
         String personId = request.getParameter("personId");
 
         List<Class> classList = new ArrayList<>();

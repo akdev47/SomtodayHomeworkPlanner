@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lesson Details</title>
+    <title>My Lessons</title>
     <!-- FONTS -->
-    <link rel="stylesheet" href="style/specificlesson.css">
+    <link rel="stylesheet" href="style/lessonstyle.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 </head>
 <body class="josefin-sans-regular">
 <div class="container">
-    <div class="side-bar red">
+    <div class="side-bar yellow">
         <div class="container-1">
             <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo">
             <p class="logo-text">somtoday</p>
@@ -114,7 +114,12 @@
     <main class="main-content">
         <header class="header">
             <div class="back-button">
-                <h2 id="lesson-name">Lesson Details</h2>
+                <!--                <button onclick="window.location.href='classes.html'">-->
+                <!--                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">-->
+                <!--                        <path d="M480-120L280-320l200-200 40 40-120 120h480v80H400l120 120-40 40ZM960-480ZM0-480h960"/>-->
+                <!--                    </svg>-->
+                <!--                </button>-->
+                <h2>My Lessons</h2>
             </div>
             <div class="user-settings">
                 <div class="user-info">
@@ -127,37 +132,25 @@
             </div>
         </header>
         <section class="content">
-            <div class="lesson-description" id="lesson-description">
-                <h2>Lesson Description</h2>
-                <p>Dive into the world of algebra, where we transform abstract concepts into concrete solutions. This course covers the fundamentals of algebraic expressions, equations, inequalities, and functions. Students will learn to manipulate variables, solve linear and quadratic equations, and understand the properties of exponents and polynomials. Through real-world applications and problem-solving strategies, learners will develop critical thinking skills and a strong mathematical foundation, preparing them for advanced studies and everyday decision-making. Join us to unlock the power of algebra and enhance your analytical abilities!</p>
-            </div>
-            <div class="assignments">
-                <div class="active-assignments">
-                    <h2>Active Assignments For This Class</h2>
-                    <div class="assignment-list">
-                        <div class="assignment-item">
-                            <span>13-A</span>
-                            <span>Math Worksheet 1</span>
-                            <span>12 May 23.59</span>
-                            <button>See Details</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="past-assignments">
-                    <h2>Past Assignments For This Class</h2>
-                    <div class="assignment-list">
-                        <div class="assignment-item">
-                            <span>12-A</span>
-                            <span>Math Worksheet 1</span>
-                            <span>12 May 23.59</span>
-                            <button>See Details</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="panel">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Class Name</th>
+                        <th>Lesson Name</th>
+                        <th>Teacher</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="lessons-table-body">
+                    <!-- Lessons will be populated here -->
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const role = sessionStorage.getItem('role');
@@ -166,15 +159,6 @@
         const lessonsTableBody = document.querySelector('.table tbody');
         const sidebar = document.querySelector('.side-bar');
         const welcomeMessage = document.querySelector('.user-info span');
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const lessonName = urlParams.get('lessonName');
-        const lessonDescription = urlParams.get('lessonDescription');
-        const teacherName = urlParams.get('teacherName');
-
-        document.getElementById('lesson-name').textContent = lessonName + " taught by " + teacherName +".";
-        document.getElementById('lesson-description').textContent = lessonDescription;
-
 
         if (personName) {
             welcomeMessage.textContent = `Welcome, ${personName}!`;
@@ -193,26 +177,39 @@
             sidebar.classList.add('red');
         }
 
-        // function fetchLessons() {
-        //     fetch(`fetchLessonsPage?role=${role}&personId=${personId}`)
-        //         .then(response => response.json())
-        //         .then(lessons => {
-        //             lessonsTableBody.innerHTML = '';
-        //             lessons.forEach(lesson => {
-        //                 const row = document.createElement('tr');
-        //                 row.innerHTML = `
-        //                 <td>${lesson.class_name}</td>
-        //                 <td>${lesson.lesson_name}</td>
-        //                 <td>${lesson.teacher_name}</td>
-        //                 <td><button class="details-button">See Details</button></td>
-        //             `;
-        //                 lessonsTableBody.appendChild(row);
-        //             });
-        //         })
-        //         .catch(error => console.error('Error fetching lessons:', error));
-        // }
-        //
-        // fetchLessons();
+        function fetchLessons() {
+            fetch(`fetchLessonsPage?role=${role}&personId=${personId}`)
+                .then(response => response.json())
+                .then(lessons => {
+                    lessonsTableBody.innerHTML = '';
+                    lessons.forEach(lesson => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${lesson.class_name}</td>
+                        <td>${lesson.lesson_name}</td>
+                        <td>${lesson.teacher_name}</td>
+                        <td><button class="details-button" data-lesson-id="${lesson.lesson_id}" data-class-name="${lesson.class_name}" data-lesson-name="${lesson.lesson_name}" data-lesson-description="${lesson.lesson_description}" data-teacher-name="${lesson.teacher_name}">See Details</button></td>
+                    `;
+                        lessonsTableBody.appendChild(row);
+                    });
+
+
+                    document.querySelectorAll('.details-button').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const lessonId = this.getAttribute('data-lesson-id');
+                            const className = this.getAttribute('data-class-name');
+                            const lessonName = this.getAttribute('data-lesson-name');
+                            const lessonDescription = this.getAttribute('data-lesson-description');
+                            const teacherName = this.getAttribute('data-teacher-name');
+
+                            window.location.href = `specificlesson.html?lessonId=${lessonId}&className=${encodeURIComponent(className)}&lessonName=${encodeURIComponent(lessonName)}&lessonDescription=${encodeURIComponent(lessonDescription)}&teacherName=${encodeURIComponent(teacherName)}`;
+                        });
+                    });
+                })
+                .catch(error => console.error('Error fetching lessons:', error));
+        }
+
+        fetchLessons();
     });
 </script>
 </body>

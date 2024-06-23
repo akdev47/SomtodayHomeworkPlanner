@@ -1,222 +1,222 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns="http://www.w3.org/1999/html">-->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My class</title>
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>My class</title>-->
 
-    <!--FONTS-->
-    <link rel="stylesheet" href="style/class_teacherstyle.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-          rel="stylesheet">
-
-
-    <script>
-        //UPDATE TO RANDOM GRADIENT AND MOVE TO JS FILE
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            if (color === "#F0F0F0" || color === "#FFFFFF") {
-                color = getRandomColor();
-            }
-            return color;
-        }
-
-        function assignRandomColors() {
-            const imgSections = document.querySelectorAll('.img-section');
-            imgSections.forEach(section => {
-                if (section.querySelector('img') === null) {  // Check if the element does not already contain an image
-                    section.style.background = getRandomColor();
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', assignRandomColors);
-    </script>
-</head>
-
-<body class="josefin-sans-regular">
-
-<div class="container">
-    <div class="side-bar yellow">
-        <div class="container-1">
-            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo"
-                 class="logo">
-            <p class="logo-text">somtoday</p>
-        </div>
-        <div class="container-2">
-            <ul class="navigations">
-                <li class="nav-item">
-                    <a href="dashboard.html" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Home</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#assignments" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Assignments</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#notifications" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Notifications</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="classes.html" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M560-564v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-600q-38 0-73 9.5T560-564Zm0 220v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-380q-38 0-73 9t-67 27Zm0-110v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-490q-38 0-73 9.5T560-454ZM260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59ZM280-494Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Classes</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#lessons" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Lessons</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#profile" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Profile</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#people" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                 width="24px">
-                                <path
-                                        d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z" />
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">Help</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="container-3">
-            <div>
-                <a href="#logout" class="nav-link">
-                    <i class="logout-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
-                        </svg>
-                    </i>
-                    <p>Logout</p>
-                </a>
-            </div>
-            <a href="#access" class="nav-link">
-                <i class="access-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                        <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/>
-                    </svg>
-                </i>
-            </a>
-        </div>
-
-    </div>
-
-    <main class="main-content">
-        <header class="header">
-            <div class="back-button">
-
-                <button onclick="window.location.href='classes.html'">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                        <path d="M480-120L280-320l200-200 40 40-120 120h480v80H400l120 120-40 40ZM960-480ZM0-480h960" />
-                    </svg>
-                </button>
-            </div>
-            <h1>Class</h1>
-            <div class="user-settings">
-                <input type="text" id="search-bar" placeholder="Search">
-                <div id="search-results" class="search-results"></div>
-                <div class="user-info">
-                    <span>Welcome, Student_Name!</span>
-                    <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-                </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
-            </div>
-        </header>
-        <div class="class-content">
-            <div class="students-section">
-                <button class="edit-btn">Edit Students</button>
-                <div id="students-list" class="students-list">
+<!--    &lt;!&ndash;FONTS&ndash;&gt;-->
+<!--    <link rel="stylesheet" href="style/class_teacherstyle.css">-->
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"-->
+<!--          rel="stylesheet">-->
 
 
-                </div>
-            </div>
-            <div class="lessons-section">
-                <button class="edit-btn">Edit Lessons</button>
-                <ul class="lessons-list">
-                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>
-                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>
-                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>
-                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>
-                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>
-                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>
+<!--    <script>-->
+<!--        //UPDATE TO RANDOM GRADIENT AND MOVE TO JS FILE-->
+<!--        function getRandomColor() {-->
+<!--            const letters = '0123456789ABCDEF';-->
+<!--            let color = '#';-->
+<!--            for (let i = 0; i < 6; i++) {-->
+<!--                color += letters[Math.floor(Math.random() * 16)];-->
+<!--            }-->
+<!--            if (color === "#F0F0F0" || color === "#FFFFFF") {-->
+<!--                color = getRandomColor();-->
+<!--            }-->
+<!--            return color;-->
+<!--        }-->
+
+<!--        function assignRandomColors() {-->
+<!--            const imgSections = document.querySelectorAll('.img-section');-->
+<!--            imgSections.forEach(section => {-->
+<!--                if (section.querySelector('img') === null) {  // Check if the element does not already contain an image-->
+<!--                    section.style.background = getRandomColor();-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+
+<!--        document.addEventListener('DOMContentLoaded', assignRandomColors);-->
+<!--    </script>-->
+<!--</head>-->
+
+<!--<body class="josefin-sans-regular">-->
+
+<!--<div class="container">-->
+<!--    <div class="side-bar yellow">-->
+<!--        <div class="container-1">-->
+<!--            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo"-->
+<!--                 class="logo">-->
+<!--            <p class="logo-text">somtoday</p>-->
+<!--        </div>-->
+<!--        <div class="container-2">-->
+<!--            <ul class="navigations">-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="dashboard.html" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Home</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="#assignments" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Assignments</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="#notifications" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Notifications</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="classes.html" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M560-564v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-600q-38 0-73 9.5T560-564Zm0 220v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-380q-38 0-73 9t-67 27Zm0-110v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-490q-38 0-73 9.5T560-454ZM260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59ZM280-494Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Classes</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="#lessons" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Lessons</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="#profile" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Profile</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="#people" class="nav-link">-->
+<!--                        <i class="nav-item-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"-->
+<!--                                 width="24px">-->
+<!--                                <path-->
+<!--                                        d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z" />-->
+<!--                            </svg>-->
+<!--                        </i>-->
+<!--                        <p class="nav-item-text">Help</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--        <div class="container-3">-->
+<!--            <div>-->
+<!--                <a href="#logout" class="nav-link">-->
+<!--                    <i class="logout-icon">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">-->
+<!--                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>-->
+<!--                        </svg>-->
+<!--                    </i>-->
+<!--                    <p>Logout</p>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--            <a href="#access" class="nav-link">-->
+<!--                <i class="access-icon">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">-->
+<!--                        <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/>-->
+<!--                    </svg>-->
+<!--                </i>-->
+<!--            </a>-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+<!--    <main class="main-content">-->
+<!--        <header class="header">-->
+<!--            <div class="back-button">-->
+
+<!--                <button onclick="window.location.href='classes.html'">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">-->
+<!--                        <path d="M480-120L280-320l200-200 40 40-120 120h480v80H400l120 120-40 40ZM960-480ZM0-480h960" />-->
+<!--                    </svg>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <h1>Class</h1>-->
+<!--            <div class="user-settings">-->
+<!--                <input type="text" id="search-bar" placeholder="Search">-->
+<!--                <div id="search-results" class="search-results"></div>-->
+<!--                <div class="user-info">-->
+<!--                    <span>Welcome, Student_Name!</span>-->
+<!--                    <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>-->
+<!--                </div>-->
+<!--                <div class="language-icon">-->
+<!--                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </header>-->
+<!--        <div class="class-content">-->
+<!--            <div class="students-section">-->
+<!--                <button class="edit-btn">Edit Students</button>-->
+<!--                <div id="students-list" class="students-list">-->
 
 
-                </ul>
-                <div class="workload-section">
-                    <h3>Workload of the class</h3>
-                    <div class="workload-chart">
-                        <!-- Workload chart (e.g., use a canvas or SVG) -->
-                        <div class="workload-hours">15</div>
-                    </div>
-                </div>
-                <button class="delete-class-btn">Delete Class</button>
-            </div>
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="lessons-section">-->
+<!--                <button class="edit-btn">Edit Lessons</button>-->
+<!--                <ul class="lessons-list">-->
+<!--                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>-->
+<!--                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>-->
+<!--                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>-->
+<!--                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>-->
+<!--                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>-->
+<!--                    <li><span>Lesson Name</span> <button class="see-lesson-btn">See lesson</button></li>-->
 
-        </div>
-    </main>
-</div>
 
-</body>
+<!--                </ul>-->
+<!--                <div class="workload-section">-->
+<!--                    <h3>Workload of the class</h3>-->
+<!--                    <div class="workload-chart">-->
+<!--                        &lt;!&ndash; Workload chart (e.g., use a canvas or SVG) &ndash;&gt;-->
+<!--                        <div class="workload-hours">15</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <button class="delete-class-btn">Delete Class</button>-->
+<!--            </div>-->
 
-</html>
+<!--        </div>-->
+<!--    </main>-->
+<!--</div>-->
+
+<!--</body>-->
+
+<!--</html>-->
