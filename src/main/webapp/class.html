@@ -150,7 +150,7 @@
             </div>
             <div class="lessons-section">
                 <h2>Lessons</h2>
-                <button class="edit-btn">Edit Lessons</button>
+                <button id="edit-lessons-btn" class="edit-btn">Edit Lessons</button>
                 <ul id="lessons-list" class="lessons-list">
                     <!-- Populated by JavaScript -->
                 </ul>
@@ -266,6 +266,11 @@
         } else {
             console.error('Class ID not found in URL');
         }
+
+
+        document.getElementById('edit-lessons-btn').addEventListener('click', function() {
+            window.location.href = `lesson_add.html?classId=${classId}`;
+        });
     });
 </script>
 </body>
