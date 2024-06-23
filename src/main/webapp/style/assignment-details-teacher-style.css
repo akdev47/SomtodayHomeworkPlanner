@@ -1,7 +1,10 @@
 /* SIDEBAR STYLING ---------------------------------------------------------------------*/
 
-*{
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .red {
@@ -37,7 +40,7 @@
     fill: #fff;
 }
 
-.side-bar{
+.side-bar {
     width: 300px;
     height: 100vh;
     text-align: center;
@@ -47,39 +50,39 @@
     align-items: center;
 }
 
-.container-1 > img{
+.container-1 > img {
     width: 100px;
     margin: 15px 0 5px;
 }
 
-.container-1 > p{
+.container-1 > p {
     font-weight: 500;
     font-size: 32px;
     letter-spacing: 5px;
 }
 
-.container-2 .navigations{
+.container-2 .navigations {
     height: 450px;
     display: flex;
     align-items: center;
 }
 
-.navigations{
+.navigations {
     width: 130px;
     padding: 0;
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
 }
 
-.nav-item{
+.nav-item {
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-.nav-item-text{
+.nav-item-text {
     margin-left: 20px;
     font-size: 18px;
 }
@@ -95,48 +98,31 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-.container-3{
+.container-3 {
     width: 170px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
-.container-3 > div{
+.container-3 > div {
     width: 100px;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-/*----------------------------------------------------------------------------- */
-
-
 /* Dashboard styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
 body {
     display: flex;
     height: 100vh;
     width: 100%;
-
 }
 
 .container {
     display: flex;
     width: 100%;
 }
-
 
 #search-bar {
     width: 500px;
@@ -145,17 +131,17 @@ body {
 
 .search-results {
     position: absolute;
-    top: 35px; 
+    top: 35px;
     left: 0;
     right: 0;
     background: white;
     border: 1px solid #ccc;
     max-height: 200px;
-    width: calc(100% - 230px); 
+    width: calc(100% - 230px);
     overflow-y: auto;
     display: none;
     z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
 .search-results div {
@@ -196,43 +182,40 @@ body {
 .user-settings input {
     padding: 5px;
     margin-right: 10px;
-    width: 500px; 
-    max-width: 100%; 
-    box-sizing: border-box; 
+    width: 500px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .user-info .language-icon {
     display: flex;
     align-items: center;
-
 }
 
 .user-info span {
     margin-right: 10px;
     padding-left: 10px;
     padding-right: 10px;
-    padding-left: 10px;
 }
 
 .user-info a {
-    margin-left: 5px; 
+    margin-left: 5px;
 }
 
 .language-icon a img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
     vertical-align: middle;
     margin-left: 5px;
 }
 
 .user-info a img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
     vertical-align: middle;
     margin-left: 5px;
     margin-right: 5px;
 }
-
 
 .content {
     display: flex;
@@ -249,8 +232,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 30%;
     max-height: 300px;
-    overflow-y: auto; 
-
+    overflow-y: auto;
 }
 
 .panel h2 {
@@ -375,9 +357,9 @@ body {
 }
 
 .week-table td {
-   height: 350px;
-   max-height: 500px;
-   overflow-y: auto; 
+    height: 350px;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .week-table th {
@@ -436,7 +418,6 @@ body {
     text-decoration: underline;
 }
 
-/*----------------------------------------------------------------------------- */
 /* Assignment Description */
 .assignment-description {
     background-color: white;
@@ -459,13 +440,13 @@ body {
     padding: 10px;
 }
 
-.btn-container{
+.btn-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.btn-container> button{
+.btn-container > button {
     background-color: #DB133D;
     color: white;
     padding: 10px 20px;
@@ -474,12 +455,12 @@ body {
     cursor: pointer;
 }
 
-.btn-container> button:hover{
+.btn-container > button:hover {
     background-color: #b81031;
 }
 
-/* Assignment Upload */
-.assignment-upload {
+/* Split Request */
+.split-request {
     width: 48%;
     background-color: white;
     padding: 20px;
@@ -487,47 +468,62 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-weight: 500;
-}
-
-.upload-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 2px dashed #ccc;
-    padding: 40px;
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative;
-    height: 98%;
-    background-color: #D9D9D9;
-    font-weight: 500;
-}
-
-.upload-box>svg {
-    fill: #454545;
-    display: block;
-    opacity: 70%;
-}
-
-.file-upload {
-    display: none;
-}
-
-.upload-label {
-    background-color: #DB133D;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-
-.upload-box p {
     margin-top: 10px;
-    color: #999;
 }
 
-.homework-container{
+.split-request h2 {
+    margin-bottom: 10px;
+}
+
+.split-request ul {
+    list-style: none;
+    padding: 0;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.split-request li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.split-buttons-container {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.split-request li .button-accept {
+    color: #fff;
+    width: 45%;
+    height: 25px;
+    background-color: #218838;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    font-size: 15px;
+    text-align: center;
+}
+
+.split-request li .button-reject {
+    color: #fff;
+    width: 45%;
+    height: 25px;
+    background-color: #DB133D;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    font-size: 15px;
+    text-align: center;
+}
+
+.homework-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -542,7 +538,6 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
 }
 
 .assignment-goals h2 {
@@ -553,7 +548,7 @@ body {
     list-style: none;
     padding: 0;
     height: 185px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .assignment-goals li {
@@ -563,7 +558,7 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.assignment-goals li button{
+.assignment-goals li button {
     color: #fff;
     width: 25px;
     height: 25px;
@@ -613,8 +608,6 @@ body {
     background-color: #b81031;
 }
 
-
-
 .pop-up {
     display: none; /* Hide the form initially */
     position: fixed;
@@ -635,7 +628,7 @@ body {
     justify-content: space-around;
 }
 
-.pop-up.visible > input{
+.pop-up.visible > input {
     padding: 5px;
 }
 
@@ -653,7 +646,8 @@ body {
 .pop-up-overlay.visible {
     display: block;
 }
-.submit-btn{
+
+.submit-btn {
     display: block;
     height: 40px;
     align-self: flex-end;
@@ -664,5 +658,3 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-
-/*----------------------------------------------------------------------------- */
