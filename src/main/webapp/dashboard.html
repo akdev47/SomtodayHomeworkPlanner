@@ -138,17 +138,9 @@
                 </ul>
             </div>
             <div class="panel assignments">
-                <h2><a href="#">Assignments</a></h2>
-                <ul>
-                    <li>Math - Algebra Test 1 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 2 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 3 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 1 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 2 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 3 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 1 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 2 <span>&#x2714;</span></li>
-                    <li>Math - Algebra Test 3 <span>&#x2714;</span></li>
+                <h2><a href="assignments-teacher.html">Assignments</a></h2>
+                <ul id="assignments-ul">
+
                 </ul>
             </div>
             <div class="panel notifications">
@@ -274,6 +266,33 @@
                 .catch(error => console.error('Error fetching classes:', error));
         }
 
+        function fetchAssignments(){
+            fetch(`fetchAssignments?role=${role}&personId=${personId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(assignments => {
+                    const assignmentContainer = document.getElementById('assignments-ul');
+                    assignmentContainer.innerHTML = '';
+                    assignments.forEach(assignmentData => {
+                        const row = document.createElement('li');
+
+                        const link = document.createElement("a");
+                        link.innerHTML = assignmentData.class_name + " - " + assignmentData.homework_name;
+                        link.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
+
+                        link.style = "    color: #262F35;\n" +
+                            "    text-decoration: none;";
+
+                        row.appendChild(link);
+                        assignmentContainer.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching assignments:', error));
+        }
 
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
@@ -385,6 +404,7 @@
 
         renderCalendar(currentMonth, currentYear);
         fetchClasses();
+        fetchAssignments()
     });
 
 

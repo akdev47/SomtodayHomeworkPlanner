@@ -63,7 +63,7 @@ public class FetchAssignmentsServlet extends HttpServlet {
             }  else if ("admin".equals(role)) {
                 sql = "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date " +
                         "FROM somtoday6.homework h, class c " +
-                        "WHERE h.class_id = c.class_id" +
+                        "WHERE h.class_id = c.class_id " +
                         "ORDER BY h.publish_date DESC";
             }  else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
