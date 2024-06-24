@@ -1,26 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Details</title>
-
-    <!--FONTS-->
-    <link rel="stylesheet" href="style/classstyle.css">
+    <title>Edit Students in Class</title>
+    <link rel="stylesheet" href="style/editstudentsstyle.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 </head>
-
 <body class="josefin-sans-regular">
-
 <div class="container">
-    <div class="side-bar yellow">
+    <div class="side-bar green" id="sidebar">
         <div class="container-1">
-            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo"
-                 class="logo">
+            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo">
             <p class="logo-text">somtoday</p>
         </div>
         <div class="container-2">
@@ -36,7 +29,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="assignments-teacher.html" class="nav-link">
+                    <a href="#assignments" class="nav-link">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />
@@ -66,7 +59,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="lessons.html" class="nav-link">
+                    <a href="#lessons" class="nav-link">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z" />
@@ -102,7 +95,7 @@
                 <a href="#logout" class="nav-link">
                     <i class="logout-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
+                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
                         </svg>
                     </i>
                     <p>Logout</p>
@@ -111,105 +104,83 @@
             <a href="#access" class="nav-link">
                 <i class="access-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                        <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/>
+                        <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z" />
                     </svg>
                 </i>
             </a>
         </div>
     </div>
-
     <main class="main-content">
         <header class="header">
             <div class="back-button">
-                <button onclick="window.location.href='classes.html'">
+                <button onclick="window.location.href='class.html'">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                        <path d="M480-120L280-320l200-200 40 40-120 120h480v80H400l120 120-40 40ZM960-480ZM0-480h960"/>
+                        <path d="M480-120L280-320l200-200 40 40-120 120h480v80H400l120 120-40 40ZM960-480ZM0-480h960" />
                     </svg>
                 </button>
             </div>
-            <h1>Class Details</h1>
-            <div class="user-settings">
-                <input type="text" id="search-bar" placeholder="Search">
-                <div id="search-results" class="search-results"></div>
-                <div class="user-info">
-                    <span>Welcome_Name!</span>
-                    <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-                </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
-            </div>
+            <h1>Edit Students in Class</h1>
         </header>
-        <div class="class-content">
-            <div class="students-section">
-                <h2>Students</h2>
-                <button class="edit-btn"  id="edit-students-btn">Edit Students</button>
-                <ul id="students-list" class="students-list">
-                    <!-- Populated by JavaScript -->
-                </ul>
-            </div>
-            <div class="lessons-section">
-                <h2>Lessons</h2>
-                <button id="edit-lessons-btn" class="edit-btn">Edit Lessons</button>
-                <ul id="lessons-list" class="lessons-list">
-                    <!-- Populated by JavaScript -->
-                </ul>
-                <div class="workload-section">
-                    <h3>Workload of the class</h3>
-                    <div class="workload-chart">
-                        <!-- Workload chart (e.g., use a canvas or SVG) -->
-                        <div class="workload-hours">15</div>
-                    </div>
+        <div class="title">Editing students in class</div>
+        <div class="class-container">
+            <form id="edit-students-form">
+                <div class="form-group">
+                    <label for="all-students-select">All Students:</label>
+                    <select id="all-students-select" multiple>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <button type="button" class="yellow-btn" id="add-student-btn">Add Student</button>
                 </div>
-                <button class="delete-class-btn">Delete Class</button>
-            </div>
+                <div class="form-group">
+                    <label for="current-students-select">Current Students in Class:</label>
+                    <select id="current-students-select" multiple>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <button type="button" class="red-btn" id="remove-student-btn">Remove Student</button>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="green-btn">Save Changes</button>
+                </div>
+            </form>
         </div>
     </main>
 </div>
 
 <script>
-
-    function updateUIBasedOnRole(role) {
-        const sidebar = document.querySelector('.side-bar');
-        const editButtons = document.querySelectorAll('.edit-btn');
-        const deleteButton = document.querySelector('.delete-class-btn');
-
-        if (role === 'admin') {
-            sidebar.classList.remove('yellow', 'red');
-            sidebar.classList.add('green');
-            editButtons.forEach(button => button.style.display = 'block');
-            deleteButton.style.display = 'block';
-        } else if (role === 'teacher') {
-            sidebar.classList.remove('green', 'red');
-            sidebar.classList.add('yellow');
-            editButtons.forEach(button => button.style.display = 'none');
-            deleteButton.style.display = 'none';
-        } else if (role === 'student') {
-            sidebar.classList.remove('green', 'yellow');
-            sidebar.classList.add('red');
-            editButtons.forEach(button => button.style.display = 'none');
-            deleteButton.style.display = 'none';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const classId = urlParams.get('classId');
-
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
         const role = sessionStorage.getItem('role');
-        const welcomeMessage = document.querySelector('.user-info span');
-        const personName = sessionStorage.getItem('personName');
 
-        console.log('Role:', role);
-
-        if (personName) {
-            welcomeMessage.textContent = `Welcome, ${personName}!`;
+        sidebar.classList.remove('red', 'yellow', 'green');
+        if (role === 'admin') {
+            sidebar.classList.add('green');
+        } else if (role === 'teacher') {
+            sidebar.classList.add('yellow');
+        } else {
+            sidebar.classList.add('red');
         }
 
-        updateUIBasedOnRole(role);
+        // fetch all unassigned students and show the all students
+        function fetchUnassignedStudents() {
+            fetch('/SomtodayHomeworkPlanner_war/fetchStudents?unassigned=true')
+                .then(response => response.json())
+                .then(students => {
+                    const allStudentsSelect = document.getElementById('all-students-select');
+                    allStudentsSelect.innerHTML = ''; // Clear the list before adding new options
+                    students.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student.student_id;
+                        option.textContent = student.person_name;
+                        allStudentsSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching students:', error));
+        }
+
+        const classId = new URLSearchParams(window.location.search).get('classId');
 
         function fetchClassDetails(classId) {
-            fetch(`fetchClassDetails?classId=${classId}`)
+            fetch(`/SomtodayHomeworkPlanner_war/fetchClassDetails?classId=${classId}`)
                 .then(response => response.json())
                 .then(data => {
                     displayClassDetails(data);
@@ -218,25 +189,16 @@
         }
 
         function displayClassDetails(data) {
-            const studentsList = document.getElementById('students-list');
-            const lessonsList = document.getElementById('lessons-list');
-            const workloadHours = document.querySelector('.workload-hours');
+            const currentStudentsSelect = document.getElementById('current-students-select');
 
-            studentsList.innerHTML = '';
+            // to view current students in class
+            currentStudentsSelect.innerHTML = '';
             data.students.forEach(student => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${student.person_name}</span> <button class="profile-btn">Profile</button>`;
-                studentsList.appendChild(li);
+                const option = document.createElement('option');
+                option.value = student.student_id;
+                option.textContent = student.person_name;
+                currentStudentsSelect.appendChild(option);
             });
-
-            lessonsList.innerHTML = '';
-            data.lessons.forEach(lesson => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${lesson.lesson_name}</span> <button class="see-lesson-btn" data-lesson-id="${lesson.lesson_id}" data-lesson-name="${lesson.lesson_name}" data-lesson-description="${lesson.lesson_description}" data-teacher-name="${lesson.teacher_name}">See lesson</button>`;
-                lessonsList.appendChild(li);
-            });
-
-            workloadHours.textContent = data.workload;
         }
 
         if (classId) {
@@ -245,50 +207,55 @@
             console.error('Class ID not found in URL');
         }
 
-        document.getElementById('edit-lessons-btn').addEventListener('click', function() {
-            window.location.href = `lesson_add.html?classId=${classId}`;
+        fetchUnassignedStudents();
+
+        // add selected students from all students to current students
+        document.getElementById('add-student-btn').addEventListener('click', function() {
+            const allStudentsSelect = document.getElementById('all-students-select');
+            const currentStudentsSelect = document.getElementById('current-students-select');
+            Array.from(allStudentsSelect.selectedOptions).forEach(option => {
+                currentStudentsSelect.appendChild(option);
+            });
         });
 
-        document.querySelector('.edit-btn').addEventListener('click', function() {
-            window.location.href = `edit_students.html?classId=${classId}`;
+        // remove selected students from current students and add them to all students.
+        document.getElementById('remove-student-btn').addEventListener('click', function() {
+            const allStudentsSelect = document.getElementById('all-students-select');
+            const currentStudentsSelect = document.getElementById('current-students-select');
+            Array.from(currentStudentsSelect.selectedOptions).forEach(option => {
+                allStudentsSelect.appendChild(option);
+            });
         });
 
-        document.querySelector('.delete-class-btn').addEventListener('click', function() {
-            if (confirm('Are you sure you want to delete this class?')) {
-                fetch('deleteClass', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ class_id: classId })
+        // save changes button to submit form
+        document.getElementById('edit-students-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const currentStudentsSelect = document.getElementById('current-students-select');
+            const studentIds = Array.from(currentStudentsSelect.options).map(option => option.value);
+
+            fetch('/SomtodayHomeworkPlanner_war/editStudentsInClass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    classId: classId,
+                    studentIds: studentIds
                 })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert('Class deleted successfully.');
-                            window.location.href = 'classes.html';
-                        } else {
-                            alert('Error deleting class');
-                        }
-                    })
-                    .catch(error => console.error('Error deleting class:', error));
-            }
-        });
-
-        document.getElementById('lessons-list').addEventListener('click', function(event) {
-            if (event.target.classList.contains('see-lesson-btn')) {
-                const lessonId = event.target.getAttribute('data-lesson-id');
-                const lessonName = event.target.getAttribute('data-lesson-name');
-                const lessonDescription = event.target.getAttribute('data-lesson-description');
-                const teacherName = event.target.getAttribute('data-teacher-name');
-                window.location.href = `specificlesson.html?lessonId=${lessonId}&lessonName=${lessonName}&lessonDescription=${lessonDescription}&teacherName=${teacherName}`;
-            }
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('Students updated successfully');
+                        window.location.href = `class.html?classId=${classId}`;
+                    } else {
+                        alert('Error updating students');
+                    }
+                })
+                .catch(error => console.error('Error updating students:', error));
         });
     });
 </script>
 
-
-
 </body>
-
 </html>
