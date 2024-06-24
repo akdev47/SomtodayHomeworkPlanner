@@ -13,13 +13,16 @@ public class Class {
 
     private List<Student> studentList;
 
+    private boolean hasProfilePicture;
+
     public Class() {
     }
-    public Class(int classID, String className, int classCapacity, List<Student> studentList) {
+    public Class(int classID, String className, int classCapacity, List<Student> studentList,  boolean hasProfilePicture) {
         this.classID = classID;
         this.className = className;
         this.classCapacity = classCapacity;
         this.studentList = studentList;
+        this.hasProfilePicture = hasProfilePicture;
     }
 
     public int getClassID() {
@@ -54,4 +57,11 @@ public class Class {
         this.studentList = studentList;
     }
 
+    public void setHasProfilePicture(boolean hasProfilePicture) {
+        this.hasProfilePicture = hasProfilePicture;
+    }
+
+    public boolean isHasProfilePicture() {
+        return hasProfilePicture;
+    }
 }

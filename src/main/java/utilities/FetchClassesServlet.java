@@ -43,18 +43,18 @@ public class FetchClassesServlet extends HttpServlet {
 
             String sql;
             if ("teacher".equals(role)) {
-                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity " +
+                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity, c.profile_picture IS NOT NULL AS has_profile_picture " +
                         "FROM somtoday6.Class c " +
                         "JOIN somtoday6.Lesson l ON c.class_id = l.class_id " +
                         "JOIN somtoday6.Teacher t ON l.teacher_id = t.teacher_id " +
                         "WHERE t.person_id = " + personId;
             } else if ("student".equals(role)) {
-                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity " +
+                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity, c.profile_picture IS NOT NULL AS has_profile_picture " +
                         "FROM somtoday6.Class c " +
                         "JOIN somtoday6.Student s ON c.class_id = s.class_id " +
                         "WHERE s.person_id = " + personId;
             } else if ("admin".equals(role)) {
-                sql = "SELECT c.class_id, c.class_name, c.class_capacity FROM somtoday6.Class c";
+                sql = "SELECT c.class_id, c.class_name, c.class_capacity, c.profile_picture IS NOT NULL AS has_profile_picture FROM somtoday6.Class c";
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
                 return;
@@ -68,6 +68,7 @@ public class FetchClassesServlet extends HttpServlet {
                 cls.setClassID(resultSet.getInt("class_id"));
                 cls.setClassName(resultSet.getString("class_name"));
                 cls.setClassCapacity(resultSet.getInt("class_capacity"));
+                cls.setHasProfilePicture(resultSet.getBoolean("has_profile_picture"));
                 classList.add(cls);
             }
 
@@ -92,7 +93,8 @@ public class FetchClassesServlet extends HttpServlet {
             json.append("{");
             json.append("\"class_id\":").append(cls.getClassID()).append(",");
             json.append("\"class_name\":\"").append(cls.getClassName()).append("\",");
-            json.append("\"class_capacity\":").append(cls.getClassCapacity());
+            json.append("\"class_capacity\":").append(cls.getClassCapacity()).append(",");
+            json.append("\"has_profile_picture\":").append(cls.isHasProfilePicture());
             json.append("}");
 
             if (i < classList.size() - 1) {

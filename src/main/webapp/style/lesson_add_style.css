@@ -41,7 +41,7 @@
 
 
 .side-bar{
-    width: 300px;
+    width: 250px;
     height: 100vh;
     text-align: center;
     display: flex;
@@ -782,4 +782,20 @@ body {
         transform: translateY(-50%);
         color: #666;
     }
+}
+
+#switch-to-delete-button {
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#switch-to-delete-button:hover {
+    background-color: #C70039;
 }

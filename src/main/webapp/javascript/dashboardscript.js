@@ -76,11 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         });
 
-        dayViewButton.addEventListener('click', () => {
-            monthView.style.display = 'none';
-            weekView.style.display = 'none';
-
-        });
 
         monthView.style.display = 'grid';
         weekView.style.display = 'none';

@@ -1,12 +1,11 @@
 package utilities;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import org.json.JSONObject;
+import java.sql.Statement;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,21 +26,25 @@ public class DeleteClassServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
+        String classIdStr = request.getParameter("class_id");
+        if (classIdStr == null || classIdStr.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Class ID is required");
+            return;
         }
-        JSONObject jsonRequest = new JSONObject(sb.toString());
 
-        int classId = jsonRequest.getInt("class_id");
+        int classId;
+        try {
+            classId = Integer.parseInt(classIdStr);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Class ID format");
+            return;
+        }
 
         try {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            // update students to set class_id to NULL
+            // Update students to set class_id to NULL
             String updateStudentsSql = "UPDATE somtoday6.Student SET class_id = NULL WHERE class_id = ?";
             try (PreparedStatement updateStudentsStmt = connection.prepareStatement(updateStudentsSql)) {
                 updateStudentsStmt.setInt(1, classId);
@@ -73,3 +76,4 @@ public class DeleteClassServlet extends HttpServlet {
         }
     }
 }
+

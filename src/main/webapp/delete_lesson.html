@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Class</title>
-    <link rel="stylesheet" href="style/addclassstyle.css">
+    <title>Somtoday Dashboard</title>
+    <!-- FONTS -->
+    <link rel="stylesheet" href="style/deleteclass.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <script src="javascript/dashboardscript.js"></script>
 </head>
 <body class="josefin-sans-regular">
 <div class="container">
-    <div class="side-bar red" id="sidebar">
+    <div class="side-bar yellow" id="sidebar">
         <div class="container-1">
-            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo">
+            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo"
+                 class="logo">
             <p class="logo-text">somtoday</p>
         </div>
         <div class="container-2">
@@ -59,7 +63,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#lessons" class="nav-link">
+                    <a href="lessons.html" class="nav-link">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z" />
@@ -95,7 +99,7 @@
                 <a href="#logout" class="nav-link">
                     <i class="logout-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
                         </svg>
                     </i>
                     <p>Logout</p>
@@ -104,7 +108,7 @@
             <a href="#access" class="nav-link">
                 <i class="access-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                        <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z" />
+                        <path d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/>
                     </svg>
                 </i>
             </a>
@@ -119,53 +123,38 @@
                     </svg>
                 </button>
             </div>
-            <h1>Add Class</h1>
+            <h1>Delete Class</h1>
+            <div class="user-settings">
+                <!-- User settings content -->
+            </div>
         </header>
-        <div class="title">Adding a class</div>
-        <div class="class-container">
-            <form action="/SomtodayHomeworkPlanner_war/addClass" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="class-name">Enter a class name:</label>
-                    <input type="text" id="class-name" name="className" required>
-                </div>
-                <div class="form-group">
-                    <label for="class-capacity">Enter class capacity:</label>
-                    <input type="number" id="class-capacity" name="classCapacity" required>
-                </div>
-                <div class="form-group">
-                    <label for="all-students-select">All Students:</label>
-                    <select id="all-students-select" multiple>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                    <button type="button" class="yellow-btn" id="add-student-btn">Add Student</button>
-                </div>
-                <div class="form-group">
-                    <label for="current-students-select">Current Students in Class:</label>
-                    <select id="current-students-select" name="students" multiple>
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="class-picture">Choose class picture:</label>
-                    <input type="file" id="class-picture" name="classPicture">
-                </div>
-                <div class="btn-group">
-                    <button type="submit" class="green-btn">Create Class</button>
-                </div>
-            </form>
+        <div class="title">Deleting a class</div>
+        <div class="form-group">
+            <label for="class-select">Choose a class to delete:</label>
+            <select id="class-select">
+                <option value="">Select a class</option>
+                <!-- options will be dynamically added here -->
+            </select>
+        </div>
+        <div class="message">
+            <p>You are deleting the class with the name “<span class="class-name"></span>”. Are you sure you want to delete this class?</p>
+        </div>
+        <div class="btn-group">
+            <button id="delete-class-btn" class="btn">Delete Class</button>
         </div>
     </main>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
+        const classSelect = document.getElementById('class-select');
+        const classNameSpan = document.querySelector('.class-name');
+        const deleteClassBtn = document.getElementById('delete-class-btn');
         const role = sessionStorage.getItem('role');
-        // const personId = sessionStorage.getItem('personId');
-        // const personName = sessionStorage.getItem('personName');
+        const personId = sessionStorage.getItem('personId');
+        const sidebar = document.getElementById('sidebar');
 
-
-        sidebar.classList.remove('red', 'yellow', 'green');
+        // update sidebar
         if (role === 'admin') {
             sidebar.classList.add('green');
         } else if (role === 'teacher') {
@@ -174,29 +163,68 @@
             sidebar.classList.add('red');
         }
 
-        console.log("add class test")
 
-        fetch('/SomtodayHomeworkPlanner_war/fetchStudents?unassigned=true')
-            .then(response => response.json())
-            .then(students => {
-                const allStudentsSelect = document.getElementById('all-students-select');
-                students.forEach(student => {
-                    const option = document.createElement('option');
-                    option.value = student.student_id;
-                    option.textContent = student.person_name;
-                    allStudentsSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error fetching students:', error));
+        function fetchClasses() {
+            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+                .then(response => response.json())
+                .then(classes => {
+                    populateClassSelect(classes);
+                })
+                .catch(error => console.error('Error fetching classes:', error));
+        }
 
-        // move the selected student from All Students to current students in class
-        document.getElementById('add-student-btn').addEventListener('click', function() {
-            const allStudentsSelect = document.getElementById('all-students-select');
-            const currentStudentsSelect = document.getElementById('current-students-select');
-            Array.from(allStudentsSelect.selectedOptions).forEach(option => {
-                currentStudentsSelect.appendChild(option);
+        function populateClassSelect(classes) {
+            classSelect.innerHTML = '<option value="">Select a class</option>';
+            classes.forEach(classData => {
+                const option = document.createElement('option');
+                option.value = classData.class_id;
+                option.textContent = classData.class_name;
+                classSelect.appendChild(option);
             });
+        }
+
+        classSelect.addEventListener('change', function() {
+            const selectedOption = classSelect.options[classSelect.selectedIndex];
+            if (selectedOption.value) {
+                classNameSpan.textContent = selectedOption.text;
+            } else {
+                classNameSpan.textContent = '';
+            }
         });
+
+        deleteClassBtn.addEventListener('click', function() {
+            const classId = classSelect.value;
+            if (classId) {
+                if (confirm('Are you sure you want to delete this class?')) {
+                    deleteClass(classId);
+                }
+            } else {
+                alert('Please select a class to delete.');
+            }
+        });
+
+        function deleteClass(classId) {
+            fetch('deleteClass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `class_id=${classId}`
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('Class deleted successfully!');
+                        fetchClasses();
+                        classNameSpan.textContent = '';
+                    } else {
+                        alert('Error deleting class.');
+                    }
+                })
+                .catch(error => console.error('Error deleting class:', error));
+        }
+
+        fetchClasses();
     });
 </script>
 </body>

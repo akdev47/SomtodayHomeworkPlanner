@@ -185,7 +185,6 @@
             sidebar.classList.add('red');
         }
 
-
         function getRandomGradient() {
             const colors = [
                 '#ff9a9e', '#fad0c4', '#fad0c4',
@@ -204,22 +203,26 @@
 
             const imgSection = document.createElement('div');
             imgSection.className = 'img-section';
-            const img = document.createElement('img');
-            img.src = `getClassPicture?classId=${classData.class_id}`;
-            img.alt = `${classData.class_name} Profile Picture`;
-            imgSection.appendChild(img);
+            if (classData.has_profile_picture) {
+                const img = document.createElement('img');
+                img.src = `getClassPicture?classId=${classData.class_id}`;
+                img.alt = `${classData.class_name} Profile Picture`;
+                imgSection.appendChild(img);
 
-            img.onerror = () => {
+                img.onerror = () => {
+                    imgSection.style.background = getRandomGradient();
+                    img.remove();
+                };
+            } else {
                 imgSection.style.background = getRandomGradient();
-                img.remove();
-            };
+            }
 
             const textSection = document.createElement('div');
             textSection.className = 'text-section';
 
             const h2 = document.createElement('h2');
             const link = document.createElement('a');
-            link.href = `class.html?classId=${classData.class_id}`; //link to individual class page!
+            link.href = `class.html?classId=${classData.class_id}`;
             link.textContent = classData.class_name;
             h2.appendChild(link);
             textSection.appendChild(h2);
@@ -242,7 +245,7 @@
             const listText = document.createElement('div');
             listText.className = 'list-text';
             const link = document.createElement('a');
-            link.href = `class.html?classId=${classData.class_id}`; // again link to class page!
+            link.href = `class.html?classId=${classData.class_id}`;
             link.textContent = classData.class_name;
             listText.appendChild(link);
             listItem.appendChild(listText);
@@ -293,7 +296,6 @@
             }
         });
     });
-
 </script>
 </body>
 </html>

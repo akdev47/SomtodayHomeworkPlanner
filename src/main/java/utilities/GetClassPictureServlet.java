@@ -24,32 +24,39 @@ public class GetClassPictureServlet extends HttpServlet {
             throws ServletException, IOException {
         String classId = request.getParameter("classId");
 
-        try {
+        if (classId == null || classId.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing classId parameter");
+            return;
+        }
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             String sql = "SELECT profile_picture FROM somtoday6.Class WHERE class_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, Integer.parseInt(classId));
-            ResultSet resultSet = preparedStatement.executeQuery();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setInt(1, Integer.parseInt(classId));
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        byte[] imgData = resultSet.getBytes("profile_picture");
 
-            if (resultSet.next()) {
-                byte[] imgData = resultSet.getBytes("profile_picture");
-
-                if (imgData != null) {
-                    response.setContentType("image/jpeg");
-                    OutputStream out = response.getOutputStream();
-                    out.write(imgData);
-                    out.close();
+                        if (imgData != null) {
+                            response.setContentType("image/jpeg");
+                            try (OutputStream out = response.getOutputStream()) {
+                                out.write(imgData);
+                            }
+                        } else {
+                            response.sendError(HttpServletResponse.SC_NOT_FOUND, "no image found for the given classId");
+                        }
+                    } else {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "class not found for the given classId");
+                    }
                 }
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404
             }
-
-            connection.close();
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "invalid classId parameter");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "an internal server error occurred!");
         }
     }
 }

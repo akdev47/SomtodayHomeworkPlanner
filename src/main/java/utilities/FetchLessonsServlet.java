@@ -25,15 +25,16 @@ public class FetchLessonsServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
+        String classId = request.getParameter("classId");
+
         try {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
-                    "SELECT l.lesson_id, c.course_name " +
-                            "FROM topicus6.Lesson l " +
-                            "JOIN topicus6.Course c ON l.course_id = c.course_id " +
-                            "WHERE c.course_name IS NOT NULL"
+                    "SELECT l.lesson_id, l.lesson_name " +
+                            "FROM somtoday6.Lesson l " +
+                            "WHERE l.class_id = " + classId
             );
 
             StringBuilder jsonBuilder = new StringBuilder();
@@ -48,7 +49,7 @@ public class FetchLessonsServlet extends HttpServlet {
                 }
                 jsonBuilder.append("{")
                         .append("\"lesson_id\":").append(resultSet.getInt("lesson_id")).append(",")
-                        .append("\"course_name\":\"").append(resultSet.getString("course_name")).append("\"")
+                        .append("\"lesson_name\":\"").append(resultSet.getString("lesson_name")).append("\"")
                         .append("}");
             }
 
