@@ -312,47 +312,7 @@
                 </div>
                 <div class="assignment-goals">
                     <h2>Assignment Goals</h2>
-                    <ul>
-                        <li>
-                            <span>Goal 1: Lorem ipsum</span>
-                            <span>10 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 2: Lorem ipsum</span>
-                            <span>30 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 3: Lorem ipsum</span>
-                            <span>30 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 4: Lorem ipsum</span>
-                            <span>20 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 5: Lorem ipsum</span>
-                            <span>30 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 5: Lorem ipsum</span>
-                            <span>30 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 5: Lorem ipsum</span>
-                            <span>30 mins</span>
-                            <button type="button">x</button>
-                        </li>
-                        <li>
-                            <span>Goal 5: Lorem ipsum</span>
-                            <span>30 mins</span>
-                            <button type="button">x</button>
-                        </li>
+                    <ul id="goals-ul">
                     </ul>
                     <div class="total-goals">
                         <div>
@@ -382,7 +342,17 @@
         const role = sessionStorage.getItem('role');
         const personId = sessionStorage.getItem('personId');
 
-        if (assignmentId && role && personId) {
+        function convertTimeToMinutes(timeStr) {
+            // Split the time string into hours, minutes, and seconds
+            const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+
+            // Calculate the total minutes
+            const totalMinutes = hours * 60 + minutes;
+
+            return totalMinutes;
+        }
+
+        function fetchDetails() {
             fetch(`fetchAssignmentDetails?id=${assignmentId}&role=${role}&personId=${personId}`)
                 .then(response => {
                     if (!response.ok) {
@@ -391,7 +361,7 @@
                     return response.json();
                 })
                 .then(assignment => {
-                    assignment.forEach(assignmentData =>{
+                    assignment.forEach(assignmentData => {
                         const descText = document.getElementById('description-text');
                         descText.innerText = assignmentData.hw_description;
 
@@ -403,6 +373,42 @@
                     })
                 })
                 .catch(error => console.error('Error fetching assignment details:', error));
+        }
+
+        function fetchGoals(){
+            const goalsList = document.getElementById("goals-ul");
+            fetch(`fetchGoals?id=${assignmentId}&role=${role}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(goals => {
+                    let i = 1;
+                    goals.forEach(goal => {
+                        const listItem = document.createElement("li");
+
+                        const goalName = document.createElement("span");
+                        goalName.textContent = "Goal " + i + ": " + goal.goal_name;
+
+                        const timeIndication = document.createElement('span');
+                        timeIndication.textContent = convertTimeToMinutes(goal.time_indication) + " mins";
+
+                        listItem.appendChild(goalName);
+                        listItem.appendChild(timeIndication);
+                        goalsList.appendChild(listItem);
+
+                        i++; // Increment the goal count
+                    });
+                })
+                .catch(error => console.error('Error fetching goals:', error));
+        }
+
+
+        if (assignmentId && role && personId) {
+            fetchDetails();
+            fetchGoals();
         } else {
             console.error('No assignment ID provided in URL');
         }

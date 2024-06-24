@@ -1,5 +1,7 @@
 package somtoday.model;
 
+import java.sql.Time;
+
 public class Goal {
 
     private int goalID;
@@ -8,11 +10,11 @@ public class Goal {
 
     private String goalName;
 
-    private String timeIndication;
+    private Time timeIndication;
 
     public Goal() { }
 
-    public Goal(int goalID, int homeworkID, String goalName, String timeIndication) {
+    public Goal(int goalID, int homeworkID, String goalName, Time timeIndication) {
         this.goalID = goalID;
         this.homeworkID = homeworkID;
         this.goalName = goalName;
@@ -43,11 +45,11 @@ public class Goal {
         this.goalName = goalName;
     }
 
-    public String getTimeIndication() {
+    public Time getTimeIndication() {
         return timeIndication;
     }
 
-    public void setTimeIndication(String timeIndication) {
+    public void setTimeIndication(Time timeIndication) {
         this.timeIndication = timeIndication;
     }
 }
