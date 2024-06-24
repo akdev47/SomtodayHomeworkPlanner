@@ -1,10 +1,14 @@
 package utilities;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,19 +24,31 @@ public class AddAssignmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        int personId = Integer.parseInt(request.getParameter("person-id"));
-        String homeworkName = request.getParameter("homeworkName");
-        Date dueDate = Date.valueOf(request.getParameter("due-date"));
-        Date publishDate = Date.valueOf(request.getParameter("publish-date"));
-        Time timeIndication = null;
-        int splitCount = 0; // UPDATE
-        String description = request.getParameter("description");
-        int lessonId = Integer.parseInt(request.getParameter("lessonId"));
-        int teacherId = 0; // Will be fetched from DB
-        int classId = Integer.parseInt(request.getParameter("classId"));
+        StringBuilder jb = new StringBuilder();
+        String line;
+        try (BufferedReader reader = request.getReader()) {
+            while ((line = reader.readLine()) != null)
+                jb.append(line);
+        } catch (Exception e) {
+            throw new IOException("Error reading request body: " + e.getMessage());
+        }
 
         try {
+            JSONObject jsonObject = new JSONObject(jb.toString());
+
+            int personId = jsonObject.getInt("personId");
+            String homeworkName = jsonObject.getString("homeworkName");
+            Date dueDate = Date.valueOf(jsonObject.getString("dueDate"));
+            Date publishDate = Date.valueOf(jsonObject.getString("publishDate"));
+            Time timeIndication = null;
+            int splitCount = 0; // UPDATE
+            String description = jsonObject.getString("description");
+            int lessonId = jsonObject.getInt("lessonId");
+            int teacherId = 0; // Will be fetched from DB
+            int classId = jsonObject.getInt("classId");
+
+            JSONArray goals = jsonObject.getJSONArray("goals");
+
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             connection.setAutoCommit(false);
@@ -55,7 +71,7 @@ public class AddAssignmentServlet extends HttpServlet {
             ResultSet rs = fetchStudentsStmt.executeQuery();
 
             String insertHomeworkSql = "INSERT INTO somtoday6.Homework (homework_name, due_date, publish_date, time_indication, split_count, description, lesson_id, student_id, class_id, homeworksubmittable, homeworksplittable, teacher_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement insertHomeworkStmt = connection.prepareStatement(insertHomeworkSql);
+            PreparedStatement insertHomeworkStmt = connection.prepareStatement(insertHomeworkSql, Statement.RETURN_GENERATED_KEYS);
 
             while (rs.next()) {
                 int studentId = rs.getInt("student_id");
@@ -72,8 +88,26 @@ public class AddAssignmentServlet extends HttpServlet {
                 insertHomeworkStmt.setBoolean(10, true);
                 insertHomeworkStmt.setBoolean(11, true);
                 insertHomeworkStmt.setInt(12, teacherId);
-
                 insertHomeworkStmt.executeUpdate();
+
+                ResultSet generatedKeys = insertHomeworkStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int homeworkId = generatedKeys.getInt(1);
+
+                    for (int i = 0; i < goals.length(); i++) {
+                        JSONObject goal = goals.getJSONObject(i);
+                        String goalName = goal.getString("name");
+                        Time goalTime = convertMinutesToTime(Integer.parseInt(goal.getString("time")));
+
+
+                        String insertGoalSql = "INSERT INTO somtoday6.goal (homework_id, goal_name, time_indication) VALUES (?, ?, ?)";
+                        PreparedStatement insertGoalStmt = connection.prepareStatement(insertGoalSql);
+                        insertGoalStmt.setInt(1, homeworkId);
+                        insertGoalStmt.setString(2, goalName);
+                        insertGoalStmt.setTime(3, goalTime);
+                        insertGoalStmt.executeUpdate();
+                    }
+                }
             }
 
             connection.commit(); // Commit the transaction
@@ -83,5 +117,10 @@ public class AddAssignmentServlet extends HttpServlet {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
+    }
+
+    private Time convertMinutesToTime(int minutes) {
+        long millis = TimeUnit.MINUTES.toMillis(minutes);
+        return new Time(millis - TimeZone.getDefault().getRawOffset());
     }
 }

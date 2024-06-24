@@ -224,7 +224,6 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
         // Fetch classes and update frontend
         const role = sessionStorage.getItem('role');
         const personId = sessionStorage.getItem('personId');
@@ -278,7 +277,7 @@
 
         if (role && personId) {
             setTimeout(fetchClasses, 50);
-            setTimeout(fetchLessons, 50)
+            setTimeout(fetchLessons, 50);
         } else {
             console.error('Missing role or personId in session storage');
         }
@@ -293,6 +292,7 @@
         const totalTime = document.getElementById('total-time');
 
         let savedData = {
+            personId: personId,
             homeworkName: '',
             dueDate: null,
             publishDate: null,
@@ -320,57 +320,35 @@
             document.getElementById('last-saved').textContent = `Last saved: ${new Date().toLocaleTimeString()}`;
             savedData.publishDate = new Date().toISOString().split('T')[0];
 
-            console.log(JSON.stringify(savedData))
+            console.log(JSON.stringify(savedData));
         });
 
         publishButton.addEventListener('click', function() {
-            console.log(savedData);
-            const dynamicForm = document.createElement('form');
-            dynamicForm.setAttribute('method', 'post');
-            dynamicForm.setAttribute('action', '/SomtodayHomeworkPlanner_war/addAssignment');
-            dynamicForm.style.display = 'none';
+            savedData.homeworkName = assignmentNameInput.value;
+            savedData.dueDate = dueDateInput.value;
+            savedData.classId = classSelector.value;
+            savedData.lessonId = lessonSelector.value;
+            savedData.description = descriptionInput.value;
 
-            // Collect all inputs and append to the form
-            const inputs = [
-                { name: 'person-id', value: personId},
-                { name: 'homeworkName', value: savedData.homeworkName},
-                { name: 'due-date', value: savedData.dueDate },
-                { name: 'publish-date', value: savedData.publishDate },
-                { name: 'classId', value: savedData.classId },
-                { name: 'lessonId', value: savedData.lessonId },
-                { name: 'description', value: savedData.description }
-            ];
+            savedData.publishDate = new Date().toISOString().split('T')[0];
 
-            inputs.forEach(inputData => {
-                const input = document.createElement('input');
-                input.setAttribute('type', 'hidden');
-                input.setAttribute('name', inputData.name);
-                input.setAttribute('value', inputData.value);
-                dynamicForm.appendChild(input);
-            });
 
-/*            // Append goal data
-            goalsList.querySelectorAll('li').forEach((goalItem, index) => {
-                const goalName = goalItem.querySelector('.goal-name').textContent;
-                const goalTime = goalItem.querySelector('.goal-time').textContent;
-                const goalNameInput = document.createElement('input');
-                goalNameInput.setAttribute('type', 'hidden');
-                goalNameInput.setAttribute('name', `goals[${index}][name]`);
-                goalNameInput.setAttribute('value', goalName);
-
-                const goalTimeInput = document.createElement('input');
-                goalTimeInput.setAttribute('type', 'hidden');
-                goalTimeInput.setAttribute('name', `goals[${index}][time]`);
-                goalTimeInput.setAttribute('value', goalTime);
-
-                dynamicForm.appendChild(goalNameInput);
-                dynamicForm.appendChild(goalTimeInput);
-            }); */
-
-            document.body.appendChild(dynamicForm);
-            console.log(dynamicForm);
-            dynamicForm.submit();
-
+            fetch('/SomtodayHomeworkPlanner_war/addAssignment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(savedData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Assignment published successfully');
+                        window.location.href = 'assignments-teacher.html';
+                    } else {
+                        return response.json().then(err => { throw new Error(err.message); });
+                    }
+                })
+                .catch(error => console.error('Error publishing assignment:', error));
         });
 
         const goalForm = document.getElementById('add-goal-form');
@@ -386,7 +364,7 @@
                 const goalItem = document.createElement('li');
                 goalItem.innerHTML = `
                 <span class="goal-name">${goalName}</span>
-                <span class="goal-time">${goalTime} mins</span>
+                <span class="goal-time">${goalTime}</span>
                 <button type="button" class="remove-goal-btn">x</button>
             `;
 
