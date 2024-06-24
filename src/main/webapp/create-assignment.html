@@ -168,22 +168,26 @@
                     <div>
                         <h3>Assignment Name</h3>
                         <input type="text" id="assignment-name">
+                        <span class="error-message" id="assignment-name-error"></span>
                     </div>
                     <div>
                         <h3>Due Date</h3> <!-- DUE DATE CAN BE CHANGED TO DATE-TIME MAYBE -->
                         <input type="date" id="due-date">
+                        <span class="error-message" id="due-date-error"></span>
                     </div>
                     <div>
                         <h3>Choose Class</h3>
                         <select name="class-selector" id="class-selector">
                             <!-- POPULATED BY JS -->
                         </select>
+                        <span class="error-message" id="class-selector-error"></span>
                     </div>
                     <div>
                         <h3>Choose Lesson</h3>
                         <select name="lesson-selector" id="lesson-selector">
                             <!-- POPULATED BY JS -->
                         </select>
+                        <span class="error-message" id="lesson-selector-error"></span>
                     </div>
                 </div>
                 <div class="assignment-goals">
@@ -195,6 +199,7 @@
                         <div>
                             <p id="total-goal-count">Total Goal Count: 0</p>
                             <p id="total-time">Total Time: 0 mins</p>
+                            <span class="error-message" id="goals-list-error"></span>
                         </div>
                         <button class="add-goal-btn">Add Goal to this Assignment</button>
                         <div class="pop-up-overlay goals-pop-up-overlay "></div>
@@ -212,6 +217,7 @@
 
                 <h2>Assignment Description</h2>
                 <textarea class="description-input" id="assignment-description"></textarea>
+                <span class="error-message" id="assignment-description-error"></span>
                 <div class="btn-container">
                     <p id="last-saved">Last saved: Never</p>
                     <button class="save-btn" id="save-btn">Save</button>
@@ -295,7 +301,6 @@
             console.error('Missing role or personId in session storage');
         }
 
-
         const saveButton = document.getElementById('save-btn');
         const publishButton = document.getElementById('publish-btn');
         const assignmentNameInput = document.getElementById('assignment-name');
@@ -316,7 +321,44 @@
             goals: []
         };
 
+        function validateForm() {
+            let isValid = true;
+
+            // Clear previous error messages
+            document.getElementById('assignment-name-error').textContent = '';
+            document.getElementById('due-date-error').textContent = '';
+            document.getElementById('class-selector-error').textContent = '';
+            document.getElementById('lesson-selector-error').textContent = '';
+            document.getElementById('assignment-description-error').textContent = '';
+            document.getElementById('goals-list-error').textContent = '';
+
+            if (!assignmentNameInput.value) {
+                isValid = false;
+                document.getElementById('assignment-name-error').textContent = 'Assignment name is required.';
+            }
+            if (!dueDateInput.value) {
+                isValid = false;
+                document.getElementById('due-date-error').textContent = 'Due date is required.';
+            }
+            if (!classSelector.value) {
+                isValid = false;
+                document.getElementById('class-selector-error').textContent = 'Class selection is required.';
+            }
+            if (!lessonSelector.value) {
+                isValid = false;
+                document.getElementById('lesson-selector-error').textContent = 'Lesson selection is required.';
+            }
+            if (!descriptionInput.value) {
+                isValid = false;
+                document.getElementById('assignment-description-error').textContent = 'Assignment description is required.';
+            }
+
+            return isValid;
+        }
+
         saveButton.addEventListener('click', function() {
+            if (!validateForm()) return;
+
             savedData.homeworkName = assignmentNameInput.value;
             savedData.dueDate = dueDateInput.value;
             savedData.classId = classSelector.value;
@@ -338,6 +380,8 @@
         });
 
         publishButton.addEventListener('click', function() {
+            if (!validateForm()) return;
+
             savedData.homeworkName = assignmentNameInput.value;
             savedData.dueDate = dueDateInput.value;
             savedData.classId = classSelector.value;
@@ -345,7 +389,6 @@
             savedData.description = descriptionInput.value;
 
             savedData.publishDate = new Date().toISOString().split('T')[0];
-
 
             fetch('/SomtodayHomeworkPlanner_war/addAssignment', {
                 method: 'POST',
@@ -389,6 +432,10 @@
 
                 goalsList.appendChild(goalItem);
                 updateTotalGoals();
+
+                // Reset form inputs
+                goalNameInput.value = '';
+                timeIndicationInput.value = '';
             }
         });
 

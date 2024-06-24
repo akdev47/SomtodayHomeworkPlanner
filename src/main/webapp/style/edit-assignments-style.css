@@ -659,4 +659,12 @@ body {
     padding: 6px;
     width: 100%;
 }
+
+.error-message{
+    display: block;
+    margin-top: 5px;
+    color: red;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
 /*----------------------------------------------------------------------------- */
