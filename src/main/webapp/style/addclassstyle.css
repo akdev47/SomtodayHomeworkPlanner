@@ -144,17 +144,17 @@ body {
 
 .search-results {
     position: absolute;
-    top: 35px; 
+    top: 35px;
     left: 0;
     right: 0;
     background: white;
     border: 1px solid #ccc;
     max-height: 200px;
-    width: calc(100% - 230px); 
+    width: calc(100% - 230px);
     overflow-y: auto;
     display: none;
     z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
 .search-results div {
@@ -191,7 +191,7 @@ body {
 }
 
 .back-button svg {
-    fill: #1984cf; 
+    fill: #1984cf;
 }
 
 .header h1 {
@@ -207,9 +207,9 @@ body {
 .user-settings input {
     padding: 5px;
     margin-right: 10px;
-    width: 500px; 
-    max-width: 100%; 
-    box-sizing: border-box; 
+    width: 500px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .user-info .language-icon {
@@ -226,18 +226,18 @@ body {
 }
 
 .user-info a {
-    margin-left: 5px; 
+    margin-left: 5px;
 }
 
 .language-icon a img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
     vertical-align: middle;
     margin-left: 5px;
 }
 
 .user-info a img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
     vertical-align: middle;
     margin-left: 5px;
