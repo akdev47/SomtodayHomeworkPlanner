@@ -503,6 +503,10 @@ td > a{
 .content > button:hover{
     background-color: #FFCC00;
 }
+
+.hidden{
+    display: none;
+}
 /*----------------------------------------------------------------------------- */
 
 /* CLEAN CSS AND HTML */
