@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import somtoday.model.Class;
 import somtoday.model.Lesson;
 
 @WebServlet("/fetchLessonsE")
-public class FetchLessonsForEdit extends HttpServlet{
+public class FetchLessonsForEdit extends HttpServlet {
     /**
      * This class is going to be deleted and functions will be into original fetch lessons.
      * This is short-term solution in order to not break any functionality with changing the code.
-      */
+     */
     private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
     private static final String DB_USER = "dab_di23242b_168";
     private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
@@ -37,7 +36,8 @@ public class FetchLessonsForEdit extends HttpServlet{
         response.setCharacterEncoding("UTF-8");
 
         String role = request.getParameter("role");
-        String personId = request.getParameter("personId");
+        int personId = Integer.parseInt(request.getParameter("personId"));
+        int classId = Integer.parseInt(request.getParameter("classId"));
 
         List<Lesson> lessonList = new ArrayList<>();
 
@@ -46,21 +46,26 @@ public class FetchLessonsForEdit extends HttpServlet{
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             String sql;
+            PreparedStatement preparedStatement;
+
             if ("teacher".equals(role)) {
                 sql = "SELECT l.lesson_id, l.lesson_name " +
                         "FROM lesson l, teacher t " +
                         "WHERE l.teacher_id = t.teacher_id AND " +
-                        "t.person_id = " + personId;
-            }  else if ("admin".equals(role)) {
+                        "t.person_id = ? AND l.class_id = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, personId);
+                preparedStatement.setInt(2, classId);
+            } else if ("admin".equals(role)) {
                 sql = "SELECT l.lesson_id, l.lesson_name " +
-                        "FROM lesson l, teacher t ";
+                        "FROM lesson l";
+                preparedStatement = connection.prepareStatement(sql);
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid role");
                 return;
             }
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Lesson ls = new Lesson();
