@@ -357,9 +357,21 @@
         const assignmentId = urlParams.get('id');
         const role = sessionStorage.getItem('role');
         const personId = sessionStorage.getItem('personId');
-        const goalsList = document.getElementById("goals-list");
         const totalGoalCount = document.getElementById('total-goal-count');
         const totalTime = document.getElementById('total-time');
+        const sidebar = document.querySelector('.side-bar');
+
+        sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
+        if (role === 'admin') {
+            console.log('Setting sidebar color to green for admin');
+            sidebar.classList.add('green');
+        } else if (role === 'teacher') {
+            console.log('Setting sidebar color to yellow for teacher');
+            sidebar.classList.add('yellow');
+        } else if (role === 'student') {
+            console.log('Setting sidebar color to red for student');
+            sidebar.classList.add('red');
+        }
 
         function convertTimeToMinutes(timeStr) {
             // Split the time string into hours, minutes, and seconds
