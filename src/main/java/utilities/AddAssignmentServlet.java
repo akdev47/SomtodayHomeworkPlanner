@@ -2,9 +2,9 @@ package utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
@@ -53,19 +53,35 @@ public class AddAssignmentServlet extends HttpServlet {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             connection.setAutoCommit(false);
 
-            // Use PreparedStatement to avoid SQL injection
-            String fetchTeacherSql = "SELECT teacher_id FROM somtoday6.teacher t WHERE t.person_id = ?";
+            // Fetch teacher information
+            String fetchTeacherSql = "SELECT teacher_id, person_name FROM somtoday6.teacher t JOIN somtoday6.person p ON t.person_id = p.person_id WHERE t.person_id = ?";
             PreparedStatement fetchTeacherStmt = connection.prepareStatement(fetchTeacherSql);
             fetchTeacherStmt.setInt(1, personId);
             ResultSet resultSet = fetchTeacherStmt.executeQuery();
 
+            String teacherName = "";
             if (resultSet.next()) {
                 teacherId = resultSet.getInt("teacher_id");
+                teacherName = resultSet.getString("person_name");
             } else {
                 throw new SQLException("Teacher not found for personId: " + personId);
             }
 
-            String fetchStudentsSql = "SELECT student_id FROM somtoday6.student WHERE class_id = ?";
+            // to get class name
+            String fetchClassNameSql = "SELECT class_name FROM somtoday6.class WHERE class_id = ?";
+            PreparedStatement fetchClassNameStmt = connection.prepareStatement(fetchClassNameSql);
+            fetchClassNameStmt.setInt(1, classId);
+            ResultSet classResultSet = fetchClassNameStmt.executeQuery();
+
+            String className = "";
+            if (classResultSet.next()) {
+                className = classResultSet.getString("class_name");
+            } else {
+                throw new SQLException("Class not found for classId: " + classId);
+            }
+
+            //to get students
+            String fetchStudentsSql = "SELECT student_id, person_id FROM somtoday6.student WHERE class_id = ?";
             PreparedStatement fetchStudentsStmt = connection.prepareStatement(fetchStudentsSql);
             fetchStudentsStmt.setInt(1, classId);
             ResultSet rs = fetchStudentsStmt.executeQuery();
@@ -75,6 +91,7 @@ public class AddAssignmentServlet extends HttpServlet {
 
             while (rs.next()) {
                 int studentId = rs.getInt("student_id");
+                int studentPersonId = rs.getInt("person_id");
 
                 insertHomeworkStmt.setString(1, homeworkName);
                 insertHomeworkStmt.setDate(2, dueDate);
@@ -99,7 +116,6 @@ public class AddAssignmentServlet extends HttpServlet {
                         String goalName = goal.getString("name");
                         Time goalTime = convertMinutesToTime(Integer.parseInt(goal.getString("time")));
 
-
                         String insertGoalSql = "INSERT INTO somtoday6.goal (homework_id, goal_name, time_indication) VALUES (?, ?, ?)";
                         PreparedStatement insertGoalStmt = connection.prepareStatement(insertGoalSql);
                         insertGoalStmt.setInt(1, homeworkId);
@@ -108,9 +124,12 @@ public class AddAssignmentServlet extends HttpServlet {
                         insertGoalStmt.executeUpdate();
                     }
                 }
+
+                // send notification for the student
+                insertNotification(connection, studentPersonId, teacherName + " created an assignment for class: " + className);
             }
 
-            connection.commit(); // Commit the transaction
+            connection.commit();
             connection.close();
             response.sendRedirect("assignments-teacher.html?timestamp=" + System.currentTimeMillis());
         } catch (Exception e) {
@@ -122,5 +141,16 @@ public class AddAssignmentServlet extends HttpServlet {
     private Time convertMinutesToTime(int minutes) {
         long millis = TimeUnit.MINUTES.toMillis(minutes);
         return new Time(millis - TimeZone.getDefault().getRawOffset());
+    }
+
+    private void insertNotification(Connection connection, int personId, String info) throws Exception {
+        String sql = "INSERT INTO somtoday6.notification (date, sender, info, person_id) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setDate(1, Date.valueOf(LocalDate.now()));
+            pstmt.setString(2, "Teacher");
+            pstmt.setString(3, info);
+            pstmt.setInt(4, personId);
+            pstmt.executeUpdate();
+        }
     }
 }

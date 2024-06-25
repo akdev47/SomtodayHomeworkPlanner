@@ -6,6 +6,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -52,14 +56,22 @@ public class AddClassServlet extends HttpServlet {
                 classId = rs.getInt(1);
             }
 
-            // Handle associations with students
+
             if (students != null) {
-                for (String studentId : students) {
+                for (String studentIdStr : students) {
+                    int studentId = Integer.parseInt(studentIdStr);
+
                     String studentSql = "UPDATE somtoday6.Student SET class_id = ? WHERE student_id = ?";
                     PreparedStatement studentStmt = connection.prepareStatement(studentSql);
                     studentStmt.setInt(1, classId);
-                    studentStmt.setInt(2, Integer.parseInt(studentId));
+                    studentStmt.setInt(2, studentId);
                     studentStmt.executeUpdate();
+
+                    // get person_id for the student
+                    int personId = fetchPersonId(connection, studentId);
+
+                    // send notification for the student
+                    insertNotification(connection, personId, "Admin added you to a class: " + className);
                 }
             }
 
@@ -69,6 +81,31 @@ public class AddClassServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred.");
+        }
+    }
+
+    private int fetchPersonId(Connection connection, int studentId) throws Exception {
+        String sql = "SELECT person_id FROM somtoday6.Student WHERE student_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("person_id");
+            } else {
+                throw new Exception("Person ID not found for student ID: " + studentId);
+            }
+        }
+    }
+
+    private void insertNotification(Connection connection, int personId, String info) throws Exception {
+        String sql = "INSERT INTO somtoday6.notification (date, sender, info, person_id) " +
+                "VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setDate(1, Date.valueOf(LocalDate.now()));
+            pstmt.setString(2, "Admin");
+            pstmt.setString(3, info);
+            pstmt.setInt(4, personId);
+            pstmt.executeUpdate();
         }
     }
 }

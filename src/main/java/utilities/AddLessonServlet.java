@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,7 +30,7 @@ public class AddLessonServlet extends HttpServlet {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            // Parse JSON data
+
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = request.getReader();
             String line;
@@ -46,16 +45,77 @@ public class AddLessonServlet extends HttpServlet {
             int classId = jsonRequest.getInt("class_id");
             int schoolYear = LocalDate.now().getYear();
 
-            String sql = "INSERT INTO somtoday6.Lesson (lesson_name, lesson_description, teacher_id, class_id, school_year) " +
+            String insertLessonSql = "INSERT INTO somtoday6.Lesson (lesson_name, lesson_description, teacher_id, class_id, school_year) " +
                     "VALUES (?, ?, ?, ?, ?)";
 
-            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            try (PreparedStatement pstmt = connection.prepareStatement(insertLessonSql)) {
                 pstmt.setString(1, lessonName);
                 pstmt.setString(2, lessonDescription);
                 pstmt.setInt(3, teacherId);
                 pstmt.setInt(4, classId);
                 pstmt.setInt(5, schoolYear);
                 pstmt.executeUpdate();
+            }
+
+            //get person_id of teacher
+            int personId = 0;
+            String fetchPersonIdSql = "SELECT person_id FROM somtoday6.Teacher WHERE teacher_id = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(fetchPersonIdSql)) {
+                pstmt.setInt(1, teacherId);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    personId = rs.getInt("person_id");
+                }
+            }
+
+            // send notification to teacher
+            String insertNotificationSql = "INSERT INTO somtoday6.notification (date, sender, info, person_id) " +
+                    "VALUES (?, ?, ?, ?)";
+            try (PreparedStatement pstmt = connection.prepareStatement(insertNotificationSql)) {
+                pstmt.setDate(1, Date.valueOf(LocalDate.now()));
+                pstmt.setString(2, "Admin");
+                pstmt.setString(3, "Admin added you to a lesson: " + lessonName);
+                pstmt.setInt(4, personId);
+                pstmt.executeUpdate();
+            }
+
+            // get class name
+            String className = "";
+            String fetchClassNameSql = "SELECT class_name FROM somtoday6.Class WHERE class_id = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(fetchClassNameSql)) {
+                pstmt.setInt(1, classId);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    className = rs.getString("class_name");
+                }
+            }
+
+            // send notification to teacher
+            try (PreparedStatement pstmt = connection.prepareStatement(insertNotificationSql)) {
+                pstmt.setDate(1, Date.valueOf(LocalDate.now()));
+                pstmt.setString(2, "Admin");
+                pstmt.setString(3, "Admin added you to class: " + className);
+                pstmt.setInt(4, personId);
+                pstmt.executeUpdate();
+            }
+
+            // get all students in the class
+            String fetchStudentsSql = "SELECT person_id FROM somtoday6.Student WHERE class_id = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(fetchStudentsSql)) {
+                pstmt.setInt(1, classId);
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int studentPersonId = rs.getInt("person_id");
+
+                    // add notification for each student
+                    try (PreparedStatement studentPstmt = connection.prepareStatement(insertNotificationSql)) {
+                        studentPstmt.setDate(1, Date.valueOf(LocalDate.now()));
+                        studentPstmt.setString(2, "Admin");
+                        studentPstmt.setString(3, "Admin added a new lesson (" + lessonName + ") to your class: " + className);
+                        studentPstmt.setInt(4, studentPersonId);
+                        studentPstmt.executeUpdate();
+                    }
+                }
             }
 
             connection.close();

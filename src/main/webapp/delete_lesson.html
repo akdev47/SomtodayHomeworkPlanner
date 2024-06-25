@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somtoday Dashboard</title>
+    <title>Delete Lesson</title>
+
     <!-- FONTS -->
     <link rel="stylesheet" href="style/deleteclass.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,8 +17,7 @@
 <div class="container">
     <div class="side-bar yellow" id="sidebar">
         <div class="container-1">
-            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo"
-                 class="logo">
+            <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo">
             <p class="logo-text">somtoday</p>
         </div>
         <div class="container-2">
@@ -116,115 +116,117 @@
     </div>
     <main class="main-content">
         <header class="header">
-            <div class="back-button">
-                <button onclick="window.location.href='classes.html'">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                        <path d="M480-120L280-320l200-200 40 40-120 120h480v80H400l120 120-40 40ZM960-480ZM0-480h960" />
-                    </svg>
-                </button>
-            </div>
-            <h1>Delete Class</h1>
+            <h1>Delete Lesson</h1>
             <div class="user-settings">
                 <!-- User settings content -->
             </div>
         </header>
-        <div class="title">Deleting a class</div>
+        <div class="title">Deleting a lesson</div>
         <div class="form-group">
-            <label for="class-select">Choose a class to delete:</label>
-            <select id="class-select">
-                <option value="">Select a class</option>
+            <label for="lesson-select">Choose a lesson to delete:</label>
+            <select id="lesson-select">
+                <option value="">Select a lesson</option>
                 <!-- options will be dynamically added here -->
             </select>
         </div>
         <div class="message">
-            <p>You are deleting the class with the name “<span class="class-name"></span>”. Are you sure you want to delete this class?</p>
+            <p>You are deleting the lesson with the name “<span class="lesson-name"></span>”. Are you sure you want to delete this lesson?</p>
         </div>
         <div class="btn-group">
-            <button id="delete-class-btn" class="btn">Delete Class</button>
+            <button id="delete-lesson-btn" class="btn">Delete Lesson</button>
         </div>
     </main>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const classSelect = document.getElementById('class-select');
-        const classNameSpan = document.querySelector('.class-name');
-        const deleteClassBtn = document.getElementById('delete-class-btn');
-        const role = sessionStorage.getItem('role');
-        const personId = sessionStorage.getItem('personId');
-        const sidebar = document.getElementById('sidebar');
+        const lessonSelect = document.getElementById('lesson-select');
+        const lessonNameSpan = document.querySelector('.lesson-name');
+        const deleteLessonBtn = document.getElementById('delete-lesson-btn');
+        const classId = new URLSearchParams(window.location.search).get('classId');
 
-        // update sidebar
+        const role = sessionStorage.getItem('role');
+        const sidebar = document.querySelector('.side-bar');
+
+        // Set sidebar color based on role
+        sidebar.classList.remove('red', 'yellow', 'green');
         if (role === 'admin') {
+            console.log('Setting sidebar color to green for admin');
             sidebar.classList.add('green');
         } else if (role === 'teacher') {
+            console.log('Setting sidebar color to yellow for teacher');
             sidebar.classList.add('yellow');
-        } else {
+        } else if (role === 'student') {
+            console.log('Setting sidebar color to red for student');
             sidebar.classList.add('red');
         }
 
 
-        function fetchClasses() {
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+        function fetchLessons() {
+            fetch(`fetchLessons?classId=${classId}`)
                 .then(response => response.json())
-                .then(classes => {
-                    populateClassSelect(classes);
+                .then(lessons => {
+                    populateLessonSelect(lessons);
                 })
-                .catch(error => console.error('Error fetching classes:', error));
+                .catch(error => console.error('Error fetching lessons:', error));
         }
 
-        function populateClassSelect(classes) {
-            classSelect.innerHTML = '<option value="">Select a class</option>';
-            classes.forEach(classData => {
+        function populateLessonSelect(lessons) {
+            lessonSelect.innerHTML = '<option value="">Select a lesson</option>';
+            lessons.forEach(lesson => {
                 const option = document.createElement('option');
-                option.value = classData.class_id;
-                option.textContent = classData.class_name;
-                classSelect.appendChild(option);
+                option.value = lesson.lesson_id;
+                option.textContent = lesson.lesson_name;
+                lessonSelect.appendChild(option);
             });
         }
 
-        classSelect.addEventListener('change', function() {
-            const selectedOption = classSelect.options[classSelect.selectedIndex];
+        lessonSelect.addEventListener('change', function() {
+            const selectedOption = lessonSelect.options[lessonSelect.selectedIndex];
             if (selectedOption.value) {
-                classNameSpan.textContent = selectedOption.text;
+                lessonNameSpan.textContent = selectedOption.text;
             } else {
-                classNameSpan.textContent = '';
+                lessonNameSpan.textContent = '';
             }
         });
 
-        deleteClassBtn.addEventListener('click', function() {
-            const classId = classSelect.value;
-            if (classId) {
-                if (confirm('Are you sure you want to delete this class?')) {
-                    deleteClass(classId);
+        deleteLessonBtn.addEventListener('click', function() {
+            const lessonId = lessonSelect.value;
+            if (lessonId) {
+                if (confirm('Are you sure you want to delete this lesson?')) {
+                    deleteLesson(lessonId);
                 }
             } else {
-                alert('Please select a class to delete.');
+                alert('Please select a lesson to delete.');
             }
         });
 
-        function deleteClass(classId) {
-            fetch('deleteClass', {
+        function deleteLesson(lessonId) {
+            fetch('deleteLesson', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 },
-                body: `class_id=${classId}`
+                body: JSON.stringify({ lesson_id: lessonId })
             })
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
-                        alert('Class deleted successfully!');
-                        fetchClasses();
-                        classNameSpan.textContent = '';
+                        alert('Lesson deleted successfully!');
+                        window.location.href = `class.html?classId=${classId}`;
+                        fetchLessons();
+                        lessonNameSpan.textContent = '';
                     } else {
-                        alert('Error deleting class.');
+                        alert('Error deleting lesson.');
                     }
                 })
-                .catch(error => console.error('Error deleting class:', error));
+                .catch(error => {
+                    console.error('Error deleting lesson:', error);
+                    alert('Error deleting lesson.');
+                });
         }
 
-        fetchClasses();
+        fetchLessons();
     });
 </script>
 </body>
