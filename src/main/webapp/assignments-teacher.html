@@ -184,7 +184,7 @@
                 console.log('Setting sidebar color to green for admin');
                 console.log('Admin - add assignment button removed');
                 sidebar.classList.add('green');
-                addBtn.classList.add(`hidden`);
+                addBtn.classList.add('hidden');
             } else if (role === 'teacher') {
                 console.log('Setting sidebar color to yellow for teacher');
                 sidebar.classList.add('yellow');
@@ -192,9 +192,8 @@
                 console.log('Setting sidebar color to red for student');
                 console.log('Student - add assignment button removed');
                 sidebar.classList.add('red');
-                addBtn.classList.add(`hidden`);
+                addBtn.classList.add('hidden');
             }
-
 
             if (role && personId) {
                 fetch(`fetchAssignments?role=${role}&personId=${personId}`)
@@ -222,10 +221,14 @@
                             const dueDate = document.createElement('td');
                             dueDate.innerText = assignmentData.due_date;
 
-                            const detailsButton = document.createElement("td");
-                            const detailsLink = document.createElement("a");
-                            detailsLink.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
-                            detailsLink.innerHTML = "See Details";
+                            const detailsButton = document.createElement('td');
+                            const detailsLink = document.createElement('a');
+                            if (role === 'student') {
+                                detailsLink.href = `assignment-details-student.html?id=${assignmentData.homework_id}`;
+                            } else {
+                                detailsLink.href = `assignments-of-class.html?homeworkId=${assignmentData.homework_id}`;
+                            }
+                            detailsLink.innerHTML = 'See Details';
                             detailsButton.appendChild(detailsLink);
 
                             row.appendChild(className);
@@ -242,6 +245,7 @@
                 console.error('Missing role or personId in session storage');
             }
         });
+
     </script>
 </body>
 
