@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
           rel="stylesheet">
 
-    <script src="javascript/assignmentPopup.js"></script>
+    <script src="javascript/splitPopup.js"></script>
 </head>
 
 <body class="josefin-sans-regular">
@@ -187,13 +187,21 @@
                     algebra and enhance your analytical abilities!</p>
                 <div class="btn-container">
                     <button class="split-btn">Split Assignment</button>
-                    <div class="pop-up-overlay split-pop-up-overlay "></div>
-                    <form class="pop-up split-pop-up">
-                        <p>Enter how many splits you want (NOT FINISHED YET)</p>
-                        <input type="number" name="split-count">
-                        <input type="submit" value="Next" class="submit-btn">
+                    <div class="pop-up-overlay split-pop-up-overlay"></div>
+                    <form class="pop-up split-pop-up" id="splitForm">
+                        <p>Enter how many splits you want?</p>
+                        <input type="number" id="splitCount" required />
+                        <button type="submit">Submit</button>
                     </form>
 
+                    <div class="pop-up-overlay individual-split-overlay"></div>
+                    <form class="pop-up individual-split" id="individualSplitForm">
+                        <p>Enter the name of the split:</p>
+                        <input type="text" id="splitName" required />
+                        <p>Enter the duration of the split (in minutes):</p>
+                        <input type="number" id="splitDuration" required />
+                        <button type="submit">Create</button>
+                    </form>
                 </div>
             </div>
             <div class="homework-container">
