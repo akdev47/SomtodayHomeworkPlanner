@@ -50,7 +50,6 @@ public class FetchGoalsServlet extends HttpServlet {
                 Goal g = new Goal();
                 g.setGoalID(resultSet.getInt("goal_id"));
                 g.setGoalName(resultSet.getString("goal_name"));
-                g.setTimeIndication(resultSet.getTime("time_indication"));
                 goalList.add(g);
             }
 
@@ -73,8 +72,7 @@ public class FetchGoalsServlet extends HttpServlet {
             Goal g = goalList.get(i);
             json.append("{");
             json.append("\"goal_id\":").append(g.getGoalID()).append(",");
-            json.append("\"goal_name\":\"").append(g.getGoalName().replace("\"", "\\\"")).append("\",");
-            json.append("\"time_indication\":\"").append(g.getTimeIndication()).append("\"");
+            json.append("\"goal_name\":\"").append(g.getGoalName().replace("\"", "\\\"")).append("\"");
             json.append("}");
 
             if (i < goalList.size() - 1) {
