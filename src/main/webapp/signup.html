@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-up</title>
+    <link rel="stylesheet" href="style/signup_style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+<div class="signup-page red">
+    <div class="container-1">
+        <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo" />
+        <p class="logo-text">somtoday</p>
+    </div>
+    <div class="container-2">
+        <p class="sign-up">Sign Up</p>
+        <form class="signupForm">
+            <input type="text" id="person-name" name="person-name" placeholder="Name" required />
+            <input type="email" id="email" name="email" placeholder="Email" required />
+            <input type="text" id="username" name="username" placeholder="Username" required />
+            <input type="password" id="password" name="password" placeholder="Password" required />
+            Introduce your birthdate:
+            <input type="date" id="birth-date" name="birth-date" placeholder="Birth date" required />
+            Introduce your gender:
+            <select id="gender">
+                <option value="F">Female</option>
+                <option value="M">Male</option>
+                <option value="O">Other</option>
+
+            </select>
+
+            <div class="buttons">
+
+                <button type="submit" aria-label="Sign-up">Sign up</button>
+            </div>
+        </form>
+
+        <div id="error-message" style="color: red; display: none;">Invalid username or password</div>
+    </div>
+</div>
+
+</body>
+</html>
