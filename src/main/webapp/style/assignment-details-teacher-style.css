@@ -428,7 +428,13 @@ body {
     margin-bottom: 20px;
 }
 
-.assignment-description h2 {
+.heading-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.heading-container > h2 {
     margin-bottom: 10px;
     font-weight: 500;
 }
@@ -443,20 +449,20 @@ body {
 .btn-container {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-.btn-container > button {
-    background-color: #DB133D;
-    color: white;
+.split-btn {
+    background-color: #F5E709;
+    color: #262F35;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.btn-container > button:hover {
-    background-color: #b81031;
+.split-btn:hover {
+    background-color: #F7E24E;
 }
 
 /* Split Request */
@@ -489,12 +495,30 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.split-buttons-container {
+.split-request-buttons-container {
     display: flex;
-    width: 40%;
+    width: 60%;
     justify-content: space-between;
     align-items: center;
     margin-right: 5px;
+}
+
+.split-request-buttons-container > div{
+    display: flex;
+    justify-content: space-between;
+    width: 55%;
+}
+
+.request-description-btn{
+    width: 40%;
+    display: block;
+    background-color: #F5E709;
+    color: #262F35;
+    padding: 2px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 25px;
 }
 
 .split-request li .button-accept {
@@ -547,7 +571,7 @@ body {
 .assignment-goals ul {
     list-style: none;
     padding: 0;
-    height: 185px;
+    height: 270px;
     overflow-y: auto;
 }
 
@@ -572,7 +596,7 @@ body {
 }
 
 .total-goals {
-    height: 73px;
+    height: 25px;
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
@@ -591,21 +615,6 @@ body {
 
 .add-goal-btn:hover {
     background-color: #d4c507;
-}
-
-.publish-assignment-btn {
-    background-color: #DB133D;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block;
-    margin: 20px 0 0 auto;
-}
-
-.publish-assignment-btn:hover {
-    background-color: #b81031;
 }
 
 .pop-up {
@@ -647,14 +656,22 @@ body {
     display: block;
 }
 
-.submit-btn {
+.btn {
     display: block;
     height: 40px;
-    align-self: flex-end;
     background-color: #F5E709;
     color: #262F35;
     padding: 2px 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 15%;
+}
+
+.delete-edit-container{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 }
