@@ -171,23 +171,30 @@
                         <span class="error-message" id="assignment-name-error"></span>
                     </div>
                     <div>
-                        <h3>Due Date</h3> <!-- DUE DATE CAN BE CHANGED TO DATE-TIME MAYBE -->
+                        <h3>Due Date</h3>
                         <input type="date" id="due-date">
                         <span class="error-message" id="due-date-error"></span>
                     </div>
                     <div>
                         <h3>Choose Class</h3>
-                        <select name="class-selector" id="class-selector">
-                            <!-- POPULATED BY JS -->
-                        </select>
+                        <select name="class-selector" id="class-selector"></select>
                         <span class="error-message" id="class-selector-error"></span>
                     </div>
                     <div>
                         <h3>Choose Lesson</h3>
-                        <select name="lesson-selector" id="lesson-selector">
-                            <!-- POPULATED BY JS -->
-                        </select>
+                        <select name="lesson-selector" id="lesson-selector"></select>
                         <span class="error-message" id="lesson-selector-error"></span>
+                    </div>
+                    <div class="time-split-container">
+                        <div>
+                            <h3>Time Indication</h3>
+                            <input type="number" id="time-indication">
+                            <span class="error-message" id="time-indication-error"></span>
+                        </div>
+                        <div class="checkbox-container">
+                            <h3>Is Homework Splittable</h3>
+                            <input type="checkbox" id="is-splittable">
+                        </div>
                     </div>
                 </div>
                 <div class="assignment-goals">
@@ -196,18 +203,12 @@
                         <!-- Dynamically populated -->
                     </ul>
                     <div class="total-goals">
-                        <div>
-                            <p id="total-goal-count">Total Goal Count: 0</p>
-                            <p id="total-time">Total Time: 0 mins</p>
-                            <span class="error-message" id="goals-list-error"></span>
-                        </div>
+                        <p id="total-goal-count">Total Goal Count: 0</p>
                         <button class="add-goal-btn">Add Goal to this Assignment</button>
                         <div class="pop-up-overlay goals-pop-up-overlay "></div>
                         <form class="pop-up goals-pop-up" id="add-goal-form">
                             <p>Enter goal's name</p>
                             <input type="text" name="goal-name" id="goal-name">
-                            <p>Enter goal's time indication</p>
-                            <input type="number" name="time-indication" id="time-indication">
                             <input type="submit" value="Create Goal" class="submit-btn">
                         </form>
                     </div>
@@ -308,7 +309,6 @@
         const descriptionInput = document.getElementById('assignment-description');
         const goalsList = document.getElementById('goals-list');
         const totalGoalCount = document.getElementById('total-goal-count');
-        const totalTime = document.getElementById('total-time');
 
         let savedData = {
             personId: personId,
@@ -330,7 +330,6 @@
             document.getElementById('class-selector-error').textContent = '';
             document.getElementById('lesson-selector-error').textContent = '';
             document.getElementById('assignment-description-error').textContent = '';
-            document.getElementById('goals-list-error').textContent = '';
 
             if (!assignmentNameInput.value) {
                 isValid = false;
@@ -368,8 +367,7 @@
             savedData.goals = [];
             goalsList.querySelectorAll('li').forEach(goalItem => {
                 const goalName = goalItem.querySelector('.goal-name').textContent;
-                const goalTime = goalItem.querySelector('.goal-time').textContent;
-                savedData.goals.push({ name: goalName, time: goalTime });
+                savedData.goals.push({ name: goalName });
             });
 
             localStorage.setItem('assignmentData', JSON.stringify(savedData));
@@ -410,20 +408,16 @@
 
         const goalForm = document.getElementById('add-goal-form');
         const goalNameInput = document.getElementById('goal-name');
-        const timeIndicationInput = document.getElementById('time-indication');
 
         goalForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const goalName = goalNameInput.value;
-            const goalTime = timeIndicationInput.value;
 
-            if (goalName && goalTime) {
+            if (goalName) {
                 const goalItem = document.createElement('li');
-                goalItem.innerHTML = `
-                <span class="goal-name">${goalName}</span>
-                <span class="goal-time">${goalTime}</span>
-                <button type="button" class="remove-goal-btn">x</button>
-            `;
+                goalItem.innerHTML =
+                    `<span class="goal-name">${goalName}</span>
+            <button type="button" class="remove-goal-btn">x</button>`;
 
                 goalItem.querySelector('.remove-goal-btn').addEventListener('click', function() {
                     goalItem.remove();
@@ -435,20 +429,12 @@
 
                 // Reset form inputs
                 goalNameInput.value = '';
-                timeIndicationInput.value = '';
             }
         });
 
         function updateTotalGoals() {
             const goals = goalsList.querySelectorAll('li');
             totalGoalCount.textContent = `Total Goal Count: ${goals.length}`;
-
-            let totalTimeMins = 0;
-            goals.forEach(goal => {
-                totalTimeMins += parseInt(goal.querySelector('.goal-time').textContent);
-            });
-
-            totalTime.textContent = `Total Time: ${totalTimeMins} mins`;
         }
     });
 
