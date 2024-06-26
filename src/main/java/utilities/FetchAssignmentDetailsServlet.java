@@ -44,7 +44,7 @@ public class FetchAssignmentDetailsServlet extends HttpServlet {
                 sql = "SELECT DISTINCT h.homework_name, h.description , h.time_indication " +
                         "FROM homework h " +
                         "WHERE h.homework_id = " + assignmentId;
-            } else if ("student".equals(role)) {
+            } else if ("student".equals(role) || "admin".equals(role)) {
                 sql = "SELECT DISTINCT h.homework_name, h.description, h.time_indication " +
                         "FROM homework h " +
                         "WHERE h.homework_id = " + assignmentId; // No goals and their time indication are added yet!
