@@ -276,7 +276,7 @@
 
         function fetchLessons() {
             console.log('Fetching lessons...');
-            fetch(`fetchLessonsE?role=${role}&personId=${personId}&classId=${classId}`)
+            fetch(`fetchLessons?role=${role}&personId=${personId}&classId=${classId}`)
                 .then(response => {
                     console.log('Fetch response:', response);
                     if (!response.ok) {
@@ -306,8 +306,10 @@
         const publishButton = document.getElementById('publish-btn');
         const assignmentNameInput = document.getElementById('assignment-name');
         const dueDateInput = document.getElementById('due-date');
+        const timeIndicationInput = document.getElementById('time-indication');
         const descriptionInput = document.getElementById('assignment-description');
         const goalsList = document.getElementById('goals-list');
+        const homeworkSplittableInput = document.getElementById('is-splittable');
         const totalGoalCount = document.getElementById('total-goal-count');
 
         let savedData = {
@@ -318,7 +320,9 @@
             classId: 0,
             lessonId: 0,
             description: '',
-            goals: []
+            goals: [],
+            timeIndication: null,
+            homeworkSplittable: false
         };
 
         function validateForm() {
@@ -329,6 +333,7 @@
             document.getElementById('due-date-error').textContent = '';
             document.getElementById('class-selector-error').textContent = '';
             document.getElementById('lesson-selector-error').textContent = '';
+            document.getElementById('time-indication-error').textContent = '';
             document.getElementById('assignment-description-error').textContent = '';
 
             if (!assignmentNameInput.value) {
@@ -347,6 +352,10 @@
                 isValid = false;
                 document.getElementById('lesson-selector-error').textContent = 'Lesson selection is required.';
             }
+            if (!timeIndicationInput.value) {
+                isValid = false;
+                document.getElementById('time-indication-error').textContent = 'Time indication is required.';
+            }
             if (!descriptionInput.value) {
                 isValid = false;
                 document.getElementById('assignment-description-error').textContent = 'Assignment description is required.';
@@ -363,7 +372,8 @@
             savedData.classId = classSelector.value;
             savedData.lessonId = lessonSelector.value;
             savedData.description = descriptionInput.value;
-
+            savedData.timeIndication = timeIndicationInput.value;
+            savedData.homeworkSplittable = homeworkSplittableInput.checked;
             savedData.goals = [];
             goalsList.querySelectorAll('li').forEach(goalItem => {
                 const goalName = goalItem.querySelector('.goal-name').textContent;
@@ -385,7 +395,8 @@
             savedData.classId = classSelector.value;
             savedData.lessonId = lessonSelector.value;
             savedData.description = descriptionInput.value;
-
+            savedData.timeIndication = timeIndicationInput.value;
+            savedData.homeworkSplittable = homeworkSplittableInput.checked;
             savedData.publishDate = new Date().toISOString().split('T')[0];
 
             fetch('/SomtodayHomeworkPlanner_war/addAssignment', {
@@ -417,7 +428,7 @@
                 const goalItem = document.createElement('li');
                 goalItem.innerHTML =
                     `<span class="goal-name">${goalName}</span>
-            <button type="button" class="remove-goal-btn">x</button>`;
+                     <button type="button" class="remove-goal-btn">x</button>`;
 
                 goalItem.querySelector('.remove-goal-btn').addEventListener('click', function() {
                     goalItem.remove();
@@ -437,7 +448,6 @@
             totalGoalCount.textContent = `Total Goal Count: ${goals.length}`;
         }
     });
-
 </script>
 </body>
 
