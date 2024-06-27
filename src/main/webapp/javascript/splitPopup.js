@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeIndicationElement = document.getElementsByClassName('time-indication')[0];
     const individualSplitForm = document.getElementById('individualSplitForm');
     const descriptionForm = document.getElementById('descriptionForm');
+    const role = sessionStorage.getItem('role');
 
     let currentSplitCount = 0;
     let totalSplits = 0;
@@ -129,28 +130,49 @@ document.addEventListener('DOMContentLoaded', () => {
             splits: splitsData.map((split) => ({
                 ...split
             })),
+            description: finalDescription
         };
 
         // Log the requestData to verify its structure
         console.log('Request Data:', requestData);
-
-        fetch(`/SomtodayHomeworkPlanner_war/splitHomeworkTeacherServlet?homeworkId=${homeworkId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestData)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Split homework created successfully.');
-                // Redirect or update the UI as needed
+        if (role === "teacher"){
+            fetch(`/SomtodayHomeworkPlanner_war/splitHomeworkTeacherServlet?homeworkId=${homeworkId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
             })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An error occurred while splitting the homework.');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    alert('Split homework created successfully.');
+                    // Redirect or update the UI as needed
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while splitting the homework.');
+                });
+        } else if(role === "student"){
+            fetch(`/SomtodayHomeworkPlanner_war/splitHomeworkStudentServlet?homeworkId=${homeworkId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    alert('Split homework created successfully.');
+                    // Redirect or update the UI as needed
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while splitting the homework.');
+                });
+        }
+
 
     });
 });
