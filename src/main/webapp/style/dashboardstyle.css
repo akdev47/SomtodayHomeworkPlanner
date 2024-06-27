@@ -329,18 +329,16 @@ body {
 
 .calendar-grid .day {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 5px;
     background-color: #f0f0f0;
     border-radius: 5px;
     position: relative;
     height: 100px;
+    overflow-y: auto;
 }
 
 .calendar-grid .day .task {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+    margin-bottom: 5px;
     padding: 5px;
     border-radius: 3px;
     color: #fff;
@@ -435,6 +433,18 @@ body {
 
 .task a:hover {
     text-decoration: underline;
+}
+
+.task.light-green {
+    background-color: lightgreen;
+}
+
+.task.orange {
+    background-color: orange;
+}
+
+.task.red {
+    background-color: red;
 }
 
 

@@ -182,31 +182,18 @@
             <div class="calendar-grid week-view" id="week-calendar-grid" style="display: none;">
                 <div class="calendar-view">
                     <button id="prev-week-button">&lt;</button>
-                    <span id="current-week-range">Current Week (19 June - 25 June)</span>
+                    <span id="current-week-range">Current Week</span>
                     <button id="next-week-button">&gt;</button>
                 </div>
                 <table class="week-table">
                     <thead>
                     <tr id="week-days-header">
-                        <!-- Week days will be populated here -->
+                        <!--week days  -->
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="week-tasks">
                     <tr>
-                        <td><div class="task red"><a href="#">Example Assignment 1</a></div></td>
-                        <td><div class="task blue"><a href="#">Example Assignment 2</a></div></td>
-                        <td>
-                            <div class="task green"><a href="#">Example Assignment 3</a></div>
-                            <div class="task red"><a href="#">Example Assignment 4</a></div>
-                        </td>
-                        <td></td>
-                        <td>
-                            <div class="task red"><a href="#">Example Assignment 5</a></div>
-                            <div class="task red"><a href="#">Example Assignment 6</a></div>
-                            <div class="task blue"><a href="#">Example Assignment 7</a></div>
-                        </td>
-                        <td></td>
-                        <td></td>
+                        <!--tasks-->
                     </tr>
                     </tbody>
                 </table>
@@ -214,6 +201,7 @@
         </section>
     </main>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -227,24 +215,115 @@
         console.log('Person ID:', personId);
         console.log('Person Name:', personName);
 
-        // at the top of the bar set welcome text with name of user
         if (personName) {
             welcomeMessage.textContent = `Welcome, ${personName}!`;
         }
 
-        // sidebar color based on role
-        sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
+        sidebar.classList.remove('red', 'yellow', 'green');
         if (role === 'admin') {
-            console.log('Setting sidebar color to green for admin');
             sidebar.classList.add('green');
         } else if (role === 'teacher') {
-            console.log('Setting sidebar color to yellow for teacher');
             sidebar.classList.add('yellow');
         } else if (role === 'student') {
-            console.log('Setting sidebar color to red for student');
             sidebar.classList.add('red');
         }
-        // get the classes and put them into the Classes panel!
+
+        function fetchHomework() {
+            fetch(`fetchHomework?role=${role}&personId=${personId}`)
+                .then(response => response.json())
+                .then(homework => {
+                    if (role === 'admin') {
+                        return;
+                    }
+
+                    if (role === 'teacher') {
+                        const uniqueHomework = [];
+                        const seenHomework = new Set();
+
+                        homework.forEach(hw => {
+                            if (!seenHomework.has(hw.homework_name + hw.class_id)) {
+                                uniqueHomework.push(hw);
+                                seenHomework.add(hw.homework_name + hw.class_id);
+                            }
+                        });
+
+                        renderHomeworkOnCalendar(uniqueHomework);
+                    } else if (role === 'student') {
+                        renderHomeworkOnCalendar(homework);
+                    }
+                })
+                .catch(error => console.error('Error fetching homework:', error));
+        }
+
+        function getTimeClass(timeIndication) {
+            const timeParts = timeIndication.split(':');
+            const minutes = parseInt(timeParts[1], 10);
+
+            if (minutes < 15) {
+                return 'light-green';
+            } else if (minutes <= 45) {
+                return 'orange';
+            } else {
+                return 'red';
+            }
+        }
+
+        function renderHomeworkOnCalendar(homework) {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const weekCalendarGrid = document.getElementById('week-calendar-grid');
+
+            // clear items on calendar
+            calendarGrid.querySelectorAll('.day .task').forEach(task => task.remove());
+
+            homework.forEach(hw => {
+                const dueDate = new Date(hw.due_date);
+                const dueDay = dueDate.getDate();
+                const dueMonth = dueDate.getMonth();
+                const dueYear = dueDate.getFullYear();
+                const timeClass = getTimeClass(hw.time_indication);
+
+                // Month view
+                if (currentMonth === dueMonth && currentYear === dueYear) {
+                    const dayCells = calendarGrid.querySelectorAll('.day');
+                    dayCells.forEach(dayCell => {
+                        if (parseInt(dayCell.textContent) === dueDay) {
+                            const hwElement = document.createElement('div');
+                            hwElement.classList.add('task', timeClass);
+                            if (role === 'student') {
+                                hwElement.innerHTML = `<a href="assignment-details-student.html?id=${hw.homework_id}">${hw.homework_name}</a>`;
+                            } else if (role === 'teacher') {
+                                hwElement.innerHTML = `<a href="assignment-details-teacher.html?id=${hw.homework_id}">${hw.homework_name}</a>`;
+                            }
+                            dayCell.appendChild(hwElement);
+                        }
+                    });
+                }
+
+                // Week view
+                const weekStart = new Date(currentWeekStart);
+                const weekEnd = new Date(currentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+
+                if (dueDate >= weekStart && dueDate <= weekEnd) {
+                    const weekCells = weekCalendarGrid.querySelectorAll('td');
+                    weekCells.forEach((weekCell, index) => {
+                        const cellDate = new Date(weekStart);
+                        cellDate.setDate(weekStart.getDate() + index);
+                        if (cellDate.toDateString() === dueDate.toDateString()) {
+                            const hwElement = document.createElement('div');
+                            hwElement.classList.add('task', timeClass);
+                            if (role === 'student') {
+                                hwElement.innerHTML = `<a href="assignment-details-student.html?id=${hw.homework_id}">${hw.homework_name}</a>`;
+                            } else if (role === 'teacher') {
+                                hwElement.innerHTML = `<a href="assignment-details-teacher.html?id=${hw.homework_id}">${hw.homework_name}</a>`;
+                            }
+                            weekCell.appendChild(hwElement);
+                        }
+                    });
+                }
+            });
+        }
+
         function fetchClasses() {
             fetch(`fetchClasses?role=${role}&personId=${personId}`)
                 .then(response => response.json())
@@ -266,7 +345,7 @@
                 .catch(error => console.error('Error fetching classes:', error));
         }
 
-        function fetchAssignments(){
+        function fetchAssignments() {
             fetch(`fetchAssignments?role=${role}&personId=${personId}`)
                 .then(response => {
                     if (!response.ok) {
@@ -284,8 +363,7 @@
                         link.innerHTML = assignmentData.class_name + " - " + assignmentData.homework_name;
                         link.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
 
-                        link.style = "    color: #262F35;\n" +
-                            "    text-decoration: none;";
+                        link.style = "color: #262F35; text-decoration: none;";
 
                         row.appendChild(link);
                         assignmentContainer.appendChild(row);
@@ -296,6 +374,8 @@
 
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
+        let currentWeekStart = new Date();
+        currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1);
 
         function renderCalendar(month, year) {
             const calendarGrid = document.getElementById('calendar-grid');
@@ -312,37 +392,42 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayCell = document.createElement('div');
                 dayCell.classList.add('day');
+                dayCell.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 dayCell.textContent = day;
                 calendarGrid.appendChild(dayCell);
             }
 
             const monthYearSpan = document.getElementById('current-month-year');
             monthYearSpan.textContent = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            fetchHomework();
         }
 
-        // week view!
         function renderWeekView(weekStart) {
             const weekDaysHeader = document.getElementById('week-days-header');
+            const weekTasks = document.getElementById('week-tasks');
             weekDaysHeader.innerHTML = '';
+            weekTasks.innerHTML = '';
 
-            const weekCalendarGrid = document.getElementById('week-calendar-grid');
             const currentWeekRange = document.getElementById('current-week-range');
             const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
+            weekEnd.setDate(weekEnd.getDate() + 6);
             currentWeekRange.textContent = `Current Week (${weekStart.toLocaleDateString('default', { day: 'numeric', month: 'long' })} - ${weekEnd.toLocaleDateString('default', { day: 'numeric', month: 'long' })})`;
 
             const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
             for (let i = 0; i < 7; i++) {
-                const dayCell = document.createElement('th');
+                const dayHeader = document.createElement('th');
                 const date = new Date(weekStart);
                 date.setDate(weekStart.getDate() + i);
-                dayCell.textContent = `${daysOfWeek[i]} (${date.toLocaleDateString('default', { day: 'numeric', month: 'long' })})`;
-                weekDaysHeader.appendChild(dayCell);
-            }
-        }
+                dayHeader.textContent = `${daysOfWeek[i]} (${date.toLocaleDateString('default', { day: 'numeric', month: 'long' })})`;
+                weekDaysHeader.appendChild(dayHeader);
 
-        let currentWeekStart = new Date();
-        currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1);
+                const dayTaskCell = document.createElement('td');
+                weekTasks.appendChild(dayTaskCell);
+            }
+
+            fetchHomework();
+        }
 
         document.getElementById('prev-month-button').addEventListener('click', () => {
             currentMonth--;
@@ -404,10 +489,11 @@
 
         renderCalendar(currentMonth, currentYear);
         fetchClasses();
-        fetchAssignments()
+        fetchAssignments();
     });
 
-
 </script>
+
+
 </body>
 </html>
