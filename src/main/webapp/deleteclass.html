@@ -215,8 +215,7 @@
                 .then(result => {
                     if (result.success) {
                         alert('Class deleted successfully!');
-                        fetchClasses();
-                        classNameSpan.textContent = '';
+                        window.location.href = 'classes.html';
                     } else {
                         alert('Error deleting class.');
                     }

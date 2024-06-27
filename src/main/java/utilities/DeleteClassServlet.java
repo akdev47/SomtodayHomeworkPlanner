@@ -43,13 +43,12 @@ public class DeleteClassServlet extends HttpServlet {
 
             connection.setAutoCommit(false);
 
-            // get students in class
+            // Fetch related data
             String fetchStudentsSql = "SELECT student_id, person_id FROM somtoday6.Student WHERE class_id = ?";
             PreparedStatement fetchStudentsStmt = connection.prepareStatement(fetchStudentsSql);
             fetchStudentsStmt.setInt(1, classId);
             ResultSet studentResultSet = fetchStudentsStmt.executeQuery();
 
-            // get teachers in the class
             String fetchTeachersSql = "SELECT t.person_id FROM somtoday6.Teacher t " +
                     "JOIN somtoday6.Lesson l ON t.teacher_id = l.teacher_id " +
                     "WHERE l.class_id = ?";
@@ -57,7 +56,6 @@ public class DeleteClassServlet extends HttpServlet {
             fetchTeachersStmt.setInt(1, classId);
             ResultSet teacherResultSet = fetchTeachersStmt.executeQuery();
 
-            // get class name
             String fetchClassNameSql = "SELECT class_name FROM somtoday6.Class WHERE class_id = ?";
             PreparedStatement fetchClassNameStmt = connection.prepareStatement(fetchClassNameSql);
             fetchClassNameStmt.setInt(1, classId);
@@ -69,6 +67,24 @@ public class DeleteClassServlet extends HttpServlet {
             } else {
                 throw new SQLException("Class not found for classId: " + classId);
             }
+
+            // Delete related entries in splitted_homework
+            String deleteSplittedHomeworkSQL = "DELETE FROM somtoday6.splitted_homework WHERE homework_id IN (SELECT homework_id FROM somtoday6.homework WHERE class_id = ?)";
+            PreparedStatement deleteSplittedHomeworkStmt = connection.prepareStatement(deleteSplittedHomeworkSQL);
+            deleteSplittedHomeworkStmt.setInt(1, classId);
+            deleteSplittedHomeworkStmt.executeUpdate();
+
+            // Delete related entries in split_request
+            String deleteSplitRequestSQL = "DELETE FROM somtoday6.split_request WHERE homework_id IN (SELECT homework_id FROM somtoday6.homework WHERE class_id = ?)";
+            PreparedStatement deleteSplitRequestStmt = connection.prepareStatement(deleteSplitRequestSQL);
+            deleteSplitRequestStmt.setInt(1, classId);
+            deleteSplitRequestStmt.executeUpdate();
+
+            // Delete related entries in homework
+            String deleteHomeworkSQL = "DELETE FROM somtoday6.homework WHERE class_id = ?";
+            PreparedStatement deleteHomeworkStmt = connection.prepareStatement(deleteHomeworkSQL);
+            deleteHomeworkStmt.setInt(1, classId);
+            deleteHomeworkStmt.executeUpdate();
 
             // Update students to set class_id to NULL
             String updateStudentsSql = "UPDATE somtoday6.Student SET class_id = NULL WHERE class_id = ?";
@@ -91,13 +107,13 @@ public class DeleteClassServlet extends HttpServlet {
                 deleteClassStmt.executeUpdate();
             }
 
-            // send notifications for students
+            // Send notifications for students
             while (studentResultSet.next()) {
                 int studentPersonId = studentResultSet.getInt("person_id");
                 insertNotification(connection, studentPersonId, "Admin removed you from class: " + className);
             }
 
-            // send notifications for teachers
+            // Send notifications for teachers
             while (teacherResultSet.next()) {
                 int teacherPersonId = teacherResultSet.getInt("person_id");
                 insertNotification(connection, teacherPersonId, "Admin removed you from class: " + className);
