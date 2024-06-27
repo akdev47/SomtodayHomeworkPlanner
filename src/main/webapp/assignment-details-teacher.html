@@ -204,6 +204,12 @@
                         <input type="text" id="descriptionInput" required/>
                         <button type="submit">Submit</button>
                     </form>
+                    <div class="pop-up-overlay request-description-pop-up-overlay"></div>
+                    <div class="pop-up request-description-pop-up" id="requestDescriptionForm">
+                        <span class="close-button">&times;</span>
+                        <p>Description:</p>
+                        <p id="description-content"></p>
+                    </div>
                 </div>
             </div>
             <div class="homework-container">
@@ -323,7 +329,6 @@
                     })
                     .then(requests => {
                         requests.forEach(request => {
-
                             const listItem = document.createElement("li");
 
                             const reqSpan = document.createElement("span");
@@ -335,18 +340,42 @@
 
                             const descBtn = document.createElement("button");
                             descBtn.classList.add("request-description-btn");
-                            descBtn.innerText = "See description"
-                            // TODO: DESCRIPTION POP-UP!
+                            descBtn.innerText = "See description";
+                            descBtn.addEventListener("click", () => {
+                                showDescriptionPopup(request.request_description);
+                            });
 
                             const reqDiv = document.createElement("div");
 
                             const accBtn = document.createElement("button");
                             accBtn.classList.add("button-accept");
                             accBtn.innerText = "Accept";
+                            accBtn.addEventListener("click", () => {
+                                fetch(`fetchSplitRequestAnswer?id=${request.split_request_id}&role=${role}&answer=true`).then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! Status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                }).then(() => {
+                                    splitRequestsList.innerHTML = "";
+                                    fetchSplitRequests();
+                                });
+                            });
 
                             const rejBtn = document.createElement("button");
                             rejBtn.classList.add("button-reject");
                             rejBtn.innerText = "Reject";
+                            rejBtn.addEventListener("click", () => {
+                                fetch(`fetchSplitRequestAnswer?id=${request.split_request_id}&role=${role}&answer=false`).then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! Status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                }).then(() => {
+                                    splitRequestsList.innerHTML = "";
+                                    fetchSplitRequests();
+                                });
+                            });
 
                             reqDiv.appendChild(accBtn);
                             reqDiv.appendChild(rejBtn);
@@ -358,6 +387,22 @@
                         });
                     })
                     .catch(error => console.error('Error fetching goals:', error));
+            }
+
+            function showDescriptionPopup(description) {
+                const descriptionPopup = document.querySelector('.request-description-pop-up');
+                const descriptionOverlay = document.querySelector('.request-description-pop-up-overlay');
+                const descriptionContent = document.getElementById('description-content');
+                const closeButton = document.querySelector('.request-description-pop-up .close-button');
+
+                descriptionContent.textContent = description;
+                descriptionPopup.classList.add('visible');
+                descriptionOverlay.classList.add('visible');
+
+                closeButton.addEventListener('click', () => {
+                    descriptionPopup.classList.remove('visible');
+                    descriptionOverlay.classList.remove('visible');
+                });
             }
 
             if (assignmentId && role && personId) {
