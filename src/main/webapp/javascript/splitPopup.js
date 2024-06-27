@@ -1,22 +1,23 @@
-
-/* Pop-Ups ---------------------------------------------------------------------*/
-
 document.addEventListener('DOMContentLoaded', () => {
     const splitBtn = document.querySelector('.split-btn');
     const splitPopUp = document.querySelector('.split-pop-up');
     const splitOverlay = document.querySelector('.split-pop-up-overlay');
-    const scSubmitBtn = document.querySelector('.sc-submit-btn');
     const individualSplitPopUp = document.querySelector('.individual-split');
     const individualSplitOverlay = document.querySelector('.individual-split-overlay');
+    const descriptionPopUp = document.querySelector('.description-pop-up');
+    const descriptionOverlay = document.querySelector('.description-pop-up-overlay');
     const splitForm = document.getElementById('splitForm');
     const splitCountInput = document.getElementById('splitCount');
-    const timeIndicationInput = document.getElementsByClassName('time-indication')[0];
+    const timeIndicationElement = document.getElementsByClassName('time-indication')[0];
     const individualSplitForm = document.getElementById('individualSplitForm');
+    const descriptionForm = document.getElementById('descriptionForm');
 
     let currentSplitCount = 0;
     let totalSplits = 0;
     let totalTimeIndication = 0;
     let splitsData = [];
+    let finalDescription = "";
+    const homeworkId = new URLSearchParams(window.location.search).get('id'); // Get homework_id from URL
 
     // Show the first pop-up
     splitBtn.addEventListener('click', () => {
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault(); // Prevent form submission
 
         totalSplits = parseInt(splitCountInput.value); // Get the number of splits
-        totalTimeIndication = parseInt(timeIndicationInput.value); // Get the total time indication
+        totalTimeIndication = parseInt(timeIndicationElement.innerText.split(" ")[0]); // Get the total time indication
 
         if (totalSplits < 2) {
             alert('Number of splits must be greater than 1.');
@@ -98,16 +99,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (totalDuration !== totalTimeIndication) {
                 alert(`Total duration of splits must be equal to ${totalTimeIndication}.`);
+                currentSplitCount--;
                 return;
             }
 
             individualSplitPopUp.classList.remove('visible'); // Hide the second pop-up
             individualSplitOverlay.classList.remove('visible');
 
-            // Process splitsData as needed (e.g., send to server, update UI)
-            console.log('Splits data:', splitsData);
+            // Show the description pop-up
+            descriptionPopUp.classList.add('visible');
+            descriptionOverlay.classList.add('visible');
         } else {
             setIndividualSplitFormData(splitsData[currentSplitCount - 1]); // Update form for next split
         }
+    });
+
+    // Handle form submission for the description pop-up
+    descriptionForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent form submission
+
+        finalDescription = document.getElementById('descriptionInput').value;
+
+        descriptionPopUp.classList.remove('visible');
+        descriptionOverlay.classList.remove('visible');
+
+        // Create the JSON object to send to the servlet
+        const requestData = {
+            split_count: totalSplits,
+            splits: splitsData.map((split) => ({
+                ...split
+            })),
+        };
+
+        // Log the requestData to verify its structure
+        console.log('Request Data:', requestData);
+
+        fetch(`/SomtodayHomeworkPlanner_war/splitHomeworkTeacherServlet?homeworkId=${homeworkId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Split homework created successfully.');
+                // Redirect or update the UI as needed
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while splitting the homework.');
+            });
+
     });
 });

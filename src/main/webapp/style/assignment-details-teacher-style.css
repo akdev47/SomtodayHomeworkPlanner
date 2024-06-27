@@ -675,3 +675,14 @@ body {
     align-items: center;
     margin-top: 10px;
 }
+
+
+.description-pop-up-overlay,
+.description-pop-up {
+    display: none;
+}
+
+.description-pop-up-overlay.visible,
+.description-pop-up.visible {
+    display: block;
+}
