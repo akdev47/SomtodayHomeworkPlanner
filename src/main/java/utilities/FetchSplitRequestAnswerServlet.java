@@ -84,13 +84,12 @@ public class FetchSplitRequestAnswerServlet extends HttpServlet {
                         deleteSplitStmt.setInt(1, splitId);
                         deleteSplitStmt.executeUpdate();
                     }
+
+                    String deleteSplitReqQuery = "DELETE FROM split_request WHERE split_request_id = ?";
+                    PreparedStatement deleteSplitReqStmt = connection.prepareStatement(deleteSplitReqQuery);
+                    deleteSplitReqStmt.setInt(1, requestId);
+                    deleteSplitReqStmt.executeUpdate();
                 }
-
-                String deleteSplitReqQuery = "DELETE FROM split_request WHERE split_request_id = ?";
-                PreparedStatement deleteSplitReqStmt = connection.prepareStatement(deleteSplitReqQuery);
-                deleteSplitReqStmt.setInt(1, requestId);
-                deleteSplitReqStmt.executeUpdate();
-
 
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("{\"message\": \"Request processed successfully.\"}");
