@@ -324,6 +324,11 @@
                 deleteHomeworks();
             });
 
+            const editBtn = document.querySelector(".edit-assignment-btn");
+            editBtn.addEventListener("click", ()=>{
+                window.location.href = `edit-assignment.html?homeworkId=${assignmentId}`;
+            })
+
             function fetchSplitRequests() {
                 const splitRequestsList = document.getElementById("split-request-ul");
                 fetch(`fetchSplitRequest?homeworkId=${assignmentId}&role=${role}`)

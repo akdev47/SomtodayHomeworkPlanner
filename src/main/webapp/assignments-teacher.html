@@ -185,42 +185,69 @@
                         }
                         return response.json();
                     })
-                    .then(assignments => {
+                    .then(data => {
+                        console.log('Fetched data:', data); // Log the fetched data to see its structure
+                        const assignments = data.homeworks;
+                        const splits = data.splits;
                         const assignmentContainer = document.getElementById('table-body');
                         assignmentContainer.innerHTML = '';
-                        assignments.forEach(assignmentData => {
-                            const row = document.createElement('tr');
 
-                            const className = document.createElement('td');
-                            className.innerText = assignmentData.class_name;
+                        if (assignments && assignments.forEach) {
+                            assignments.forEach(assignmentData => {
+                                const row = document.createElement('tr');
 
-                            const homeworkType = document.createElement('td');
-                            homeworkType.innerText = assignmentData.homework_name;
+                                const className = document.createElement('td');
+                                className.innerText = assignmentData.class_name;
 
-                            const publishDate = document.createElement('td');
-                            publishDate.innerText = assignmentData.publish_date;
+                                const homeworkType = document.createElement('td');
+                                homeworkType.innerText = assignmentData.homework_name;
 
-                            const dueDate = document.createElement('td');
-                            dueDate.innerText = assignmentData.due_date;
+                                const publishDate = document.createElement('td');
+                                publishDate.innerText = assignmentData.publish_date;
 
-                            const detailsButton = document.createElement('td');
-                            const detailsLink = document.createElement('a');
-                            if (role === 'student') {
-                                detailsLink.href = `assignment-details-student.html?id=${assignmentData.homework_id}`;
-                            } else {
-                                detailsLink.href = `assignments-of-class.html?homeworkId=${assignmentData.homework_id}`;
-                            }
-                            detailsLink.innerHTML = 'See Details';
-                            detailsButton.appendChild(detailsLink);
+                                const dueDate = document.createElement('td');
+                                dueDate.innerText = assignmentData.due_date;
 
-                            row.appendChild(className);
-                            row.appendChild(homeworkType);
-                            row.appendChild(publishDate);
-                            row.appendChild(dueDate);
-                            row.appendChild(detailsButton);
+                                const detailsButton = document.createElement('td');
+                                const detailsLink = document.createElement('a');
+                                if (role === 'student') {
+                                    detailsLink.href = `assignment-details-student.html?id=${assignmentData.homework_id}`;
+                                } else {
+                                    detailsLink.href = `assignments-of-class.html?homeworkId=${assignmentData.homework_id}`;
+                                }
+                                detailsLink.innerHTML = 'See Details';
+                                detailsButton.appendChild(detailsLink);
 
-                            assignmentContainer.appendChild(row);
-                        });
+                                row.appendChild(className);
+                                row.appendChild(homeworkType);
+                                row.appendChild(publishDate);
+                                row.appendChild(dueDate);
+                                row.appendChild(detailsButton);
+
+                                assignmentContainer.appendChild(row);
+                            });
+                        } else {
+                            console.error('Assignments data is missing or not an array');
+                        }
+
+                        if (splits && splits.forEach) {
+                            splits.forEach(splitData => {
+                                const correspondingHomework = assignments.find(hw => hw.homework_id === splitData.homework_id);
+                                if (correspondingHomework) {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                <td>${correspondingHomework.class_name}</td>
+                                <td>${correspondingHomework.homework_name} ${splitData.split_name}</td>
+                                <td>${correspondingHomework.publish_date}</td>
+                                <td>${correspondingHomework.due_date}</td>
+                                <td><a href="assignment-split-details.html?splitId=${splitData.split_id}&homeworkId=${splitData.homework_id}">Details</a></td>
+                            `;
+                                    assignmentContainer.appendChild(row);
+                                }
+                            });
+                        } else {
+                            console.error('Splits data is missing or not an array');
+                        }
                     })
                     .catch(error => console.error('Error fetching assignments:', error));
             } else {
