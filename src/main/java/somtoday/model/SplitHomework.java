@@ -1,66 +1,85 @@
 package somtoday.model;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class SplitHomework {
 
-    private int splitHomeworkID;
+    int splittedHomeworkId;
+    int studentId;
+    int homeworkId;
+    Time timeIndication;
+    boolean accept;
+    Date studentCalendarDate;
+    String splitName;
 
-    private int studentID;
-
-    private int homeworkID;
-
-    private Byte[] submittedFile;
-
-    private Date submissionDate;
-
-    public SplitHomework() { }
-
-    public SplitHomework(int splitHomeworkID, int studentID, int homeworkID, Byte[] submittedFile, Date submissionDate) {
-        this.splitHomeworkID = splitHomeworkID;
-        this.studentID = studentID;
-        this.homeworkID = homeworkID;
-        this.submittedFile = submittedFile;
-        this.submissionDate = submissionDate;
+    public SplitHomework() {
     }
 
-    public int getSplitHomeworkID() {
-        return splitHomeworkID;
+    public SplitHomework(int splittedHomeworkId, int studentId, int homeworkId, Time timeIndication, boolean accept, Date studentCalendarDate, String splitName) {
+        this.splittedHomeworkId = splittedHomeworkId;
+        this.studentId = studentId;
+        this.homeworkId = homeworkId;
+        this.timeIndication = timeIndication;
+        this.accept = accept;
+        this.studentCalendarDate = studentCalendarDate;
+        this.splitName = splitName;
     }
 
-    public void setSplitHomeworkID(int splitHomeworkID) {
-        this.splitHomeworkID = splitHomeworkID;
+    public int getSplittedHomeworkId() {
+        return splittedHomeworkId;
     }
 
-    public int getStudentID() {
-        return studentID;
+    public void setSplittedHomeworkId(int splittedHomeworkId) {
+        this.splittedHomeworkId = splittedHomeworkId;
     }
 
-    public void setStudentID(int studentID) {
-        this.studentID = studentID;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public int getHomeworkID() {
-        return homeworkID;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
-    public void setHomeworkID(int homeworkID) {
-        this.homeworkID = homeworkID;
+    public int getHomeworkId() {
+        return homeworkId;
     }
 
-    public Byte[] getSubmittedFile() {
-        return submittedFile;
+    public void setHomeworkId(int homeworkId) {
+        this.homeworkId = homeworkId;
     }
 
-    public void setSubmittedFile(Byte[] submittedFile) {
-        this.submittedFile = submittedFile;
+    public Time getTimeIndication() {
+        return timeIndication;
     }
 
-    public Date getSubmissionDate() {
-        return submissionDate;
+    public void setTimeIndication(Time timeIndication) {
+        this.timeIndication = timeIndication;
     }
 
-    public void setSubmissionDate(Date submissionDate) {
-        this.submissionDate = submissionDate;
+    public boolean isAccept() {
+        return accept;
     }
+
+    public void setAccept(boolean accept) {
+        this.accept = accept;
+    }
+
+    public Date getStudentCalendarDate() {
+        return studentCalendarDate;
+    }
+
+    public void setStudentCalendarDate(Date studentCalendarDate) {
+        this.studentCalendarDate = studentCalendarDate;
+    }
+
+    public String getSplitName() {
+        return splitName;
+    }
+
+    public void setSplitName(String splitName) {
+        this.splitName = splitName;
+    }
+
 }
