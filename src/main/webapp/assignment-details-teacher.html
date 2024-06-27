@@ -387,25 +387,6 @@
                 .catch(error => console.error('Error fetching assignment details:', error));
         }
 
-        function setSplitDetails() {
-            const splitNameInputs = document.querySelectorAll(".split-name");
-            const splitDurationInputs = document.querySelectorAll(".split-duration");
-            let splits = [];
-            splitNameInputs.forEach((nameInput, index) => {
-                const name = nameInput.value.trim();
-                const duration = splitDurationInputs[index].value.trim();
-                if (name && duration) {
-                    splits.push({
-                        name: name,
-                        duration: duration
-                    });
-                }
-            });
-            const splitsJSON = JSON.stringify(splits);
-            console.log(splitsJSON);
-            return splitsJSON;
-        }
-
         function fetchGoals() {
             const goalsList = document.getElementById("goals-ul");
             fetch(`fetchGoals?id=${assignmentId}&role=${role}`)
