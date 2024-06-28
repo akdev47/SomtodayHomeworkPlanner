@@ -6,16 +6,13 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 @Path("/fetchAssignmentsOfClass")
 public class FetchAssignmentsOfClassResource {
@@ -46,12 +43,7 @@ public class FetchAssignmentsOfClassResource {
                 Date originalPublishDate = originalHomeworkRs.getDate("publish_date");
                 int originalTeacherId = originalHomeworkRs.getInt("teacher_id");
 
-                // Fetch matching homework instances
-                String fetchHomeworkInstancesSql = "SELECT h.homework_id, h.homework_name, h.publish_date, h.due_date, s.student_id, p.person_name as student_name " +
-                        "FROM somtoday6.Homework h " +
-                        "LEFT JOIN somtoday6.student s ON h.student_id = s.student_id " +
-                        "LEFT JOIN somtoday6.person p ON s.person_id = p.person_id " +
-                        "WHERE h.homework_name = ? AND h.due_date = ? AND h.publish_date = ? AND h.teacher_id = ?";
+                String fetchHomeworkInstancesSql = "SELECT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date, sh.splitted_homework_id, sh.split_name, s.student_id, p.person_name as student_name FROM somtoday6.homework h LEFT JOIN (SELECT * FROM somtoday6.splitted_homework WHERE accepted = true) sh ON h.homework_id = sh.homework_id LEFT JOIN somtoday6.class c ON h.class_id = c.class_id LEFT JOIN somtoday6.student s ON h.student_id = s.student_id LEFT JOIN somtoday6.person p ON s.person_id = p.person_id WHERE h.homework_name = ? AND h.due_date = ? AND h.publish_date = ? AND h.teacher_id = ? ORDER BY h.publish_date DESC";
                 PreparedStatement fetchHomeworkInstancesStmt = connection.prepareStatement(fetchHomeworkInstancesSql);
                 fetchHomeworkInstancesStmt.setString(1, originalHomeworkName);
                 fetchHomeworkInstancesStmt.setDate(2, originalDueDate);
@@ -59,48 +51,49 @@ public class FetchAssignmentsOfClassResource {
                 fetchHomeworkInstancesStmt.setInt(4, originalTeacherId);
                 ResultSet homeworkInstancesRs = fetchHomeworkInstancesStmt.executeQuery();
 
-                boolean teacherAssignmentAdded = false;
+                Set<Integer> processedHomeworkIds = new HashSet<>();
 
                 while (homeworkInstancesRs.next()) {
-                    JSONObject assignment = new JSONObject();
-                    assignment.put("homework_id", homeworkInstancesRs.getInt("homework_id"));
-                    assignment.put("homework_name", homeworkInstancesRs.getString("homework_name"));
-                    assignment.put("publish_date", homeworkInstancesRs.getDate("publish_date").toString());
-                    assignment.put("due_date", homeworkInstancesRs.getDate("due_date").toString());
+                    int hwId = homeworkInstancesRs.getInt("homework_id");
 
-                    if (homeworkInstancesRs.getObject("student_id") == null) {
-                        assignment.put("student_name", "yours");
-                        // Add the teacher's assignment at the top
-                        assignmentList.add(0, assignment);
-                        teacherAssignmentAdded = true;
-                    } else {
-                        assignment.put("student_name", homeworkInstancesRs.getString("student_name"));
+                    if (!processedHomeworkIds.contains(hwId)) {
+                        JSONObject assignment = new JSONObject();
+                        assignment.put("homework_id", hwId);
+                        assignment.put("homework_name", homeworkInstancesRs.getString("homework_name"));
+                        assignment.put("publish_date", homeworkInstancesRs.getDate("publish_date").toString());
+                        assignment.put("due_date", homeworkInstancesRs.getDate("due_date").toString());
+                        assignment.put("is_teacher", homeworkInstancesRs.getObject("student_id") == null);
+
+                        if (homeworkInstancesRs.getObject("student_id") == null) {
+                            assignment.put("student_name", "yours");
+                        } else {
+                            assignment.put("student_name", homeworkInstancesRs.getString("student_name"));
+                        }
+
                         assignmentList.add(assignment);
+                        processedHomeworkIds.add(hwId);
+                    }
+
+                    if (homeworkInstancesRs.getObject("splitted_homework_id") != null) {
+                        JSONObject splitAssignment = new JSONObject();
+                        splitAssignment.put("homework_id", hwId);
+                        splitAssignment.put("split_id", homeworkInstancesRs.getInt("splitted_homework_id"));
+                        splitAssignment.put("homework_name", homeworkInstancesRs.getString("homework_name") + " - " + homeworkInstancesRs.getString("split_name"));
+                        splitAssignment.put("publish_date", homeworkInstancesRs.getDate("publish_date").toString());
+                        splitAssignment.put("due_date", homeworkInstancesRs.getDate("due_date").toString());
+                        splitAssignment.put("student_name", homeworkInstancesRs.getString("student_name"));
+                        splitAssignment.put("is_teacher", homeworkInstancesRs.getObject("student_id") == null);
+                        assignmentList.add(splitAssignment);
                     }
                 }
-
-                // If no teacher assignment was found, create a placeholder at the top
-                if (!teacherAssignmentAdded) {
-                    JSONObject placeholderAssignment = new JSONObject();
-                    placeholderAssignment.put("homework_id", homeworkId);
-                    placeholderAssignment.put("homework_name", originalHomeworkName);
-                    placeholderAssignment.put("publish_date", originalPublishDate.toString());
-                    placeholderAssignment.put("due_date", originalDueDate.toString());
-                    placeholderAssignment.put("student_name", "yours");
-                    assignmentList.add(0, placeholderAssignment);
-                }
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Homework not found for homeworkId: " + homeworkId)
-                        .build();
+                return Response.status(Response.Status.NOT_FOUND).entity("Homework not found for homeworkId: " + homeworkId).build();
             }
 
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred.")
-                    .build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("An error occurred.").build();
         }
 
         JSONArray jsonArray = new JSONArray(assignmentList);

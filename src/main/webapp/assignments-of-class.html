@@ -161,8 +161,6 @@
       profileLink.href = `profile.html?personId=${personId}`;
     }
 
-
-
     // Get homeworkId from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const homeworkId = urlParams.get('homeworkId');
@@ -194,6 +192,10 @@
               .then(assignments => {
                 const assignmentContainer = document.getElementById('table-body');
                 assignmentContainer.innerHTML = '';
+
+                // Sort assignments to have teacher's homeworks and splits at the top
+                assignments.sort((a, b) => b.is_teacher - a.is_teacher);
+
                 assignments.forEach(assignmentData => {
                   const row = document.createElement('tr');
 
@@ -211,12 +213,12 @@
 
                   const detailsButton = document.createElement('td');
                   const detailsLink = document.createElement('a');
-                  if (assignmentData.student_name === "yours") {
-                    detailsLink.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
+                  if (!assignmentData.is_teacher) {
+                    detailsLink.href = assignmentData.split_id ? `assignment-split-details.html?splitId=${assignmentData.split_id}&homeworkId=${assignmentData.homework_id}` : `assignment-details-student.html?id=${assignmentData.homework_id}`;
+                    detailsLink.style.backgroundColor = "#DB133D";
+                    detailsLink.style.color = "#fff";
                   } else {
-                    detailsLink.style.backgroundColor = "#DB133D"
-                    detailsLink.style.color = "#fff"
-                    detailsLink.href = `assignment-details-student.html?id=${assignmentData.homework_id}`;
+                    detailsLink.href = assignmentData.split_id ? `assignment-split-details.html?splitId=${assignmentData.split_id}&homeworkId=${assignmentData.homework_id}` : `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
                   }
                   detailsLink.innerText = 'See Details';
                   detailsButton.appendChild(detailsLink);
@@ -245,8 +247,9 @@
     }
 
     logoutBtn.addEventListener("click", logoutAndRedirect)
-
   });
+
+
 </script>
 
 
