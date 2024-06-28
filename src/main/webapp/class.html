@@ -76,7 +76,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link"  id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
@@ -123,14 +123,9 @@
             </div>
             <h1>Class Details</h1>
             <div class="user-settings">
-                <input type="text" id="search-bar" placeholder="Search">
-                <div id="search-results" class="search-results"></div>
                 <div class="user-info">
                     <span>Welcome_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-                </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
                 </div>
             </div>
         </header>
@@ -148,13 +143,13 @@
                 <ul id="lessons-list" class="lessons-list">
                     <!-- Populated by JavaScript -->
                 </ul>
-                <div class="workload-section">
-                    <h3>Workload of the class</h3>
-                    <div class="workload-chart">
-                        <!-- Workload chart (e.g., use a canvas or SVG) -->
-                        <div class="workload-hours">15</div>
-                    </div>
-                </div>
+<!--                <div class="workload-section">-->
+<!--                    <h3>Workload of the class</h3>-->
+<!--                    <div class="workload-chart">-->
+<!--                        &lt;!&ndash; Workload chart (e.g., use a canvas or SVG) &ndash;&gt;-->
+<!--                        <div class="workload-hours">15</div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <button class="delete-class-btn">Delete Class</button>
             </div>
         </div>
@@ -162,7 +157,6 @@
 </div>
 
 <script>
-
     function updateUIBasedOnRole(role) {
         const sidebar = document.querySelector('.side-bar');
         const editButtons = document.querySelectorAll('.edit-btn');
@@ -203,7 +197,7 @@
         updateUIBasedOnRole(role);
 
         function fetchClassDetails(classId) {
-            fetch(`fetchClassDetails?classId=${classId}`)
+            fetch(`api/fetchClassDetails?classId=${classId}`)
                 .then(response => response.json())
                 .then(data => {
                     displayClassDetails(data);
@@ -219,7 +213,8 @@
             studentsList.innerHTML = '';
             data.students.forEach(student => {
                 const li = document.createElement('li');
-                li.innerHTML = `<span>${student.person_name}</span> <button class="profile-btn">Profile</button>`;
+                li.innerHTML = `<span>${student.person_name}</span>
+                                <button class="profile-btn" data-person-id="${student.person_id}">Profile</button>`;
                 studentsList.appendChild(li);
             });
 
@@ -249,12 +244,12 @@
 
         document.querySelector('.delete-class-btn').addEventListener('click', function() {
             if (confirm('Are you sure you want to delete this class?')) {
-                fetch('deleteClass', {
-                    method: 'POST',
+                fetch('api/deleteClass', {
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `class_id=${classId}`
+                    body: JSON.stringify({ class_id: classId })
                 })
                     .then(response => response.json())
                     .then(result => {
@@ -276,6 +271,13 @@
                 const lessonDescription = event.target.getAttribute('data-lesson-description');
                 const teacherName = event.target.getAttribute('data-teacher-name');
                 window.location.href = `specificlesson.html?lessonId=${lessonId}&lessonName=${lessonName}&lessonDescription=${lessonDescription}&teacherName=${teacherName}`;
+            }
+        });
+
+        document.getElementById('students-list').addEventListener('click', function(event) {
+            if (event.target.classList.contains('profile-btn')) {
+                const personId = event.target.getAttribute('data-person-id');
+                window.location.href = `profile.html?personId=${personId}`;
             }
         });
     });

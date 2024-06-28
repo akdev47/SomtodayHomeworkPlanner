@@ -87,7 +87,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link"  id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                  viewBox="0 -960 960 960" width="24px">
@@ -137,10 +137,7 @@
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png"
-                                                          alt="Language Icon"></a>
-                </div>
+
             </div>
         </header>
         <section class="content">
@@ -217,213 +214,238 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const assignmentId = urlParams.get('id');
-            const role = sessionStorage.getItem('role');
-            const personId = sessionStorage.getItem('personId');
-            const totalGoalCount = document.getElementById('total-goal-count');
-            const sidebar = document.querySelector('.side-bar');
-            const deleteBtn = document.querySelector('.delete-assignment-btn');
+        const urlParams = new URLSearchParams(window.location.search);
+        const assignmentId = urlParams.get('id');
+        const role = sessionStorage.getItem('role');
+        const personId = sessionStorage.getItem('personId');
+        const totalGoalCount = document.getElementById('total-goal-count');
+        const sidebar = document.querySelector('.side-bar');
+        const deleteBtn = document.querySelector('.delete-assignment-btn');
+        sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
 
-            sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
-            if (role === 'admin') {
-                console.log('Setting sidebar color to green for admin');
-                sidebar.classList.add('green');
-            } else if (role === 'teacher') {
-                console.log('Setting sidebar color to yellow for teacher');
-                sidebar.classList.add('yellow');
-            } else if (role === 'student') {
-                console.log('Setting sidebar color to red for student');
-                sidebar.classList.add('red');
-            }
+        if (personId) {
+            profileLink.href = `profile.html?personId=${personId}`;
+        }
 
-            function convertTimeToMinutes(timeStr) {
-                const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+        if (role === 'admin') {
+            console.log('Setting sidebar color to green for admin');
+            sidebar.classList.add('green');
+        } else if (role === 'teacher') {
+            console.log('Setting sidebar color to yellow for teacher');
+            sidebar.classList.add('yellow');
+        } else if (role === 'student') {
+            console.log('Setting sidebar color to red for student');
+            sidebar.classList.add('red');
+        }
 
-                const totalMinutes = hours * 60 + minutes;
+        function convertTimeToMinutes(timeStr) {
+            const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+            const totalMinutes = hours * 60 + minutes;
+            return totalMinutes;
+        }
 
-                return totalMinutes;
-            }
-
-            function fetchDetails() {
-                fetch(`fetchAssignmentDetails?id=${assignmentId}&role=${role}&personId=${personId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(assignment => {
-                        assignment.forEach(assignmentData => {
-                            const descText = document.getElementById('description-text');
+        function fetchDetails() {
+            fetch(`api/fetchAssignmentDetails?id=${assignmentId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(assignment => {
+                    assignment.forEach(assignmentData => {
+                        const descText = document.getElementById('description-text');
+                        if (descText) {
                             descText.innerText = assignmentData.hw_description;
-
-                            const heading = document.getElementById('page-heading');
-                            heading.innerText = assignmentData.homework_name;
-
-                            const title = document.getElementsByTagName("<title>");
-                            title.innerText = assignmentData.homework_name;
-
-                            const timeIndication = document.getElementsByClassName('time-indication')[0];
-                            timeIndication.innerHTML = convertTimeToMinutes(assignmentData.time_indication) + " mins";
-                        })
-                    })
-                    .catch(error => console.error('Error fetching assignment details:', error));
-            }
-
-            function fetchGoals() {
-                const goalsList = document.getElementById("goals-ul");
-                fetch(`fetchGoals?id=${assignmentId}&role=${role}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
                         }
-                        return response.json();
+
+                        const heading = document.getElementById('page-heading');
+                        if (heading) {
+                            heading.innerText = assignmentData.homework_name;
+                        }
+
+                        const title = document.querySelector("title");
+                        if (title) {
+                            title.innerText = assignmentData.homework_name;
+                        }
+
+                        const timeIndication = document.querySelector('.time-indication');
+                        if (timeIndication) {
+                            timeIndication.innerHTML = convertTimeToMinutes(assignmentData.time_indication) + " mins";
+                        }
                     })
-                    .then(goals => {
-                        let i = 1;
-                        goals.forEach(goal => {
-                            const listItem = document.createElement("li");
+                })
+                .catch(error => console.error('Error fetching assignment details:', error));
+        }
 
-                            const goalName = document.createElement("span");
-                            goalName.textContent = "Goal " + i + ": " + goal.goal_name;
+        function fetchGoals() {
+            const goalsList = document.getElementById("goals-ul");
+            fetch(`api/fetchGoals?id=${assignmentId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(goals => {
+                    let i = 1;
+                    goals.forEach(goal => {
+                        const listItem = document.createElement("li");
 
-                            listItem.appendChild(goalName);
-                            goalsList.appendChild(listItem);
+                        const goalName = document.createElement("span");
+                        goalName.textContent = "Goal " + i + ": " + goal.goal_name;
 
-                            i++; // Increment the goal count
-                        });
+                        listItem.appendChild(goalName);
+                        goalsList.appendChild(listItem);
+
+                        i++; // Increment the goal count
+                    });
+                    if (totalGoalCount) {
                         totalGoalCount.textContent = i - 1;
-                    })
-                    .catch(error => console.error('Error fetching goals:', error));
-            }
-
-            function deleteHomeworks() {
-                fetch(`deleteHomeworks?homeworkId=${assignmentId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': "application/json"
                     }
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok");
-                        }
-                        console.log("Homework deleted successfully")
-                    })
-                    .then(data => {
-                        window.location.href = 'assignments-teacher.html';
-                    })
-                    .catch(error => {
-                        console.error("There was a problem with the fetch operation: ", error);
-                    });
-            }
+                .catch(error => console.error('Error fetching goals:', error));
+        }
 
+        function deleteHomeworks() {
+            fetch(`api/deleteHomeworks?homeworkId=${assignmentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    console.log("Homework deleted successfully")
+                })
+                .then(data => {
+                    window.location.href = 'assignments-teacher.html';
+                })
+                .catch(error => {
+                    console.error("There was a problem with the fetch operation: ", error);
+                });
+        }
+
+        if (deleteBtn) {
             deleteBtn.addEventListener('click', function () {
-
                 deleteHomeworks();
             });
+        }
 
-            function fetchSplitRequests() {
-                const splitRequestsList = document.getElementById("split-request-ul");
-                fetch(`fetchSplitRequest?homeworkId=${assignmentId}&role=${role}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(requests => {
-                        requests.forEach(request => {
-                            const listItem = document.createElement("li");
+        const editBtn = document.querySelector(".edit-assignment-btn");
+        if (editBtn) {
+            editBtn.addEventListener("click", () => {
+                window.location.href = `edit-assignment.html?homeworkId=${assignmentId}`;
+            });
+        }
 
-                            const reqSpan = document.createElement("span");
-                            reqSpan.classList.add("student-name");
-                            reqSpan.textContent = request.person_name;
+        function fetchSplitRequests() {
+            const splitRequestsList = document.getElementById("split-request-ul");
+            fetch(`api/fetchSplitRequest?homeworkId=${assignmentId}&role=${role}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(requests => {
+                    requests.forEach(request => {
+                        const listItem = document.createElement("li");
 
-                            const splitCont = document.createElement("div");
-                            splitCont.classList.add("split-request-buttons-container");
+                        const reqSpan = document.createElement("span");
+                        reqSpan.classList.add("student-name");
+                        reqSpan.textContent = request.person_name;
 
-                            const descBtn = document.createElement("button");
-                            descBtn.classList.add("request-description-btn");
-                            descBtn.innerText = "See description";
-                            descBtn.addEventListener("click", () => {
-                                showDescriptionPopup(request.request_description);
-                            });
+                        const splitCont = document.createElement("div");
+                        splitCont.classList.add("split-request-buttons-container");
 
-                            const reqDiv = document.createElement("div");
-
-                            const accBtn = document.createElement("button");
-                            accBtn.classList.add("button-accept");
-                            accBtn.innerText = "Accept";
-                            accBtn.addEventListener("click", () => {
-                                fetch(`fetchSplitRequestAnswer?id=${request.split_request_id}&role=${role}&answer=true`).then(response => {
-                                    if (!response.ok) {
-                                        throw new Error(`HTTP error! Status: ${response.status}`);
-                                    }
-                                    return response.json();
-                                }).then(() => {
-                                    splitRequestsList.innerHTML = "";
-                                    fetchSplitRequests();
-                                });
-                            });
-
-                            const rejBtn = document.createElement("button");
-                            rejBtn.classList.add("button-reject");
-                            rejBtn.innerText = "Reject";
-                            rejBtn.addEventListener("click", () => {
-                                fetch(`fetchSplitRequestAnswer?id=${request.split_request_id}&role=${role}&answer=false`).then(response => {
-                                    if (!response.ok) {
-                                        throw new Error(`HTTP error! Status: ${response.status}`);
-                                    }
-                                    return response.json();
-                                }).then(() => {
-                                    splitRequestsList.innerHTML = "";
-                                    fetchSplitRequests();
-                                });
-                            });
-
-                            reqDiv.appendChild(accBtn);
-                            reqDiv.appendChild(rejBtn);
-                            splitCont.appendChild(descBtn);
-                            splitCont.appendChild(reqDiv);
-                            listItem.appendChild(reqSpan);
-                            listItem.appendChild(splitCont);
-                            splitRequestsList.appendChild(listItem);
+                        const descBtn = document.createElement("button");
+                        descBtn.classList.add("request-description-btn");
+                        descBtn.innerText = "See description";
+                        descBtn.addEventListener("click", () => {
+                            showDescriptionPopup(request.request_description);
                         });
-                    })
-                    .catch(error => console.error('Error fetching goals:', error));
+
+                        const reqDiv = document.createElement("div");
+
+                        const accBtn = document.createElement("button");
+                        accBtn.classList.add("button-accept");
+                        accBtn.innerText = "Accept";
+                        accBtn.addEventListener("click", () => {
+                            fetch(`api/fetchSplitRequestAnswer?id=${request.split_request_id}&answer=true`).then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            }).then(() => {
+                                splitRequestsList.innerHTML = "";
+                                fetchSplitRequests();
+                            });
+                        });
+
+                        const rejBtn = document.createElement("button");
+                        rejBtn.classList.add("button-reject");
+                        rejBtn.innerText = "Reject";
+                        rejBtn.addEventListener("click", () => {
+                            fetch(`api/fetchSplitRequestAnswer?id=${request.split_request_id}&answer=false`).then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            }).then(() => {
+                                splitRequestsList.innerHTML = "";
+                                fetchSplitRequests();
+                            });
+                        });
+
+                        reqDiv.appendChild(accBtn);
+                        reqDiv.appendChild(rejBtn);
+                        splitCont.appendChild(descBtn);
+                        splitCont.appendChild(reqDiv);
+                        listItem.appendChild(reqSpan);
+                        listItem.appendChild(splitCont);
+                        splitRequestsList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching split requests:', error));
+        }
+
+        function showDescriptionPopup(description) {
+            const descriptionPopup = document.querySelector('.request-description-pop-up');
+            const descriptionOverlay = document.querySelector('.request-description-pop-up-overlay');
+            const descriptionContent = document.getElementById('description-content');
+            const closeButton = document.querySelector('.request-description-pop-up .close-button');
+
+            if (descriptionContent) {
+                descriptionContent.textContent = description;
             }
 
-            function showDescriptionPopup(description) {
-                const descriptionPopup = document.querySelector('.request-description-pop-up');
-                const descriptionOverlay = document.querySelector('.request-description-pop-up-overlay');
-                const descriptionContent = document.getElementById('description-content');
-                const closeButton = document.querySelector('.request-description-pop-up .close-button');
-
-                descriptionContent.textContent = description;
+            if (descriptionPopup && descriptionOverlay) {
                 descriptionPopup.classList.add('visible');
                 descriptionOverlay.classList.add('visible');
+            }
 
+            if (closeButton) {
                 closeButton.addEventListener('click', () => {
                     descriptionPopup.classList.remove('visible');
                     descriptionOverlay.classList.remove('visible');
                 });
             }
-
-            if (assignmentId && role && personId) {
-                fetchDetails();
-                fetchGoals();
-                fetchSplitRequests();
-            } else {
-                console.error('No assignment ID provided in URL');
-            }
         }
-    )
-    ;
 
-
+        if (assignmentId && role && personId) {
+            fetchDetails();
+            fetchGoals();
+            fetchSplitRequests();
+        } else {
+            console.error('No assignment ID provided in URL');
+        }
+    });
 </script>
+
+
 
 </body>
 </html>

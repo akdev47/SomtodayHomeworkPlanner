@@ -9,23 +9,27 @@ document.addEventListener("DOMContentLoaded", function() {
     const splitPopUp = document.querySelector(".split-pop-up");
     const splitOverlay = document.querySelector(".split-pop-up-overlay");
 
-    addGoalBtn.addEventListener("click", function() {
-        goalsPopUp.classList.toggle("visible");
-        goalsOverlay.classList.toggle("visible");
-    });
+    if (addGoalBtn && goalsPopUp && goalsOverlay) {
+        addGoalBtn.addEventListener("click", function() {
+            goalsPopUp.classList.toggle("visible");
+            goalsOverlay.classList.toggle("visible");
+        });
 
-    goalsOverlay.addEventListener("click", function() {
-        goalsPopUp.classList.remove("visible");
-        goalsOverlay.classList.remove("visible");
-    });
+        goalsOverlay.addEventListener("click", function() {
+            goalsPopUp.classList.remove("visible");
+            goalsOverlay.classList.remove("visible");
+        });
+    }
 
-    splitBtn.addEventListener("click", function() {
-        splitPopUp.classList.toggle("visible");
-        goalsOverlay.classList.toggle("visible");
-    });
+    if (splitBtn && splitPopUp && splitOverlay) {
+        splitBtn.addEventListener("click", function() {
+            splitPopUp.classList.toggle("visible");
+            goalsOverlay.classList.toggle("visible");
+        });
 
-    splitOverlay.addEventListener("click", function() {
-        splitPopUp.classList.remove("visible");
-        splitOverlay.classList.remove("visible");
-    });
+        splitOverlay.addEventListener("click", function() {
+            splitPopUp.classList.remove("visible");
+            splitOverlay.classList.remove("visible");
+        });
+    }
 });

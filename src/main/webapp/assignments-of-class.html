@@ -81,7 +81,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="#profile" class="nav-link">
+          <a href="profile.html" class="nav-link"  id="profileLink">
             <i class="nav-item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                 <path
@@ -128,9 +128,6 @@
           <span>Welcome, Student_Name!</span>
           <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
         </div>
-        <div class="language-icon">
-          <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-        </div>
       </div>
     </header>
     <h3 class="page-hdn">All Assignments For All Classes</h3>
@@ -161,6 +158,12 @@
     const sidebar = document.querySelector('.side-bar');
     const addBtn = document.getElementById("add-button");
 
+    if (personId) {
+      profileLink.href = `profile.html?personId=${personId}`;
+    }
+
+
+
     // Get homeworkId from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const homeworkId = urlParams.get('homeworkId');
@@ -182,7 +185,7 @@
     }
 
     if (role && personId && homeworkId) {
-      fetch(`fetchAssignmentsOfClass?role=${role}&personId=${personId}&homeworkId=${homeworkId}`)
+      fetch(`api/fetchAssignmentsOfClass?role=${role}&personId=${personId}&homeworkId=${homeworkId}`)
               .then(response => {
                 if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);

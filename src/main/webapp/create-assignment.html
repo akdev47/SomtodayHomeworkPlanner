@@ -87,7 +87,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link" id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                                  width="24px">
@@ -134,9 +134,6 @@
                 <div class="user-info">
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-                </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
                 </div>
             </div>
         </header>
@@ -214,6 +211,10 @@
         const role = sessionStorage.getItem('role');
         const personId = sessionStorage.getItem('personId');
 
+        if (personId) {
+            profileLink.href = `profile.html?personId=${personId}`;
+        }
+
         const classSelector = document.getElementById("class-selector");
         const lessonSelector = document.getElementById("lesson-selector");
 
@@ -226,7 +227,7 @@
 
         function fetchClasses() {
             console.log('Fetching classes...');
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+            fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
                 .then(response => {
                     console.log('Fetch response:', response);
                     if (!response.ok) {
@@ -255,7 +256,7 @@
 
         function fetchLessons() {
             console.log('Fetching lessons...');
-            fetch(`fetchLessons?role=${role}&personId=${personId}&classId=${classId}`)
+            fetch(`api/fetchLessons?role=${role}&personId=${personId}&classId=${classId}`)
                 .then(response => {
                     console.log('Fetch response:', response);
                     if (!response.ok) {
@@ -290,6 +291,8 @@
         const goalsList = document.getElementById('goals-list');
         const homeworkSplittableInput = document.getElementById('is-splittable');
         const totalGoalCount = document.getElementById('total-goal-count');
+
+
 
         let savedData = {
             personId: personId,
@@ -428,6 +431,7 @@
         }
     });
 </script>
+
 </body>
 
 </html>

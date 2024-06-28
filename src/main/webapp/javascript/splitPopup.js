@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Log the requestData to verify its structure
         console.log('Request Data:', requestData);
         if (role === "teacher"){
-            fetch(`/SomtodayHomeworkPlanner_war/splitHomeworkTeacherServlet?homeworkId=${homeworkId}`, {
+            fetch(`/SomtodayHomeworkPlanner_war/api/splitHomeworkTeacher?homeworkId=${homeworkId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('An error occurred while splitting the homework.');
                 });
         } else if(role === "student"){
-            fetch(`/SomtodayHomeworkPlanner_war/splitHomeworkStudentServlet?homeworkId=${homeworkId}`, {
+            fetch(`/SomtodayHomeworkPlanner_war/api/splitHomeworkStudent?homeworkId=${homeworkId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -172,7 +172,5 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('An error occurred while splitting the homework.');
                 });
         }
-
-
     });
 });

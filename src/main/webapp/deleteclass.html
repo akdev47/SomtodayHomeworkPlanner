@@ -73,7 +73,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link"  id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
@@ -155,7 +155,11 @@
         const personId = sessionStorage.getItem('personId');
         const sidebar = document.getElementById('sidebar');
 
-        // update sidebar
+        if (personId) {
+            profileLink.href = `profile.html?personId=${personId}`;
+        }
+
+        // Update sidebar based on role
         if (role === 'admin') {
             sidebar.classList.add('green');
         } else if (role === 'teacher') {
@@ -164,16 +168,22 @@
             sidebar.classList.add('red');
         }
 
-
+        // Function to fetch classes based on role and personId
         function fetchClasses() {
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
-                .then(response => response.json())
+            fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(classes => {
                     populateClassSelect(classes);
                 })
                 .catch(error => console.error('Error fetching classes:', error));
         }
 
+        // Populate the class selection dropdown
         function populateClassSelect(classes) {
             classSelect.innerHTML = '<option value="">Select a class</option>';
             classes.forEach(classData => {
@@ -184,6 +194,7 @@
             });
         }
 
+        // Update the displayed class name when a class is selected
         classSelect.addEventListener('change', function() {
             const selectedOption = classSelect.options[classSelect.selectedIndex];
             if (selectedOption.value) {
@@ -193,6 +204,7 @@
             }
         });
 
+        // Handle delete class button click event
         deleteClassBtn.addEventListener('click', function() {
             const classId = classSelect.value;
             if (classId) {
@@ -204,15 +216,21 @@
             }
         });
 
+        // Function to delete a class
         function deleteClass(classId) {
-            fetch('deleteClass', {
-                method: 'POST',
+            fetch('api/deleteClass', {
+                method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 },
-                body: `class_id=${classId}`
+                body: JSON.stringify({ classId: classId })
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(result => {
                     if (result.success) {
                         alert('Class deleted successfully!');
@@ -224,8 +242,12 @@
                 .catch(error => console.error('Error deleting class:', error));
         }
 
+        // Fetch classes on page load
         fetchClasses();
     });
 </script>
+
+
+
 </body>
 </html>

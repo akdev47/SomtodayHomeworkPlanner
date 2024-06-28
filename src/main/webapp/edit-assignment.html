@@ -87,7 +87,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="#profile" class="nav-link">
+          <a href="profile.html" class="nav-link" id="profileLink">
             <i class="nav-item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                    width="24px">
@@ -134,9 +134,6 @@
         <div class="user-info">
           <span>Welcome, Student_Name!</span>
           <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-        </div>
-        <div class="language-icon">
-          <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
         </div>
       </div>
     </header>
@@ -224,6 +221,10 @@
     const homeworkSplittableInput = document.getElementById('is-splittable');
     const totalGoalCount = document.getElementById('total-goal-count');
 
+    if (personId) {
+      profileLink.href = `profile.html?personId=${personId}`;
+    }
+
     let savedData = {
       homeworkId: homeworkId,
       homeworkName: '',
@@ -239,7 +240,7 @@
 
     function fetchClasses() {
       console.log('Fetching classes...');
-      fetch(`fetchClasses?role=${role}&personId=${personId}`)
+      fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
               .then(response => response.json())
               .then(classes => {
                 classes.forEach(ownClass => {
@@ -253,18 +254,14 @@
     }
 
     function convertTimeToMinutes(timeStr) {
-      // Split the time string into hours, minutes, and seconds
       const [hours, minutes, seconds] = timeStr.split(':').map(Number);
-
-      // Calculate the total minutes
       const totalMinutes = hours * 60 + minutes;
-
       return totalMinutes;
     }
 
     function fetchLessons(classId) {
       console.log('Fetching lessons...');
-      fetch(`fetchLessons?role=${role}&personId=${personId}&classId=${classId}`)
+      fetch(`api/fetchLessons?classId=${classId}`)
               .then(response => response.json())
               .then(lessons => {
                 lessons.forEach(lesson => {
@@ -279,8 +276,13 @@
 
     function fetchAssignmentDetails() {
       console.log('Fetching assignment details...');
-      fetch(`/SomtodayHomeworkPlanner_war/editAssignment?homeworkId=${homeworkId}`)
-              .then(response => response.json())
+      fetch(`api/editAssignment?homeworkId=${homeworkId}`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+              })
               .then(data => {
                 assignmentNameInput.value = data.homeworkName;
                 dueDateInput.value = data.dueDate;
@@ -377,7 +379,7 @@
 
       savedData.publishDate = new Date().toISOString().split('T')[0];
 
-      fetch('/SomtodayHomeworkPlanner_war/editAssignment', {
+      fetch('/api/editAssignment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -425,6 +427,8 @@
     fetchAssignmentDetails();
   });
 </script>
+
+
 
 
 

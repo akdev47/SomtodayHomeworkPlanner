@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link"  id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path
@@ -126,9 +126,6 @@
                 <div class="user-info">
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-                </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
                 </div>
             </div>
         </header>
@@ -192,11 +189,13 @@
         console.log('Person ID:', personId);
         console.log('Person Name:', personName);
 
-
         if (personName) {
             welcomeMessage.textContent = `Welcome, ${personName}!`;
         }
 
+        if (personId) {
+            profileLink.href = `profile.html?personId=${personId}`;
+        }
 
         sidebar.classList.remove('red', 'yellow', 'green');
         if (role === 'admin') {
@@ -210,15 +209,17 @@
             sidebar.classList.add('red');
         }
 
-
         if (role !== 'admin') {
             fetchNotifications(personId);
         } else {
-            document.querySelector('.notification-container').innerHTML = '<p>No notifications for admin.</p>';
+            const notificationContainer = document.querySelector('.notification-container');
+            if (notificationContainer) {
+                notificationContainer.innerHTML = '<p>No notifications for admin.</p>';
+            }
         }
 
         function fetchNotifications(personId) {
-            fetch(`fetchNotifications?personId=${personId}`)
+            fetch(`api/fetchNotifications?personId=${personId}`)
                 .then(response => response.json())
                 .then(notifications => {
                     populateNotificationsTable(notifications);
@@ -228,27 +229,32 @@
 
         function populateNotificationsTable(notifications) {
             const notificationsTableBody = document.querySelector('.notifications-table tbody');
-            notificationsTableBody.innerHTML = ''; // Clear the table body
+            if (notificationsTableBody) {
+                notificationsTableBody.innerHTML = ''; // Clear the table body
 
-            notifications.forEach(notification => {
-                const row = document.createElement('tr');
-                const dateCell = document.createElement('td');
-                const fromCell = document.createElement('td');
-                const infoCell = document.createElement('td');
+                notifications.forEach(notification => {
+                    const row = document.createElement('tr');
+                    const dateCell = document.createElement('td');
+                    const fromCell = document.createElement('td');
+                    const infoCell = document.createElement('td');
 
-                dateCell.textContent = new Date(notification.date).toLocaleDateString();
-                fromCell.textContent = notification.sender;
-                infoCell.innerHTML = `<i class="info-icon fas fa-info-circle"></i> ${notification.info}`;
+                    dateCell.textContent = new Date(notification.date).toLocaleDateString();
+                    fromCell.textContent = notification.sender;
+                    infoCell.innerHTML = `<i class="info-icon fas fa-info-circle"></i> ${notification.info}`;
 
-                row.appendChild(dateCell);
-                row.appendChild(fromCell);
-                row.appendChild(infoCell);
+                    row.appendChild(dateCell);
+                    row.appendChild(fromCell);
+                    row.appendChild(infoCell);
 
-                notificationsTableBody.appendChild(row);
-            });
+                    notificationsTableBody.appendChild(row);
+                });
+            } else {
+                console.error('Notifications table body element not found.');
+            }
         }
     });
 </script>
+
 </body>
 
 </html>
