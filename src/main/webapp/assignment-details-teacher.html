@@ -306,6 +306,11 @@
         }
 
         function deleteHomeworks() {
+            if (!assignmentId) {
+                console.error("Assignment ID is not provided");
+                return;
+            }
+
             fetch(`api/deleteHomeworks?homeworkId=${assignmentId}`, {
                 method: 'DELETE',
                 headers: {
@@ -316,9 +321,11 @@
                     if (!response.ok) {
                         throw new Error("Network response was not ok");
                     }
-                    console.log("Homework deleted successfully")
+                    return response.json();
                 })
                 .then(data => {
+                    console.log("Homework deleted successfully", data);
+                    // Only navigate if the deletion was successful
                     window.location.href = 'assignments-teacher.html';
                 })
                 .catch(error => {
