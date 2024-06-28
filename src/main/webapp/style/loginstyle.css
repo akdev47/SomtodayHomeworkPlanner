@@ -90,7 +90,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: top;
 }
 
 .container-2 > form > input {
