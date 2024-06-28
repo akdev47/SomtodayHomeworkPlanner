@@ -264,7 +264,7 @@
                     document.getElementById('email').innerText = data.email_address;
                     if (viewedPersonId === personId) {
                         document.getElementById('username').innerText = data.username;
-                        document.getElementById('password').innerText = "*".repeat(parseInt(data.user_password.length));
+                        document.getElementById('password').innerText = data.user_password;
                         document.getElementById('usernameE').value = data.username;
                         document.getElementById('passwordE').value = data.user_password;
                     }
