@@ -139,34 +139,6 @@ body {
 }
 
 
-#search-bar {
-    width: 500px;
-    padding: 5px;
-}
-
-.search-results {
-    position: absolute;
-    top: 35px;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    max-height: 200px;
-    width: calc(100% - 230px);
-    overflow-y: auto;
-    display: none;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-}
-
-.search-results div {
-    padding: 10px;
-    cursor: pointer;
-}
-
-.search-results div:hover {
-    background-color: #f0f0f0;
-}
 .main-content {
     width: 100%;
     display: flex;
