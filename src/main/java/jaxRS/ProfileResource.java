@@ -46,26 +46,65 @@ public class ProfileResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateProfileInfo(@QueryParam("personId") int personId, Map<String, Object> profile) {
+        String oldPasswordInput = profile.getOrDefault("old_password", "").toString();
+        String newPassword = profile.getOrDefault("user_password", "").toString();
+        String birthDateString = profile.getOrDefault("birth_date", "").toString();
+        Date birthDate = null;
+
+        // Validate and parse birth_date
+        if (!birthDateString.isEmpty()) {
+            try {
+                birthDate = Date.valueOf(birthDateString);
+            } catch (IllegalArgumentException e) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"message\": \"Invalid birth_date format. Please use YYYY-MM-DD.\"}")
+                        .build();
+            }
+        }
+
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "UPDATE person SET person_name = ?, birth_date = ?, person_gender = ?, email_address = ?, username = ?, user_password = ? WHERE person_id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setString(1, profile.getOrDefault("person_name", "").toString());
-                stmt.setDate(2, profile.get("birth_date") != null ? Date.valueOf(profile.get("birth_date").toString()) : null);
-                stmt.setString(3, profile.getOrDefault("person_gender", "").toString());
-                stmt.setString(4, profile.getOrDefault("email_address", "").toString());
-                stmt.setString(5, profile.getOrDefault("username", "").toString());
-                stmt.setString(6, profile.getOrDefault("user_password", "").toString());
-                stmt.setInt(7, personId);
-                int rowsUpdated = stmt.executeUpdate();
+            // Retrieve the current password from the database
+            String sqlGetOldPassword = "SELECT user_password FROM person WHERE person_id = ?";
+            try (PreparedStatement stmtGetOldPassword = connection.prepareStatement(sqlGetOldPassword)) {
+                stmtGetOldPassword.setInt(1, personId);
+                try (ResultSet rs = stmtGetOldPassword.executeQuery()) {
+                    if (rs.next()) {
+                        String currentPassword = rs.getString("user_password");
+                        if (!currentPassword.equals(oldPasswordInput)) {
+                            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                                    .entity("{\"message\": \"Provided old password does not match the old password.\"}")
+                                    .build();
+                        }
+                    } else {
+                        return Response.status(Response.Status.NOT_FOUND)
+                                .entity("{\"message\": \"Profile not found\"}").build();
+                    }
+                }
+            }
+
+            // Proceed with the update if the old password matches
+            String sqlUpdateProfile = "UPDATE person SET person_name = ?, birth_date = ?, person_gender = ?, email_address = ?, username = ?, user_password = ? WHERE person_id = ?";
+            try (PreparedStatement stmtUpdateProfile = connection.prepareStatement(sqlUpdateProfile)) {
+                stmtUpdateProfile.setString(1, profile.getOrDefault("person_name", "").toString());
+                stmtUpdateProfile.setDate(2, birthDate);
+                stmtUpdateProfile.setString(3, profile.getOrDefault("person_gender", "").toString());
+                stmtUpdateProfile.setString(4, profile.getOrDefault("email_address", "").toString());
+                stmtUpdateProfile.setString(5, profile.getOrDefault("username", "").toString());
+                stmtUpdateProfile.setString(6, newPassword);
+                stmtUpdateProfile.setInt(7, personId);
+
+                int rowsUpdated = stmtUpdateProfile.executeUpdate();
                 if (rowsUpdated > 0) {
                     return Response.ok("{\"success\": true}").build();
                 } else {
-                    return Response.status(Response.Status.NOT_FOUND).entity("{\"message\": \"Profile not found\"}").build();
+                    return Response.status(Response.Status.NOT_FOUND)
+                            .entity("{\"message\": \"Profile not found\"}").build();
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"message\": \"Error updating profile info\"}").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\": \"Error updating profile info\"}").build();
         }
     }
 }
