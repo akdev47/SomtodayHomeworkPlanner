@@ -380,7 +380,7 @@
             savedData.homeworkSplittable = homeworkSplittableInput.checked;
             savedData.publishDate = new Date().toISOString().split('T')[0];
 
-            fetch('/SomtodayHomeworkPlanner_war/addAssignment', {
+            fetch('api/addAssignment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

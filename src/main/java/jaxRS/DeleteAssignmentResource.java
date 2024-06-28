@@ -78,7 +78,7 @@ public class DeleteAssignmentResource {
                                                 deleteStmt.setInt(1, hwId);
                                                 deleteStmt.executeUpdate();
                                             }
-                                            String deleteSplitRequestQuery = "DELETE FROM split_request s WHERE s.teacher_homework_id = ?";
+                                            String deleteSplitRequestQuery = "DELETE FROM split_request s WHERE s.homework_id = ?";
                                             try (PreparedStatement deleteStmt = connection.prepareStatement(
                                                     deleteSplitRequestQuery)) {
                                                 deleteStmt.setInt(1, hwId);
@@ -91,7 +91,7 @@ public class DeleteAssignmentResource {
                                                 deleteStmt.executeUpdate();
                                             }
                                         } else {
-                                            String deleteSplitRequestQuery = "DELETE FROM split_request s WHERE s.teacher_homework_id = ?";
+                                            String deleteSplitRequestQuery = "DELETE FROM split_request s WHERE s.homework_id = ?";
                                             try (PreparedStatement deleteStmt = connection.prepareStatement(
                                                     deleteSplitRequestQuery)) {
                                                 deleteStmt.setInt(1, hwId);

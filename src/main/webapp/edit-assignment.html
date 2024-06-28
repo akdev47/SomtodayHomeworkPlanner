@@ -378,7 +378,7 @@
 
       savedData.publishDate = new Date().toISOString().split('T')[0];
 
-      fetch('/api/editAssignment', {
+      fetch('api/editAssignment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
