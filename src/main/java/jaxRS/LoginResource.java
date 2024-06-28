@@ -8,6 +8,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import org.json.JSONObject;
 
 import java.sql.Connection;
@@ -37,11 +39,23 @@ public class LoginResource {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder(2 * hash.length);
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            String password1 = hexString.toString();
+
             // check to see if user is in person table
             String sql = "SELECT person_id, person_name FROM somtoday6.Person WHERE username = ? AND user_password = ?";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, password1);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {

@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('email').innerText = data.email_address;
                 if (viewedPersonId === personId) {
                     document.getElementById('username').innerText = data.username;
-                    document.getElementById('password').innerText = data.user_password;
+                    document.getElementById('password').innerText = "Hidden for privacy";
                     document.getElementById('usernameE').value = data.username;
                     document.getElementById('passwordE').value = data.user_password;
                 }

@@ -3,6 +3,9 @@ package jaxRS;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,11 +48,23 @@ public class ProfileResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProfileInfo(@QueryParam("personId") int personId, Map<String, Object> profile) {
+    public Response updateProfileInfo(@QueryParam("personId") int personId, Map<String, Object> profile) throws NoSuchAlgorithmException {
         String oldPasswordInput = profile.getOrDefault("old_password", "").toString();
         String newPassword = profile.getOrDefault("user_password", "").toString();
         String birthDateString = profile.getOrDefault("birth_date", "").toString();
         Date birthDate = null;
+
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = messageDigest.digest(oldPasswordInput.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        String oldPasswordInput1 = hexString.toString();
 
         // Validate and parse birth_date
         if (!birthDateString.isEmpty()) {
@@ -70,7 +85,7 @@ public class ProfileResource {
                 try (ResultSet rs = stmtGetOldPassword.executeQuery()) {
                     if (rs.next()) {
                         String currentPassword = rs.getString("user_password");
-                        if (!currentPassword.equals(oldPasswordInput)) {
+                        if (!currentPassword.equals(oldPasswordInput1)) {
                             return Response.status(Response.Status.NOT_ACCEPTABLE)
                                     .entity("{\"message\": \"Provided old password does not match the old password.\"}")
                                     .build();
@@ -90,7 +105,20 @@ public class ProfileResource {
                 stmtUpdateProfile.setString(3, profile.getOrDefault("person_gender", "").toString());
                 stmtUpdateProfile.setString(4, profile.getOrDefault("email_address", "").toString());
                 stmtUpdateProfile.setString(5, profile.getOrDefault("username", "").toString());
-                stmtUpdateProfile.setString(6, newPassword);
+
+                MessageDigest messageDigest1 = MessageDigest.getInstance("SHA-256");
+                byte[] hash1  = messageDigest1.digest(newPassword.getBytes(StandardCharsets.UTF_8));
+                StringBuilder hexString1 = new StringBuilder(2 * hash1.length);
+                for (int i = 0; i < hash1.length; i++) {
+                    String hex = Integer.toHexString(0xff & hash1[i]);
+                    if(hex.length() == 1) {
+                        hexString1.append('0');
+                    }
+                    hexString1.append(hex);
+                }
+                String newPassword1 = hexString1.toString();
+
+                stmtUpdateProfile.setString(6, newPassword1);
                 stmtUpdateProfile.setInt(7, personId);
 
                 int rowsUpdated = stmtUpdateProfile.executeUpdate();
