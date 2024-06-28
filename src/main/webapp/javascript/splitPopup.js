@@ -26,6 +26,22 @@ document.addEventListener('DOMContentLoaded', () => {
         splitOverlay.classList.add('visible');
     });
 
+    // Add event listeners for closing pop-ups when clicking outside of them
+    splitOverlay.addEventListener('click', () => {
+        splitPopUp.classList.remove('visible');
+        splitOverlay.classList.remove('visible');
+    });
+
+    individualSplitOverlay.addEventListener('click', () => {
+        individualSplitPopUp.classList.remove('visible');
+        individualSplitOverlay.classList.remove('visible');
+    });
+
+    descriptionOverlay.addEventListener('click', () => {
+        descriptionPopUp.classList.remove('visible');
+        descriptionOverlay.classList.remove('visible');
+    });
+
     // Handle form submission for the first pop-up
     splitForm.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevent form submission
