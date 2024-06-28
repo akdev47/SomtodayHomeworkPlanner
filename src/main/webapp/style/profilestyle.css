@@ -300,7 +300,7 @@ body {
 }
 
 .edit-profile-btn, .save-profile-btn, .cancel-profile-btn {
-    display: inline-block;
+    display: flex;
     margin-top: 20px;
     padding: 10px 20px;
     text-decoration: none;
@@ -311,6 +311,7 @@ body {
 .edit-profile-btn {
     background-color: #1984cf;
     color: white;
+    border: none;
 }
 
 .edit-profile-btn:hover {
@@ -320,6 +321,7 @@ body {
 .save-profile-btn {
     background-color: #1984cf;
     color: white;
+    border: none;
 }
 
 .save-profile-btn:hover {
@@ -330,6 +332,8 @@ body {
     background-color: #db133d;
     color: white;
     margin-left: 10px;
+    border-radius: 4px;
+    border: none;
 }
 
 .cancel-profile-btn:hover {
