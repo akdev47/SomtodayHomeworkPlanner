@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update welcome message
     if (role === 'admin') {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = ` ${personName}`;
         sidebar.classList.add('green');
     } else if (role === 'teacher') {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = ` ${personName}`;
         editClassButton.style.display = 'none';
         addClassButton.style.display = 'none';
         sidebar.classList.add('yellow');
     } else {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = ` ${personName}`;
         addClassButton.style.display = 'none';
         editClassButton.style.display = 'none';
         sidebar.classList.add('red');

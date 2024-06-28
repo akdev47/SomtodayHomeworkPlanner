@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const welcomeMessage = document.querySelector('.user-info span');
 
     if (personName) {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = ` ${personName}`;
     }
 
     if (personId) {

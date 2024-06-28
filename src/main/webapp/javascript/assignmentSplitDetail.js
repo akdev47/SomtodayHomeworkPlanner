@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const personId = sessionStorage.getItem('personId');
     const totalGoalCount = document.getElementById('total-goal-count');
     const sidebar = document.querySelector('.side-bar');
+    const welcomeMessage = document.querySelector('.user-info span');
+    const personName = sessionStorage.getItem('personName');
+
+    if (personName) {
+        welcomeMessage.textContent = ` ${personName}`;
+    }
 
     if (personId) {
         profileLink.href = `profile.html?personId=${personId}`;

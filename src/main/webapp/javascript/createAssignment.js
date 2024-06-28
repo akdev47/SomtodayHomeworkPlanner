@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch classes and update frontend
     const role = sessionStorage.getItem('role');
     const personId = sessionStorage.getItem('personId');
+    const welcomeMessage = document.querySelector('.user-info span');
+    const personName = sessionStorage.getItem('personName');
+
+    if (personName) {
+        welcomeMessage.textContent = ` ${personName}`;
+    }
 
     if (personId) {
         profileLink.href = `profile.html?personId=${personId}`;

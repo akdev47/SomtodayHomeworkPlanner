@@ -3,6 +3,7 @@ function updateUIBasedOnRole(role) {
     const editButtons = document.querySelectorAll('.edit-btn');
     const deleteButton = document.querySelector('.delete-class-btn');
 
+
     if (role === 'admin') {
         sidebar.classList.remove('yellow', 'red');
         sidebar.classList.add('green');
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Role:', role);
 
     if (personName) {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = `${personName}`;
     }
 
     updateUIBasedOnRole(role);

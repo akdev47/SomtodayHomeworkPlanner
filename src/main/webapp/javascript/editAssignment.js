@@ -12,6 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const goalsList = document.getElementById('goals-list');
     const homeworkSplittableInput = document.getElementById('is-splittable');
     const totalGoalCount = document.getElementById('total-goal-count');
+    const welcomeMessage = document.querySelector('.user-info span');
+    const personName = sessionStorage.getItem('personName');
+
+    if (personName) {
+        welcomeMessage.textContent = ` ${personName}`;
+    }
 
     if (personId) {
         profileLink.href = `profile.html?personId=${personId}`;

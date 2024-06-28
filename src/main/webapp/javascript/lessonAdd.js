@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Set welcome text with the name of the user
     if (personName) {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = ` ${personName}`;
     }
 
     if (personId) {

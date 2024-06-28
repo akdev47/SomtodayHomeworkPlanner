@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Person Name:', personName);
 
     if (personName) {
-        welcomeMessage.textContent = `Welcome, ${personName}!`;
+        welcomeMessage.textContent = `${personName}`;
     }
 
     if (personId) {

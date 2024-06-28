@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const role = sessionStorage.getItem('role');
     const personId = sessionStorage.getItem('personId');
+    const welcomeMessage = document.querySelector('.user-info span');
+    const personName = sessionStorage.getItem('personName');
+
+    if (personName) {
+        welcomeMessage.textContent = ` ${personName}`;
+    }
 
     sidebar.classList.remove('red', 'yellow', 'green');
     if (role === 'admin') {

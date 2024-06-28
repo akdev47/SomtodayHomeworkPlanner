@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const deleteBtn = document.querySelector('.delete-assignment-btn');
     const splitBtn = document.querySelector(".split-btn");
     sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
+    const welcomeMessage = document.querySelector('.user-info span');
+    const personName = sessionStorage.getItem('personName');
+
+    if (personName) {
+        welcomeMessage.textContent = ` ${personName}`;
+    }
 
     if (personId) {
         profileLink.href = `profile.html?personId=${personId}`;

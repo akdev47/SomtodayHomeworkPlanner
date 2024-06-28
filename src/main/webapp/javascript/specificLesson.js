@@ -14,7 +14,7 @@
     document.getElementById('lesson-description').textContent = lessonDescription;
 
     if (personName) {
-    welcomeMessage.textContent = `Welcome, ${personName}!`;
+    welcomeMessage.textContent = `${personName}`;
 }
 
     if (personId) {
