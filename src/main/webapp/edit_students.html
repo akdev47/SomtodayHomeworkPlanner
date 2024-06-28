@@ -144,6 +144,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const role = sessionStorage.getItem('role');
+        const personId = sessionStorage.getItem('personId');
 
         sidebar.classList.remove('red', 'yellow', 'green');
         if (role === 'admin') {
