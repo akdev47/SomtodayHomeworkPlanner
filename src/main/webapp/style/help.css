@@ -1,5 +1,10 @@
+/* SIDEBAR STYLING ---------------------------------------------------------------------*/
+
 *{
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .red {
@@ -39,7 +44,7 @@
 }
 
 .side-bar{
-    width: 300px;
+    width: 250px;
     height: 100vh;
     text-align: center;
     display: flex;
@@ -114,6 +119,8 @@
     align-items: center;
     justify-content: space-around;
 }
+
+/*----------------------------------------------------------------------------- */
 
 
 /* Container Text Styling */
