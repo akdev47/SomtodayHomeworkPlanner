@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#notifications" class="nav-link">
+                    <a href="notifications.html" class="nav-link">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" />
@@ -115,9 +115,6 @@
                     <span id="welcome-message">Welcome!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
             </div>
         </header>
         <section class="content">
@@ -163,7 +160,7 @@
         const listContainer = document.getElementById('list-container');
         const sidebar = document.getElementById('sidebar');
 
-        // update welcome message
+        // Update welcome message
         if (role === 'admin') {
             welcomeMessage.textContent = `Welcome, ${personName}!`;
             sidebar.classList.add('green');
@@ -199,7 +196,7 @@
             imgSection.className = 'img-section';
             if (classData.has_profile_picture) {
                 const img = document.createElement('img');
-                img.src = `getClassPicture?classId=${classData.class_id}`;
+                img.src = `api/getClassPicture?classId=${classData.class_id}`;
                 img.alt = `${classData.class_name} Profile Picture`;
                 imgSection.appendChild(img);
 
@@ -249,7 +246,7 @@
 
         function fetchClasses() {
             console.log('Fetching classes...');
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+            fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
                 .then(response => {
                     console.log('Fetch response:', response);
                     if (!response.ok) {
@@ -278,7 +275,7 @@
             console.error('Missing role or personId in session storage');
         }
 
-        // switching between card and list views
+        // Switching between card and list views
         const toggleCheckbox = document.getElementById('toggle');
         toggleCheckbox.addEventListener('change', function() {
             if (toggleCheckbox.checked) {
@@ -291,5 +288,6 @@
         });
     });
 </script>
+
 </body>
 </html>

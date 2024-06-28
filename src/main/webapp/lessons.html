@@ -120,9 +120,6 @@
                     <span>Name</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
             </div>
         </header>
         <section class="content">
@@ -172,21 +169,20 @@
         }
 
         function fetchLessons() {
-            fetch(`fetchLessonsPage?role=${role}&personId=${personId}`)
+            fetch(`api/fetchLessonsPage?role=${role}&personId=${personId}`)
                 .then(response => response.json())
                 .then(lessons => {
                     lessonsTableBody.innerHTML = '';
                     lessons.forEach(lesson => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                        <td>${lesson.class_name}</td>
-                        <td>${lesson.lesson_name}</td>
-                        <td>${lesson.teacher_name}</td>
-                        <td><button class="details-button" data-lesson-id="${lesson.lesson_id}" data-class-name="${lesson.class_name}" data-lesson-name="${lesson.lesson_name}" data-lesson-description="${lesson.lesson_description}" data-teacher-name="${lesson.teacher_name}">See Details</button></td>
-                    `;
+                            <td>${lesson.class_name}</td>
+                            <td>${lesson.lesson_name}</td>
+                            <td>${lesson.teacher_name}</td>
+                            <td><button class="details-button" data-lesson-id="${lesson.lesson_id}" data-class-name="${lesson.class_name}" data-lesson-name="${lesson.lesson_name}" data-lesson-description="${lesson.lesson_description}" data-teacher-name="${lesson.teacher_name}">See Details</button></td>
+                        `;
                         lessonsTableBody.appendChild(row);
                     });
-
 
                     document.querySelectorAll('.details-button').forEach(button => {
                         button.addEventListener('click', function() {
@@ -206,5 +202,6 @@
         fetchLessons();
     });
 </script>
+
 </body>
 </html>

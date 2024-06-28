@@ -155,7 +155,7 @@
         const personId = sessionStorage.getItem('personId');
         const sidebar = document.getElementById('sidebar');
 
-        // update sidebar
+        // Update sidebar based on role
         if (role === 'admin') {
             sidebar.classList.add('green');
         } else if (role === 'teacher') {
@@ -164,16 +164,22 @@
             sidebar.classList.add('red');
         }
 
-
+        // Function to fetch classes based on role and personId
         function fetchClasses() {
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
-                .then(response => response.json())
+            fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(classes => {
                     populateClassSelect(classes);
                 })
                 .catch(error => console.error('Error fetching classes:', error));
         }
 
+        // Populate the class selection dropdown
         function populateClassSelect(classes) {
             classSelect.innerHTML = '<option value="">Select a class</option>';
             classes.forEach(classData => {
@@ -184,6 +190,7 @@
             });
         }
 
+        // Update the displayed class name when a class is selected
         classSelect.addEventListener('change', function() {
             const selectedOption = classSelect.options[classSelect.selectedIndex];
             if (selectedOption.value) {
@@ -193,6 +200,7 @@
             }
         });
 
+        // Handle delete class button click event
         deleteClassBtn.addEventListener('click', function() {
             const classId = classSelect.value;
             if (classId) {
@@ -204,15 +212,21 @@
             }
         });
 
+        // Function to delete a class
         function deleteClass(classId) {
-            fetch('deleteClass', {
-                method: 'POST',
+            fetch('api/deleteClass', {
+                method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 },
-                body: `class_id=${classId}`
+                body: JSON.stringify({ classId: classId })
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(result => {
                     if (result.success) {
                         alert('Class deleted successfully!');
@@ -224,8 +238,12 @@
                 .catch(error => console.error('Error deleting class:', error));
         }
 
+        // Fetch classes on page load
         fetchClasses();
     });
 </script>
+
+
+
 </body>
 </html>

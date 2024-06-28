@@ -135,9 +135,6 @@
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
             </div>
         </header>
         <section class="content">
@@ -226,7 +223,7 @@
 
         function fetchClasses() {
             console.log('Fetching classes...');
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+            fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
                 .then(response => {
                     console.log('Fetch response:', response);
                     if (!response.ok) {
@@ -255,7 +252,7 @@
 
         function fetchLessons() {
             console.log('Fetching lessons...');
-            fetch(`fetchLessons?role=${role}&personId=${personId}&classId=${classId}`)
+            fetch(`api/fetchLessons?role=${role}&personId=${personId}&classId=${classId}`)
                 .then(response => {
                     console.log('Fetch response:', response);
                     if (!response.ok) {
@@ -428,6 +425,7 @@
         }
     });
 </script>
+
 </body>
 
 </html>

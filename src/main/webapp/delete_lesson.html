@@ -155,9 +155,8 @@
             sidebar.classList.add('red');
         }
 
-
         function fetchLessons() {
-            fetch(`fetchLessons?classId=${classId}`)
+            fetch(`api/fetchLessons?classId=${classId}`)
                 .then(response => response.json())
                 .then(lessons => {
                     populateLessonSelect(lessons);
@@ -196,8 +195,8 @@
         });
 
         function deleteLesson(lessonId) {
-            fetch('deleteLesson', {
-                method: 'POST',
+            fetch('api/deleteLesson', {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -223,5 +222,6 @@
         fetchLessons();
     });
 </script>
+
 </body>
 </html>

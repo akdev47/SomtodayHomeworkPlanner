@@ -137,10 +137,6 @@
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png"
-                                                          alt="Language Icon"></a>
-                </div>
             </div>
         </header>
         <section class="content">
@@ -221,14 +217,12 @@
 
         function convertTimeToMinutes(timeStr) {
             const [hours, minutes, seconds] = timeStr.split(':').map(Number);
-
             const totalMinutes = hours * 60 + minutes;
-
             return totalMinutes;
         }
 
         function fetchDetails() {
-            fetch(`fetchAssignmentDetails?id=${assignmentId}&role=${role}&personId=${personId}`)
+            fetch(`api/fetchAssignmentDetails?id=${assignmentId}&role=${role}&personId=${personId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -238,16 +232,24 @@
                 .then(assignment => {
                     assignment.forEach(assignmentData => {
                         const descText = document.getElementById('description-text');
-                        descText.innerText = assignmentData.hw_description;
+                        if (descText) {
+                            descText.innerText = assignmentData.hw_description;
+                        }
 
                         const heading = document.getElementById('page-heading');
-                        heading.innerText = assignmentData.homework_name;
+                        if (heading) {
+                            heading.innerText = assignmentData.homework_name;
+                        }
 
                         const title = document.querySelector("title");
-                        title.innerText = assignmentData.homework_name;
+                        if (title) {
+                            title.innerText = assignmentData.homework_name;
+                        }
 
-                        const timeIndication = document.getElementsByClassName('time-indication')[0];
-                        timeIndication.innerHTML = convertTimeToMinutes(assignmentData.time_indication) + " mins";
+                        const timeIndication = document.querySelector('.time-indication');
+                        if (timeIndication) {
+                            timeIndication.innerHTML = convertTimeToMinutes(assignmentData.time_indication) + " mins";
+                        }
                     })
                 })
                 .catch(error => console.error('Error fetching assignment details:', error));
@@ -255,7 +257,7 @@
 
         function fetchGoals() {
             const goalsList = document.getElementById("goals-ul");
-            fetch(`fetchGoals?id=${assignmentId}&role=${role}`)
+            fetch(`api/fetchGoals?id=${assignmentId}&role=${role}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -275,7 +277,9 @@
 
                         i++; // Increment the goal count
                     });
-                    totalGoalCount.textContent = i - 1;
+                    if (totalGoalCount) {
+                        totalGoalCount.textContent = i - 1;
+                    }
                 })
                 .catch(error => console.error('Error fetching goals:', error));
         }
@@ -287,7 +291,6 @@
             console.error('No assignment ID provided in URL');
         }
     });
-
 </script>
 
 </body>

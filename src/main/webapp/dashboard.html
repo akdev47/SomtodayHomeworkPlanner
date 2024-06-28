@@ -119,9 +119,6 @@
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
             </div>
         </header>
         <section class="content">
@@ -223,7 +220,7 @@
         }
 
         function fetchHomework() {
-            fetch(`fetchHomework?role=${role}&personId=${personId}`)
+            fetch(`api/fetchHomework?role=${role}&personId=${personId}`)
                 .then(response => response.json())
                 .then(homework => {
                     if (role === 'admin') {
@@ -319,7 +316,7 @@
         }
 
         function fetchClasses() {
-            fetch(`fetchClasses?role=${role}&personId=${personId}`)
+            fetch(`api/fetchClasses?role=${role}&personId=${personId}`)
                 .then(response => response.json())
                 .then(classes => {
                     const classesList = document.getElementById('classes-list');
@@ -340,28 +337,34 @@
         }
 
         function fetchAssignments() {
-            fetch(`fetchAssignments?role=${role}&personId=${personId}`)
+            fetch(`api/fetchAssignments?role=${role}&personId=${personId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     return response.json();
                 })
-                .then(assignments => {
+                .then(data => {
+                    const assignments = data.homeworks;  // Assuming server returns an object with 'homeworks' key
                     const assignmentContainer = document.getElementById('assignments-ul');
                     assignmentContainer.innerHTML = '';
-                    assignments.forEach(assignmentData => {
-                        const row = document.createElement('li');
 
-                        const link = document.createElement("a");
-                        link.innerHTML = assignmentData.class_name + " - " + assignmentData.homework_name;
-                        link.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
+                    if (Array.isArray(assignments)) {
+                        assignments.forEach(assignmentData => {
+                            const row = document.createElement('li');
 
-                        link.style = "color: #262F35; text-decoration: none;";
+                            const link = document.createElement("a");
+                            link.innerHTML = assignmentData.class_name + " - " + assignmentData.homework_name;
+                            link.href = `assignment-details-teacher.html?id=${assignmentData.homework_id}`;
 
-                        row.appendChild(link);
-                        assignmentContainer.appendChild(row);
-                    });
+                            link.style = "color: #262F35; text-decoration: none;";
+
+                            row.appendChild(link);
+                            assignmentContainer.appendChild(row);
+                        });
+                    } else {
+                        console.error('Assignments data is missing or not an array');
+                    }
                 })
                 .catch(error => console.error('Error fetching assignments:', error));
         }
@@ -485,8 +488,8 @@
         fetchClasses();
         fetchAssignments();
     });
-
 </script>
+
 
 
 </body>

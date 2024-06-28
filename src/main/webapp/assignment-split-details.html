@@ -73,7 +73,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#lessons" class="nav-link">
+                    <a href="lessons.html" class="nav-link">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                  viewBox="0 -960 960 960" width="24px">
@@ -94,18 +94,6 @@
                             </svg>
                         </i>
                         <p class="nav-item-text">Profile</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#people" class="nav-link">
-                        <i class="nav-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                 viewBox="0 -960 960 960" width="24px">
-                                <path
-                                        d="M480-120q83 0 156-31.5T763-197q54-54 85.5-127T880-480q0-83-31.5-156T763-763q-54-54-127-85.5T480-880q-83 0-156 31.5T197-763q-54 54-85.5 127T80-480q0 83 31.5 156T197-197q54 54 127 85.5T480-120Zm0-80q-134 0-227-93t-93-227q0-134 93-227t227-93q134 0 227 93t93 227q0 134-93 227t-227 93Zm0-320Zm0 0q66 0 113-47t47-113q0-66-47-113t-113-47q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-400q-33 0-56.5-23.5T400-640q0-33 23.5-56.5T480-720q33 0 56.5 23.5T560-640q0 33-23.5 56.5T480-560Zm0 400Zm0 0Zm0 320q-42 0-82.5-11T140-306q-9 5-14.5 14t-5.5 20v32H120v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H760Zm0-320q-33 0-56.5-23.5T680-640q0-33 23.5-56.5T760-720q33 0 56.5 23.5T840-640q0 33-23.5 56.5T760-560Zm0 400Zm0-320q-33 0-56.5-23.5T680-640q0-33 23.5-56.5T760-720q33 0 56.5 23.5T840-640q0 33-23.5 56.5T760-560Z"/>
-                            </svg>
-                        </i>
-                        <p class="nav-item-text">People</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -135,15 +123,6 @@
                     <p>Logout</p>
                 </a>
             </div>
-            <a href="#access" class="nav-link">
-                <i class="access-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                         width="24px">
-                        <path
-                                d="M480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-252q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680v400Zm0 140 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/>
-                    </svg>
-                </i>
-            </a>
         </div>
     </div>
     <main class="main-content">
@@ -156,10 +135,7 @@
                     <span>Welcome, Student_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png"
-                                                          alt="Language Icon"></a>
-                </div>
+
             </div>
         </header>
         <section class="content">
@@ -216,14 +192,12 @@
 
         function convertTimeToMinutes(timeStr) {
             const [hours, minutes, seconds] = timeStr.split(':').map(Number);
-
             const totalMinutes = hours * 60 + minutes;
-
             return totalMinutes;
         }
 
         function fetchDetails() {
-            fetch(`fetchAssignmentSplitDetails?splitId=${splitId}&role=${role}&personId=${personId}`)
+            fetch(`api/fetchAssignmentSplitDetails?splitId=${splitId}&role=${role}&personId=${personId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -250,7 +224,7 @@
 
         function fetchGoals() {
             const goalsList = document.getElementById("goals-ul");
-            fetch(`fetchGoals?id=${assignmentId}&role=${role}`)
+            fetch(`api/fetchGoals?id=${assignmentId}&role=${role}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -282,7 +256,6 @@
             console.error('No assignment ID provided in URL');
         }
     });
-
 </script>
 
 </body>

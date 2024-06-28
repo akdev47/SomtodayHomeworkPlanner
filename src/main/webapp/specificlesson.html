@@ -115,9 +115,6 @@
                     <span>Name</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                 </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                </div>
             </div>
         </header>
         <section class="content">
@@ -184,7 +181,7 @@
         }
 
         function fetchHomeworkForLesson() {
-            fetch(`fetchHomeworkForLesson?lessonId=${lessonId}&personId=${personId}&role=${role}`)
+            fetch(`api/fetchHomeworkForLesson?lessonId=${lessonId}&personId=${personId}&role=${role}`)
                 .then(response => response.json())
                 .then(homework => {
                     const activeAssignmentsContainer = document.querySelector('.active-assignments .assignment-list');
@@ -236,5 +233,6 @@
         fetchHomeworkForLesson();
     });
 </script>
+
 </body>
 </html>

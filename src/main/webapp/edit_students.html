@@ -155,13 +155,15 @@
         }
 
         const backButton = document.querySelector('.back-button button');
+        const classId = new URLSearchParams(window.location.search).get('classId');
+
         backButton.addEventListener('click', function() {
             window.location.href = `class.html?classId=${classId}`;
         });
 
-        // fetch all unassigned students and show the all students
+        // fetch all unassigned students and show them
         function fetchUnassignedStudents() {
-            fetch('/SomtodayHomeworkPlanner_war/fetchStudents?unassigned=true')
+            fetch('api/fetchStudents?unassigned=true')
                 .then(response => response.json())
                 .then(students => {
                     const allStudentsSelect = document.getElementById('all-students-select');
@@ -176,10 +178,8 @@
                 .catch(error => console.error('Error fetching students:', error));
         }
 
-        const classId = new URLSearchParams(window.location.search).get('classId');
-
         function fetchClassDetails(classId) {
-            fetch(`/SomtodayHomeworkPlanner_war/fetchClassDetails?classId=${classId}`)
+            fetch(`api/fetchClassDetails?classId=${classId}`)
                 .then(response => response.json())
                 .then(data => {
                     displayClassDetails(data);
@@ -232,7 +232,7 @@
             const currentStudentsSelect = document.getElementById('current-students-select');
             const studentIds = Array.from(currentStudentsSelect.options).map(option => option.value);
 
-            fetch('/SomtodayHomeworkPlanner_war/editStudentsInClass', {
+            fetch('api/editStudentsInClass', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -255,6 +255,7 @@
         });
     });
 </script>
+
 
 </body>
 </html>

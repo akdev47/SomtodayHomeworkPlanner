@@ -117,7 +117,7 @@
         </header>
         <div class="title">Adding a class</div>
         <div class="class-container">
-            <form action="/SomtodayHomeworkPlanner_war/addClass" method="post" enctype="multipart/form-data">
+            <form action="api/addToClass" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="class-name">Enter a class name:</label>
                     <input type="text" id="class-name" name="className" required>
@@ -155,9 +155,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const role = sessionStorage.getItem('role');
-        // const personId = sessionStorage.getItem('personId');
-        // const personName = sessionStorage.getItem('personName');
-
 
         sidebar.classList.remove('red', 'yellow', 'green');
         if (role === 'admin') {
@@ -168,9 +165,9 @@
             sidebar.classList.add('red');
         }
 
-        console.log("add class test")
+        console.log("add class test");
 
-        fetch('/SomtodayHomeworkPlanner_war/fetchStudents?unassigned=true')
+        fetch('api/fetchStudents?unassigned=true')
             .then(response => response.json())
             .then(students => {
                 const allStudentsSelect = document.getElementById('all-students-select');
@@ -183,7 +180,6 @@
             })
             .catch(error => console.error('Error fetching students:', error));
 
-        // move the selected student from All Students to current students in class
         document.getElementById('add-student-btn').addEventListener('click', function() {
             const allStudentsSelect = document.getElementById('all-students-select');
             const currentStudentsSelect = document.getElementById('current-students-select');

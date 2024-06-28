@@ -123,14 +123,9 @@
             </div>
             <h1>Class Details</h1>
             <div class="user-settings">
-                <input type="text" id="search-bar" placeholder="Search">
-                <div id="search-results" class="search-results"></div>
                 <div class="user-info">
                     <span>Welcome_Name!</span>
                     <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
-                </div>
-                <div class="language-icon">
-                    <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
                 </div>
             </div>
         </header>
@@ -162,7 +157,6 @@
 </div>
 
 <script>
-
     function updateUIBasedOnRole(role) {
         const sidebar = document.querySelector('.side-bar');
         const editButtons = document.querySelectorAll('.edit-btn');
@@ -203,7 +197,7 @@
         updateUIBasedOnRole(role);
 
         function fetchClassDetails(classId) {
-            fetch(`fetchClassDetails?classId=${classId}`)
+            fetch(`api/fetchClassDetails?classId=${classId}`)
                 .then(response => response.json())
                 .then(data => {
                     displayClassDetails(data);
@@ -249,12 +243,12 @@
 
         document.querySelector('.delete-class-btn').addEventListener('click', function() {
             if (confirm('Are you sure you want to delete this class?')) {
-                fetch('deleteClass', {
-                    method: 'POST',
+                fetch('api/deleteClass', {
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `class_id=${classId}`
+                    body: JSON.stringify({ class_id: classId })
                 })
                     .then(response => response.json())
                     .then(result => {
@@ -280,6 +274,7 @@
         });
     });
 </script>
+
 
 
 

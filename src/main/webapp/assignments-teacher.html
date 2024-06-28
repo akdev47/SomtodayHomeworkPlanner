@@ -128,9 +128,6 @@
                         <span>Welcome, Student_Name!</span>
                         <a href="user-profile.html"><img src="res/user-icon.png" alt="User Icon"></a>
                     </div>
-                    <div class="language-icon">
-                        <a href="language-settings.html"><img src="res/language-icon.png" alt="Language Icon"></a>
-                    </div>
                 </div>
             </header>
             <h3 class="page-hdn">All Assignments For All Classes</h3>
@@ -178,7 +175,7 @@
             }
 
             if (role && personId) {
-                fetch(`fetchAssignments?role=${role}&personId=${personId}`)
+                fetch(`api/fetchAssignments?role=${role}&personId=${personId}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -186,13 +183,13 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log('Fetched data:', data); // Log the fetched data to see its structure
+                        console.log('Fetched data:', data);
                         const assignments = data.homeworks;
                         const splits = data.splits;
                         const assignmentContainer = document.getElementById('table-body');
                         assignmentContainer.innerHTML = '';
 
-                        if (assignments && assignments.forEach) {
+                        if (Array.isArray(assignments)) {
                             assignments.forEach(assignmentData => {
                                 const row = document.createElement('tr');
 
@@ -230,18 +227,18 @@
                             console.error('Assignments data is missing or not an array');
                         }
 
-                        if (splits && splits.forEach) {
+                        if (Array.isArray(splits)) {
                             splits.forEach(splitData => {
                                 const correspondingHomework = assignments.find(hw => hw.homework_id === splitData.homework_id);
                                 if (correspondingHomework) {
                                     const row = document.createElement('tr');
                                     row.innerHTML = `
-                                <td>${correspondingHomework.class_name}</td>
-                                <td>${correspondingHomework.homework_name} ${splitData.split_name}</td>
-                                <td>${correspondingHomework.publish_date}</td>
-                                <td>${correspondingHomework.due_date}</td>
-                                <td><a href="assignment-split-details.html?splitId=${splitData.split_id}&homeworkId=${splitData.homework_id}">See Details</a></td>
-                            `;
+                                    <td>${correspondingHomework.class_name}</td>
+                                    <td>${correspondingHomework.homework_name} ${splitData.split_name}</td>
+                                    <td>${correspondingHomework.publish_date}</td>
+                                    <td>${correspondingHomework.due_date}</td>
+                                    <td><a href="assignment-split-details.html?splitId=${splitData.split_id}&homeworkId=${splitData.homework_id}">See Details</a></td>
+                                `;
                                     assignmentContainer.appendChild(row);
                                 }
                             });
@@ -254,8 +251,8 @@
                 console.error('Missing role or personId in session storage');
             }
         });
-
     </script>
+
 </body>
 
 </html>
