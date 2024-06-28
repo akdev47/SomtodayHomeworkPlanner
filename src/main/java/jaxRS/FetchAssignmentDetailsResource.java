@@ -32,7 +32,7 @@ public class FetchAssignmentDetailsResource {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            String sql = "SELECT homework_name, description, time_indication FROM somtoday6.Homework WHERE homework_id = ?";
+            String sql = "SELECT homework_name, description, time_indication, homework_splitable FROM somtoday6.Homework WHERE homework_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, assignmentId);
             ResultSet resultSet = statement.executeQuery();
@@ -42,6 +42,7 @@ public class FetchAssignmentDetailsResource {
                 assignment.put("homework_name", resultSet.getString("homework_name"));
                 assignment.put("hw_description", resultSet.getString("description"));
                 assignment.put("time_indication", resultSet.getTime("time_indication").toString());
+                assignment.put("homework_splitable", resultSet.getBoolean("homework_splitable"));
                 assignmentArray.put(assignment);
             }
 

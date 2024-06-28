@@ -200,6 +200,7 @@
         const personId = sessionStorage.getItem('personId');
         const totalGoalCount = document.getElementById('total-goal-count');
         const sidebar = document.querySelector('.side-bar');
+        const splitBtn = document.querySelector(".split-btn");
 
         if (personId) {
             profileLink.href = `profile.html?personId=${personId}`;
@@ -252,6 +253,11 @@
                         if (timeIndication) {
                             timeIndication.innerHTML = convertTimeToMinutes(assignmentData.time_indication) + " mins";
                         }
+
+                        if (assignmentData.homework_splitable === false){
+                            splitBtn.style.display = "none";
+                        }
+
                     })
                 })
                 .catch(error => console.error('Error fetching assignment details:', error));
@@ -288,16 +294,6 @@
 
         const logoutBtn = document.querySelector(".log-out");
         function logoutAndRedirect() {
-            console.log("baba")
-            sessionStorage.clear();
-
-            var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-            window.location.href = baseUrl;
-        }
-
-        logoutBtn.addEventListener("click", logoutAndRedirect)const logoutBtn = document.querySelector(".log-out");
-        function logoutAndRedirect() {
-            console.log("baba")
             sessionStorage.clear();
 
             var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";

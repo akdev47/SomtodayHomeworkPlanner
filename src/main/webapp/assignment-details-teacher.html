@@ -219,6 +219,7 @@
         const totalGoalCount = document.getElementById('total-goal-count');
         const sidebar = document.querySelector('.side-bar');
         const deleteBtn = document.querySelector('.delete-assignment-btn');
+        const splitBtn = document.querySelector(".split-btn");
         sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
 
         if (personId) {
@@ -270,6 +271,10 @@
                         const timeIndication = document.querySelector('.time-indication');
                         if (timeIndication) {
                             timeIndication.innerHTML = convertTimeToMinutes(assignmentData.time_indication) + " mins";
+                        }
+
+                        if (assignmentData.homework_splitable === false){
+                            splitBtn.style.display = "none";
                         }
                     })
                 })
