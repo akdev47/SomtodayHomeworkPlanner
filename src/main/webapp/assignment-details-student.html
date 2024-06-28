@@ -87,7 +87,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link"  id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                  viewBox="0 -960 960 960" width="24px">
@@ -202,6 +202,10 @@
         const personId = sessionStorage.getItem('personId');
         const totalGoalCount = document.getElementById('total-goal-count');
         const sidebar = document.querySelector('.side-bar');
+
+        if (personId) {
+            profileLink.href = `profile.html?personId=${personId}`;
+        }
 
         sidebar.classList.remove('red', 'yellow', 'green'); // Remove any existing color classes
         if (role === 'admin') {

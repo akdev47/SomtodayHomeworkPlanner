@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#profile" class="nav-link">
+                    <a href="profile.html" class="nav-link"  id="profileLink">
                         <i class="nav-item-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                                 <path
@@ -191,6 +191,10 @@
 
         if (personName) {
             welcomeMessage.textContent = `Welcome, ${personName}!`;
+        }
+
+        if (personId) {
+            profileLink.href = `profile.html?personId=${personId}`;
         }
 
         sidebar.classList.remove('red', 'yellow', 'green');
