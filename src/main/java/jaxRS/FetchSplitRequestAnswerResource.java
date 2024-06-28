@@ -63,13 +63,14 @@ public class FetchSplitRequestAnswerResource {
                                         deleteSplitStmt.executeUpdate();
                                     }
                                 }
-                                String deleteSplitReqQuery = "DELETE FROM split_request WHERE split_request_id = ?";
-                                try (PreparedStatement deleteSplitReqStmt = connection.prepareStatement(deleteSplitReqQuery)) {
-                                    deleteSplitReqStmt.setInt(1, requestId);
-                                    deleteSplitReqStmt.executeUpdate();
-                                }
                             }
                         }
+                    }
+
+                    String deleteSplitReqQuery = "DELETE FROM split_request WHERE split_request_id = ?";
+                    try (PreparedStatement deleteSplitReqStmt = connection.prepareStatement(deleteSplitReqQuery)) {
+                        deleteSplitReqStmt.setInt(1, requestId);
+                        deleteSplitReqStmt.executeUpdate();
                     }
 
                     return Response.ok("{\"message\": \"Request processed successfully.\"}").build();
