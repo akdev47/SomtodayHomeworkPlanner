@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded", ()=>{
     const role = sessionStorage.getItem('role');
     const sidebar = document.querySelector('.side-bar');
+    const personId = sessionStorage.getItem('personId');
 
     sidebar.classList.remove('red', 'yellow', 'green');
     if (role === 'admin') {
@@ -12,9 +13,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
         sidebar.classList.add('red');
     }
 
+    if (personId) {
+        profileLink.href = `profile.html?personId=${personId}`;
+    }
+
     const logoutBtn = document.querySelector(".log-out");
     function logoutAndRedirect() {
-        console.log("baba")
         sessionStorage.clear();
 
         var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";

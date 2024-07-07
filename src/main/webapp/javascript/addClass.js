@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const role = sessionStorage.getItem('role');
@@ -39,15 +38,4 @@ document.addEventListener('DOMContentLoaded', function() {
             currentStudentsSelect.appendChild(option);
         });
     });
-
-    const logoutBtn = document.querySelector(".log-out");
-    function logoutAndRedirect() {
-        console.log("baba")
-        sessionStorage.clear();
-
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
-    }
-
-    logoutBtn.addEventListener("click", logoutAndRedirect)
 });

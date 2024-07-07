@@ -68,7 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const timeParts = timeIndication.split(':');
         const minutes = parseInt(timeParts[1], 10);
 
-        if (minutes < 15) {
+        console.log('Minutes:', minutes);
+        
+        if (minutes <= 15) {
             return 'light-green';
         } else if (minutes <= 45) {
             return 'orange';

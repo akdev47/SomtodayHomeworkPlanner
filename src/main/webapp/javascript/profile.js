@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.classList.add('red');
     }
 
+    if (personId) {
+        profileLink.href = `profile.html?personId=${personId}`;
+    }
+
     function fetchProfileInfo() {
         fetch(`api/profile?personId=${viewedPersonId}`)
             .then(response => response.json())

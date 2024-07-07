@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update welcome message
     if (role === 'admin') {
-        welcomeMessage.textContent = ` ${personName}`;
+        welcomeMessage.textContent = `Welcome, ${personName}!`;
         sidebar.classList.add('green');
     } else if (role === 'teacher') {
-        welcomeMessage.textContent = ` ${personName}`;
+        welcomeMessage.textContent = `Welcome, ${personName}!`;
         editClassButton.style.display = 'none';
         addClassButton.style.display = 'none';
         sidebar.classList.add('yellow');
     } else {
-        welcomeMessage.textContent = ` ${personName}`;
+        welcomeMessage.textContent = `Welcome, ${personName}!`;
         addClassButton.style.display = 'none';
         editClassButton.style.display = 'none';
         sidebar.classList.add('red');
@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
                 return response.json();
             })
             .then(classes => {
@@ -140,15 +141,4 @@ document.addEventListener('DOMContentLoaded', function() {
             listContainer.style.display = 'none';
         }
     });
-
-    const logoutBtn = document.querySelector(".log-out");
-    function logoutAndRedirect() {
-        console.log("baba")
-        sessionStorage.clear();
-
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
-    }
-
-    logoutBtn.addEventListener("click", logoutAndRedirect)
 });

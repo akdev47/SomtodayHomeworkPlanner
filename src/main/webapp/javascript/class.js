@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
             lessonsList.appendChild(li);
         });
 
-        workloadHours.textContent = data.workload;
+
     }
 
     if (classId) {

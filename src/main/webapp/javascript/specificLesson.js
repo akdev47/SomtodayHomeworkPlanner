@@ -15,11 +15,11 @@
 
     if (personName) {
     welcomeMessage.textContent = `${personName}`;
-}
+    }
 
     if (personId) {
     profileLink.href = `profile.html?personId=${personId}`;
-}
+    }
 
     sidebar.classList.remove('red', 'yellow', 'green');
     if (role === 'admin') {

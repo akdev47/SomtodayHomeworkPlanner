@@ -5,8 +5,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.*;
@@ -29,6 +27,23 @@ public class AddClassResource {
             @FormDataParam("classPicture") InputStream fileInputStream,
             @FormDataParam("classPicture") FormDataContentDisposition fileMetaData) {
 
+        System.out.println("Received className: " + className);
+        System.out.println("Received classCapacity: " + classCapacity);
+
+        if (fileInputStream == null) {
+            System.out.println("fileInputStream is null");
+        } else {
+            System.out.println("fileInputStream is not null");
+        }
+
+        if (fileMetaData == null) {
+            System.out.println("fileMetaData is null");
+        } else {
+            System.out.println("fileMetaData is not null");
+            System.out.println("fileMetaData.getSize(): " + fileMetaData.getSize());
+            System.out.println("fileMetaData.getFileName(): " + fileMetaData.getFileName());
+        }
+
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             connection.setAutoCommit(false);
 
@@ -37,10 +52,16 @@ public class AddClassResource {
                 preparedStatement.setString(1, className);
                 preparedStatement.setInt(2, classCapacity);
 
-                if (fileInputStream != null && fileMetaData.getSize() > 0) {
+                if (fileInputStream != null) {
                     byte[] fileBytes = readAllBytes(fileInputStream);
-                    preparedStatement.setBytes(3, fileBytes);
+                    System.out.println("File bytes length: " + fileBytes.length);
+                    if (fileBytes.length > 0) {
+                        preparedStatement.setBytes(3, fileBytes);
+                    } else {
+                        preparedStatement.setNull(3, java.sql.Types.BINARY);
+                    }
                 } else {
+                    System.out.println("File is empty");
                     preparedStatement.setNull(3, java.sql.Types.BINARY);
                 }
 
