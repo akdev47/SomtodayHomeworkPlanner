@@ -1,113 +1,139 @@
-/* SIDEBAR STYLING ---------------------------------------------------------------------*/
-
-*{
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL RESET */
+* {
     margin: 0;
-}
-
-.red {
+    padding: 0;
+    box-sizing: border-box;
     font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #DB133D;
-    color: #fff;
-}
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-    fill: #fff;
 }
 
-.yellow {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #F5E709;
-    color: #262F35;
-}
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-    fill: #262F35;
-}
-
-.green {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #4CAF50;
-    color: #fff;
-}
-.green > div > ul > li > i > svg,
-.green > div i > svg {
-    fill: #fff;
+:root {
+    --red: #DB133D;
+    --yellow: #F5E709;
+    --green: #4CAF50;
+    --dark: #262F35;
+    --bg: #f0f0f0;
+    --card: #ffffff;
+    --danger: #ff5722;
+    --dangerHover: #e64a19;
 }
 
-.side-bar{
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL GUARDS (prevents horizontal overflow / zoom-out on mobile) */
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container,
+.main-content {
+    min-width: 0;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* THEME COLORS */
+.red { background-color: var(--red); color: #fff; }
+.red > div > ul > li > i > svg, .red > div i > svg { fill: #fff; }
+
+.yellow { background-color: var(--yellow); color: var(--dark); }
+.yellow > div > ul > li > i > svg, .yellow > div i > svg { fill: var(--dark); }
+
+.green { background-color: var(--green); color: #fff; }
+.green > div > ul > li > i > svg, .green > div i > svg { fill: #fff; }
+
+/* ----------------------------------------------------------------------------- */
+/* PAGE LAYOUT */
+body {
+    min-height: 100dvh;
+    width: 100%;
+    background: var(--bg);
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* SIDEBAR (DESKTOP DEFAULT) */
+.side-bar {
     width: 300px;
-    height: 100vh;
+    min-height: 100dvh;
     text-align: center;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
 }
 
-.container-1 > img{
+.container-1 > img {
     width: 100px;
     margin: 15px 0 5px;
 }
 
-.container-1 > p{
+.container-1 > p {
     font-weight: 500;
     font-size: 32px;
     letter-spacing: 5px;
 }
 
-.container-2 .navigations{
+.container-2 .navigations {
     height: 450px;
     display: flex;
     align-items: center;
 }
 
-.navigations{
-    width: 130px;
+.navigations {
+    width: 170px;
     padding: 0;
-    list-style-type: none;
+    list-style: none;
+
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
+    gap: 10px;
 }
 
-.nav-item{
+.nav-item {
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-.nav-item-text{
-    margin-left: 20px;
-    font-size: 18px;
-}
-
 .nav-link {
+    width: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
+
+    padding: 10px 10px;
+    border-radius: 14px;
+}
+
+.nav-item-text {
+    margin-left: 14px;
+    font-size: 18px;
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-.container-3{
+.container-3 {
     width: 170px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
-.container-3 > div{
+.container-3 > div {
     width: 100px;
     display: flex;
     align-items: center;
@@ -119,16 +145,20 @@
     height: 24px;
 }
 
+/* ----------------------------------------------------------------------------- */
+/* MAIN CONTENT */
 .main-content {
-    flex-grow: 1;
+    flex: 1;
     padding: 20px;
     overflow-y: auto;
 }
 
+/* HEADER */
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
@@ -141,17 +171,26 @@
 .header h1 {
     font-size: 24px;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* top-right */
 .user-settings {
     display: flex;
     align-items: center;
+    gap: 10px;
+    min-width: 0; /* allow shrink */
 }
 
 .user-settings input[type="text"] {
-    padding: 5px 10px;
+    padding: 10px 12px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
+    font-size: 16px; /* stops iOS zoom */
+    width: min(500px, 40vw);
+    max-width: 100%;
 }
 
 .user-settings .search-results {
@@ -161,11 +200,13 @@
 .user-info {
     display: flex;
     align-items: center;
+    gap: 10px;
     margin-left: 20px;
 }
 
 .user-info span {
-    margin-right: 10px;
+    margin-right: 0;
+    white-space: nowrap;
 }
 
 .user-info img {
@@ -183,35 +224,55 @@
     height: 24px;
 }
 
+/* ----------------------------------------------------------------------------- */
+/* FORM SECTION (CENTERED CARD) */
+.page-card {
+    width: min(720px, 100%);
+    background: var(--card);
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+
+/* If you don't have .page-card in HTML, this still helps */
+.main-content > *:not(.header) {
+    width: min(720px, 100%);
+}
+
 .title {
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    color: #333;
 }
 
 .form-group select {
     width: 100%;
-    padding: 8px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
+    background: #fff;
 }
 
 .message {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    color: #333;
 }
 
 .message p {
     font-size: 16px;
+    line-height: 1.4;
 }
 
 .message .lesson-name {
@@ -224,14 +285,136 @@
 }
 
 .btn-group .btn {
-    padding: 10px 20px;
-    background-color: #ff5722;
+    padding: 12px 16px;
+    background-color: var(--danger);
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.2s ease;
 }
 
 .btn-group .btn:hover {
-    background-color: #e64a19;
+    background-color: var(--dangerHover);
+}
+
+.btn-group .btn:active {
+    transform: scale(0.98);
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: TABLET */
+@media (max-width: 900px) {
+    .side-bar { width: 240px; }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: MOBILE (BOTTOM NAV FIX) */
+@media (max-width: 700px) {
+    .container { flex-direction: column; }
+
+    /* make room for bottom nav */
+    .main-content {
+        padding: 12px;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom));
+        min-width: 0;
+    }
+
+    /* Sidebar becomes BOTTOM NAV */
+    .side-bar {
+        width: 100%;
+        height: 72px;
+        min-height: 0;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+
+        z-index: 999;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    /* hide logo + user icons */
+    .container-1,
+    .container-3 {
+        display: none;
+    }
+
+    .container-2 {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .container-2 .navigations {
+        height: auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* bottom nav layout */
+    .navigations {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .nav-item { width: auto; }
+    .nav-item-text { display: none; }
+
+    .nav-link {
+        width: 52px;
+        height: 52px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 14px;
+        white-space: nowrap;
+    }
+
+    /* page header stacks */
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .user-settings {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .user-settings input[type="text"] {
+        width: 100%;
+    }
+
+    .user-info span { display: none; }
+    .language-icon { margin-left: 0; }
+
+    /* button full width */
+    .btn-group { justify-content: stretch; }
+    .btn-group .btn { width: 100%; }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    .btn-group .btn { transition: none; }
 }

@@ -1,60 +1,74 @@
-/* Reset and global styles */
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-/* Sidebar styling */
-.red {
     font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #DB133D !important;
-    color: #fff;
 }
 
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-    fill: #fff;
+:root {
+    --red: #DB133D;
+    --yellow: #F5E709;
+    --green: #4CAF50;
+    --dark: #262F35;
+    --bg: #f0f0f0;
+    --card: #ffffff;
 }
 
-.yellow {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #F5E709 !important;
-    color: #262F35;
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL GUARDS (prevents horizontal overflow / zoom-out on mobile) */
+html, body {
+    width: 100%;
+    overflow-x: hidden;
 }
 
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-    fill: #262F35;
+.container,
+.main-content {
+    min-width: 0;
 }
 
-.green {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #4CAF50 !important;
-    color: #fff;
+/* ----------------------------------------------------------------------------- */
+/* THEME COLORS */
+.red { background-color: var(--red) !important; color: #fff; }
+.red > div > ul > li > i > svg, .red > div i > svg { fill: #fff; }
+
+.yellow { background-color: var(--yellow) !important; color: var(--dark); }
+.yellow > div > ul > li > i > svg, .yellow > div i > svg { fill: var(--dark); }
+
+.green { background-color: var(--green) !important; color: #fff; }
+.green > div > ul > li > i > svg, .green > div i > svg { fill: #fff; }
+
+/* ----------------------------------------------------------------------------- */
+/* PAGE LAYOUT */
+body {
+    min-height: 100dvh;
+    width: 100%;
+    background: var(--bg);
 }
 
-.green > div > ul > li > i > svg,
-.green > div i > svg {
-    fill: #fff;
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100dvh;
 }
 
+/* ----------------------------------------------------------------------------- */
+/* SIDEBAR (DESKTOP DEFAULT) */
 .side-bar {
     width: 300px;
-    height: 100vh;
+    min-height: 100dvh;
     text-align: center;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
-    left: 0;
+
+    position: sticky;
     top: 0;
-    background-color: #F5E709;
+    left: 0;
+    flex-shrink: 0;
 }
 
 .container-1 > img {
@@ -75,35 +89,32 @@
 }
 
 .navigations {
-    width: 130px;
+    width: 170px;
     padding: 0;
-    list-style-type: none;
+    list-style: none;
+
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    gap: 10px;
 }
 
-.nav-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.nav-item-text {
-    margin-left: 20px;
-    font-size: 18px;
-}
+.nav-item { width: 100%; display: flex; align-items: center; }
 
 .nav-link {
+    width: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
+
+    padding: 10px 10px;
+    border-radius: 14px;
 }
 
-.nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
+.nav-item-text { margin-left: 14px; font-size: 18px; }
+
+.nav-link:hover { background-color: rgba(0, 0, 0, 0.08); }
 
 .container-3 {
     width: 170px;
@@ -119,17 +130,20 @@
     justify-content: space-around;
 }
 
-
+/* ----------------------------------------------------------------------------- */
+/* MAIN CONTENT */
 .main-content {
     flex: 1;
     padding: 20px;
-    margin-left: 300px;
+    margin-left: 0;
 }
 
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
 }
 
 .back-button button {
@@ -143,58 +157,175 @@
     margin: 20px 0;
 }
 
+/* ----------------------------------------------------------------------------- */
+/* FORM CARD */
 .class-container {
-    background-color: #f0f0f0;
+    background: var(--card);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+
+    width: min(820px, 100%);
 }
 
-.form-group {
-    margin-bottom: 20px;
-}
+/* Form groups */
+.form-group { margin-bottom: 16px; }
 
 .form-group label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
 }
 
 .form-group select {
     width: 100%;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px;
+    border-radius: 10px;
     border: 1px solid #ccc;
+    font-size: 16px; /* stops iOS zoom */
 }
 
 .form-group button {
     margin-top: 10px;
-    padding: 10px 20px;
+    padding: 12px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    min-height: 44px;
 }
 
-.yellow-btn {
-    background-color: #f0ad4e;
-    color: #fff;
-}
+/* Button colors (keep your intent) */
+.yellow-btn { background-color: #f0ad4e; color: #fff; }
+.red-btn { background-color: #d9534f; color: #fff; }
+.green-btn { background-color: #5cb85c; color: #fff; }
 
-.red-btn {
-    background-color: #d9534f;
-    color: #fff;
-}
+.yellow-btn:hover, .red-btn:hover, .green-btn:hover { opacity: 0.92; }
 
-.green-btn {
-    background-color: #5cb85c;
-    color: #fff;
-}
-
+/* Group buttons */
 .btn-group {
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .btn-group button {
-    padding: 10px 20px;
+    padding: 12px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    min-height: 44px;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: TABLET */
+@media (max-width: 900px) {
+    .side-bar { width: 240px; }
+    .title { font-size: 22px; }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: MOBILE (BOTTOM NAV FIX) */
+@media (max-width: 700px) {
+    .container { flex-direction: column; }
+
+    /* make room for bottom nav */
+    .main-content {
+        padding: 12px;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom));
+        min-width: 0;
+    }
+
+    /* Sidebar becomes BOTTOM NAV */
+    .side-bar {
+        width: 100%;
+        height: 72px;
+        min-height: 0;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+
+        z-index: 999;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    /* hide logo + bottom user block on mobile bottom nav */
+    .container-1,
+    .container-3 {
+        display: none;
+    }
+
+    .container-2 {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .container-2 .navigations {
+        height: auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navigations {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .nav-item { width: auto; }
+    .nav-item-text { display: none; }
+
+    .nav-link {
+        width: 52px;
+        height: 52px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 14px;
+        white-space: nowrap;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .title { margin: 12px 0; font-size: 20px; }
+
+    /* buttons become easier to tap */
+    .form-group button,
+    .btn-group button {
+        width: 100%;
+    }
+
+    .btn-group {
+        justify-content: stretch;
+    }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto; }
 }

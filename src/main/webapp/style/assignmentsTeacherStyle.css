@@ -1,485 +1,522 @@
-/* SIDEBAR STYLING ---------------------------------------------------------------------*/
-
-*{
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL RESET */
+* {
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
-}
-
-.red {
     font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #DB133D;
-    color: #fff;
-}
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-    fill: #fff;
 }
 
-.yellow {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #F5E709;
-    color: #262F35;
-}
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-    fill: #262F35;
+:root {
+    --red: #DB133D;
+    --yellow: #F5E709;
+    --green: #4CAF50;
+    --dark: #262F35;
+    --bg: #f0f0f0;
+    --card: #ffffff;
 }
 
-.green {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #4CAF50;
-    color: #fff;
-}
-.green > div > ul > li > i > svg,
-.green > div i > svg {
-    fill: #fff;
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL GUARDS (prevents horizontal overflow / zoom-out on mobile) */
+html, body {
+    width: 100%;
+    overflow-x: hidden;
 }
 
-.side-bar{
+.container,
+.main-content {
+    min-width: 0;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* THEME COLORS */
+.red { background-color: var(--red); color: #fff; }
+.red > div > ul > li > i > svg, .red > div i > svg { fill: #fff; }
+
+.yellow { background-color: var(--yellow); color: var(--dark); }
+.yellow > div > ul > li > i > svg, .yellow > div i > svg { fill: var(--dark); }
+
+.green { background-color: var(--green); color: #fff; }
+.green > div > ul > li > i > svg, .green > div i > svg { fill: #fff; }
+
+/* ----------------------------------------------------------------------------- */
+/* PAGE LAYOUT */
+body {
+    min-height: 100dvh;
+    width: 100%;
+    background: var(--bg);
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* SIDEBAR (DESKTOP DEFAULT) */
+.side-bar {
     width: 300px;
-    height: 100vh;
+    min-height: 100dvh;
     text-align: center;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
 }
 
-.container-1 > img{
+.container-1 > img {
     width: 100px;
     margin: 15px 0 5px;
 }
 
-.container-1 > p{
+.container-1 > p {
     font-weight: 500;
     font-size: 32px;
     letter-spacing: 5px;
 }
 
-.container-2 .navigations{
+.container-2 .navigations {
     height: 450px;
     display: flex;
     align-items: center;
 }
 
-.navigations{
-    width: 130px;
+.navigations {
+    width: 170px;
     padding: 0;
-    list-style-type: none;
+    list-style: none;
+
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
+    gap: 10px;
 }
 
-.nav-item{
+.nav-item {
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-.nav-item-text{
-    margin-left: 20px;
+.nav-item-text {
+    margin-left: 14px;
     font-size: 18px;
 }
 
 .nav-link {
+    width: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
+
+    padding: 10px 10px;
+    border-radius: 14px;
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-.container-3{
+.container-3 {
     width: 170px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
-.container-3 > div{
+.container-3 > div {
     width: 100px;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-/*----------------------------------------------------------------------------- */
-
-
-/* Dashboard styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-body {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-
-}
-
-.container {
-    display: flex;
-    width: 100%;
-}
-
-
-
+/* ----------------------------------------------------------------------------- */
+/* MAIN CONTENT */
 .main-content {
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #f0f0f0;
+    background-color: var(--bg);
 }
 
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
+
+    background-color: var(--card);
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 80px;
+    min-height: 80px;
+    gap: 12px;
 }
 
 .header h1 {
     font-size: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-settings {
     display: flex;
     align-items: center;
-    position: relative;
+    gap: 10px;
+    min-width: 0; /* allow shrink */
 }
 
 .user-settings input {
-    padding: 5px;
-    margin-right: 10px;
-    width: 500px; 
-    max-width: 100%; 
-    box-sizing: border-box; 
+    padding: 10px 12px;
+    width: min(500px, 40vw);
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px; /* prevents iOS zoom */
 }
 
 .user-info .language-icon {
     display: flex;
     align-items: center;
-
 }
 
 .user-info span {
     margin-right: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
+    padding: 0 10px;
+    white-space: nowrap;
 }
 
-.user-info a {
-    margin-left: 5px; 
-}
+.user-info a { margin-left: 5px; }
 
-.language-icon a img {
-    width: 30px; 
-    height: 30px;
-    vertical-align: middle;
-    margin-left: 5px;
-}
-
+.language-icon a img,
 .user-info a img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
     vertical-align: middle;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 5px;
 }
 
-
+/* ----------------------------------------------------------------------------- */
+/* CONTENT AREA (TABLE PAGE) */
 .content {
+    flex: 1;
+    margin: 20px;
+    margin-top: 20px;
+
+    background-color: var(--card);
+    border-radius: 12px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    margin: 20px;
+    gap: 10px;
 }
 
-.panel {
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    max-height: 300px;
-    overflow-y: auto; 
-
+/* heading */
+.page-hdn {
+    position: static;
+    margin: 8px 8px 0;
 }
 
-.panel h2 {
-    margin-bottom: 10px;
-}
-
-.panel ul {
-    list-style: none;
-    padding: 0;
-}
-
-.panel ul li {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-}
-
-.panel ul li button {
-    background-color: #FFE54D;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.panel ul li button:hover {
-    background-color: #FFCC00;
-}
-
-.panel ul li span {
-    color: green;
-}
-.calendar {
-    margin: 20px;
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 98%;
-    min-height: 550px;
-}
-
-.calendar h2 {
-    margin-bottom: 10px;
-}
-
-.calendar-view {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.calendar-view button {
-    margin-right: 10px;
-    padding: 5px 10px;
-    background-color: #FFE54D;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.calendar-view button:hover {
-    background-color: #FFCC00;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    padding: 10px;
-}
-
-.calendar-grid .day {
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    position: relative;
-    height: 100px;
-}
-
-.calendar-grid .day .task {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    padding: 5px;
-    border-radius: 3px;
-    color: #fff;
-    font-size: 0.8em;
-    text-align: center;
-}
-
-.calendar-grid .day .task.red {
-    background-color: red;
-}
-
-.calendar-grid .day .task.blue {
-    background-color: blue;
-}
-
-.calendar-grid .day .task.green {
-    background-color: green;
-}
-
-.week-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.week-table th,
-.week-table td {
-    border: 1px solid #ddd;
-    padding: 20px;
-    text-align: left;
-    vertical-align: top;
-    background-color: #f9f9f9;
-}
-
-.week-table td {
-   height: 350px;
-   max-height: 500px;
-   overflow-y: auto; 
-}
-
-.week-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    height: 50px;
-    width: 300px;
-}
-
-.week-table .task {
-    display: block;
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 3px;
-    color: #fff;
-    text-align: center;
-}
-
-.week-table .task.red {
-    background-color: red;
-}
-
-.week-table .task.blue {
-    background-color: blue;
-}
-
-.week-table .task.green {
-    background-color: green;
-}
-
-.notification-bell {
-    position: relative;
-}
-
-.notification-bell img {
-    width: 50px;
-    height: 50px;
-}
-
-.notification-bell span {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: red;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 50%;
-}
-
-.task a {
-    color: white;
-    text-decoration: none;
-}
-
-.task a:hover {
-    text-decoration: underline;
-}
-
-/*----------------------------------------------------------------------------- */
-.content{
-    height: 100%;
-    margin-top: 20px;
-    background-color: #fff;
-}
-.content > .table-scroll{
+/* scroll container for table */
+.content > .table-scroll {
     height: 580px;
-    overflow-y: scroll;
-    margin-top: 5px;
-    margin-left: 20px;
-    width: 96%;
+    overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    margin: 0 8px;
+    width: auto;
     text-align: left;
     border: 0;
+    border-radius: 10px;
 }
 
-.content > .table-scroll > table{
+/* table */
+.content > .table-scroll > table {
     width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
 }
 
-th{
-    height: 40px;
-}
-td{
-    height: 30px;
-    background-color: #f9f9f9;
-    border: none;
-}
-
-th td{
+th {
+    height: 44px;
+    text-align: left;
+    padding: 10px;
+    background: #f2f2f2;
     border-bottom: 1px solid #ddd;
 }
-td > a{
-    display: block;
+
+td {
+    height: 40px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* action link/button inside table */
+td > a {
+    display: inline-block;
     text-align: center;
     color: #1e1e1e;
     text-decoration: none;
-    padding: 5px 10px;
-    background-color: #F5E709;
-    width: 100%;
+
+    padding: 8px 12px;
+    background-color: var(--yellow);
+    border-radius: 10px;
     border: none;
     cursor: pointer;
+    white-space: nowrap;
 }
 
-.page-hdn{
-    position: relative;
-    left: 20px;
-    top: 10px;
-}
+td > a:hover { opacity: 0.9; }
 
-.content > button{
+/* bottom button (Add / Create etc) */
+.content > button {
     font-size: 1rem;
     border: 0;
     width: 150px;
     height: 40px;
-    background: #F5E709;
+    background: var(--yellow);
+
     align-self: flex-end;
-    margin-right: 30px;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin: 0 8px 8px;
     padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.2s ease;
 }
 
-.content > button:hover{
-    background-color: #FFCC00;
+.content > button:hover { opacity: 0.92; }
+.content > button:active { transform: scale(0.98); }
+
+.hidden { display: none; }
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: TABLET */
+@media (max-width: 900px) {
+    .side-bar { width: 240px; }
+    .header h1 { font-size: 1.6em; }
+    .user-settings input { width: min(380px, 35vw); }
 }
 
-.hidden{
-    display: none;
-}
-/*----------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: MOBILE (BOTTOM NAV FIX) */
+@media (max-width: 700px) {
+    .container { flex-direction: column; }
 
-/* CLEAN CSS AND HTML */
+    /* make room for bottom nav */
+    .main-content {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom));
+        min-width: 0;
+    }
+
+    /* Sidebar becomes BOTTOM NAV */
+    .side-bar {
+        width: 100%;
+        height: 72px;
+        min-height: 0;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+
+        z-index: 999;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    /* hide logo + user icons */
+    .container-1,
+    .container-3 {
+        display: none;
+    }
+
+    .container-2 {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .container-2 .navigations {
+        height: auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* bottom nav layout */
+    .navigations {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .nav-item-text { display: none; }
+    .nav-item { width: auto; }
+
+    .nav-link {
+        width: 52px;
+        height: 52px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 14px;
+        white-space: nowrap;
+    }
+
+    /* Header stacks */
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        min-height: auto;
+    }
+
+    .header h1 {
+        font-size: 1.4em;
+        text-align: left;
+    }
+
+    .user-settings { width: 100%; }
+    .user-settings input { width: 100%; }
+    .user-info span { display: none; }
+
+    /* Content spacing */
+    .content {
+        margin: 12px;
+        padding: 12px;
+    }
+
+    .content > .table-scroll {
+        height: auto;
+        max-height: 70dvh;
+    }
+
+    /* Make main button full width */
+    .content > button {
+        width: 100%;
+        align-self: stretch;
+    }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    .content > button {
+        transition: none;
+    }
+}
+
+/* =============================================================================
+   MOBILE UX FIX: Assignments table -> stacked cards (no horizontal scroll)
+============================================================================= */
+@media (max-width: 700px){
+
+    /* remove sideways scroll on mobile */
+    .content > .table-scroll{
+        overflow-x: visible !important;
+    }
+
+    /* table becomes normal width */
+    .content > .table-scroll > table{
+        min-width: 0 !important;
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px; /* spacing between cards */
+    }
+
+    /* hide header row on mobile */
+    .content > .table-scroll > table thead{
+        display: none;
+    }
+
+    /* each row becomes a card */
+    .content > .table-scroll > table tbody tr{
+        display: block;
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    /* each cell stacks */
+    .content > .table-scroll > table tbody td{
+        display: block;
+        width: 100%;
+        height: auto;          /* override fixed height */
+        padding: 0;            /* we control spacing below */
+        border: 0;             /* remove table borders */
+        background: transparent;
+        vertical-align: top;
+        word-break: break-word;
+    }
+
+    /* spacing per field */
+    .content > .table-scroll > table tbody td + td{
+        margin-top: 10px;
+    }
+
+    /* labels for each field */
+    .content > .table-scroll > table tbody td:nth-child(1)::before{
+        content: "Class: ";
+        font-weight: 700;
+        opacity: 0.7;
+    }
+    .content > .table-scroll > table tbody td:nth-child(2)::before{
+        content: "Assignment: ";
+        font-weight: 700;
+        opacity: 0.7;
+    }
+    .content > .table-scroll > table tbody td:nth-child(3)::before{
+        content: "Created: ";
+        font-weight: 700;
+        opacity: 0.7;
+    }
+    .content > .table-scroll > table tbody td:nth-child(4)::before{
+        content: "Due: ";
+        font-weight: 700;
+        opacity: 0.7;
+    }
+    .content > .table-scroll > table tbody td:nth-child(5)::before{
+        content: "Details";
+        display: block;
+        font-weight: 700;
+        opacity: 0.7;
+        margin-bottom: 6px;
+    }
+
+    /* make Details button/link full width */
+    .content > .table-scroll > table tbody td:nth-child(5) > a{
+        width: 100%;
+        display: block;
+        text-align: center;
+        padding: 12px;
+        border-radius: 12px;
+    }
+}

@@ -1,249 +1,467 @@
-* {
+/* ----------------------------------------------------------------------------- */
+/* RESET + THEME */
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: "Josefin Sans", sans-serif;
 }
 
-/* Sidebar styling */
-.red {
-    background-color: #DB133D;
-    color: #fff;
+:root{
+    --red:#DB133D;
+    --yellow:#F5E709;
+    --green:#4CAF50;
+    --dark:#262F35;
+    --bg:#f3f4f6;
+    --card:#ffffff;
+    --border:#e6e6e6;
+    --muted:#6b7280;
+
+    --sidebarW:260px;
+    --radius:14px;
 }
 
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-    fill: #fff;
+/* Role theme colors (sidebar gets these classes from JS) */
+.red{ background-color: var(--red) !important; color:#fff !important; }
+.red svg{ fill:#fff !important; stroke:#fff !important; }
+
+.yellow{ background-color: var(--yellow) !important; color: var(--dark) !important; }
+.yellow svg{ fill: var(--dark) !important; stroke: var(--dark) !important; }
+
+.green{ background-color: var(--green) !important; color:#fff !important; }
+.green svg{ fill:#fff !important; stroke:#fff !important; }
+
+/* ----------------------------------------------------------------------------- */
+/* BASE */
+html, body{
+    width: 100%;
+    overflow-x: hidden;
 }
 
-.yellow {
-    background-color: #F5E709;
-    color: #262F35;
+body{
+    min-height: 100dvh;
+    background: var(--bg);
+    color: #111827;
 }
 
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-    fill: #262F35;
-}
-
-.green {
-    background-color: #4CAF50;
-    color: #fff;
-}
-
-.green > div > ul > li > i > svg,
-.green > div i > svg {
-    fill: #fff;
-}
-
-.side-bar {
-    width: 250px;
-    height: 100vh;
-    text-align: center;
+.container{
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* SIDEBAR (DESKTOP) */
+.side-bar{
+    width: var(--sidebarW);
+    height: 100dvh;
     position: fixed;
     left: 0;
     top: 0;
-}
+    z-index: 100;
 
-.container-1 > img {
-    width: 100px;
-    margin: 15px 0 5px;
-}
-
-.container-1 > p {
-    font-weight: 500;
-    font-size: 32px;
-    letter-spacing: 5px;
-}
-
-.container-2 .navigations {
-    height: 450px;
-    display: flex;
-    align-items: center;
-}
-
-.navigations {
-    width: 130px;
-    padding: 0;
-    list-style-type: none;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+
+    text-align: center;
+    padding: 14px 10px;
 }
 
-.nav-item {
+.container-1 > img{
+    width: 96px;
+    margin: 10px 0 6px;
+}
+
+.container-1 > p{
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: 4px;
+    text-transform: lowercase;
+}
+
+/* Nav */
+.container-2{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.container-2 .navigations{
+    width: 180px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-item{
+    width: 100%;
+}
+
+.nav-link{
     width: 100%;
     display: flex;
     align-items: center;
-}
+    gap: 12px;
 
-.nav-item-text {
-    margin-left: 20px;
-    font-size: 18px;
-}
-
-.nav-link {
-    display: flex;
-    align-items: center;
     text-decoration: none;
     color: inherit;
+
+    padding: 10px 12px;
+    border-radius: 14px;
+
+    transition: background-color 0.15s ease, transform 0.08s ease;
 }
 
-.nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+.nav-link:hover{
+    background-color: rgba(255,255,255,0.18);
 }
 
-.container-3 {
-    width: 170px;
+.nav-link:active{
+    transform: scale(0.99);
+}
+
+.nav-item-text{
+    font-size: 16px;
+}
+
+/* Bottom actions */
+.container-3{
+    width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    justify-content: center;
+    padding-bottom: 6px;
 }
 
-.container-3 > div {
-    width: 100px;
+.container-3 > div{
+    width: 180px;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-.logout-icon svg,
-.access-icon svg {
-    fill: #262F35;
-}
+/* ----------------------------------------------------------------------------- */
+/* MAIN CONTENT */
+.main-content{
+    margin-left: var(--sidebarW);
+    width: calc(100% - var(--sidebarW));
+    min-width: 0;
 
-/* Main content styles */
-body {
+    padding: 22px;
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    flex-direction: column;
+    gap: 14px;
 }
 
-.container {
-    display: flex;
+/* Make content not stretch too wide on huge screens */
+.main-content > *{
+    max-width: 1200px;
     width: 100%;
 }
 
-.main-content {
-    margin-left: 300px; /* Ensure main content is not hidden behind the sidebar */
-    width: calc(100% - 300px);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
+/* ----------------------------------------------------------------------------- */
+/* HEADER */
+.header{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 
-.header {
+    padding: 14px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #CCC;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    background-color: white;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 12px;
+
+    min-width: 0;
 }
 
-.header h1 {
-    font-size: 2em;
+.header h1{
+    font-size: clamp(18px, 2.4vw, 28px);
+    font-weight: 700;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.user-settings {
+.user-settings{
     display: flex;
     align-items: center;
-    position: relative;
+    gap: 10px;
+    min-width: 0;
 }
 
-.user-settings input {
-    padding: 5px;
-    margin-right: 10px;
-    width: 500px;
+.user-settings input{
+    padding: 10px 12px;
+    width: min(420px, 38vw);
     max-width: 100%;
-    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+.user-settings input:focus{
+    border-color: rgba(17,24,39,0.25);
+    box-shadow: 0 0 0 3px rgba(17,24,39,0.08);
 }
 
 .user-info,
-.language-icon {
+.language-icon{
     display: flex;
     align-items: center;
-    margin-left: 10px;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 .user-info img,
-.language-icon img {
-    width: 30px;
-    height: 30px;
+.language-icon img{
+    width: 28px;
+    height: 28px;
 }
 
-.lesson-description {
-    margin-bottom: 20px;
+/* ----------------------------------------------------------------------------- */
+/* LESSON DESCRIPTION CARD */
+.lesson-description{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+
+    padding: 16px 18px;
 }
 
-.lesson-description h2 {
-    font-size: 22px;
-    margin-bottom: 10px;
+.lesson-description h2{
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.lesson-description p {
-    font-size: 16px;
-    line-height: 1.5;
+.lesson-description p{
+    font-size: 15px;
+    line-height: 1.55;
+    color: #111827;
 }
 
-.assignments {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px; /* Add space between the two columns */
+/* ----------------------------------------------------------------------------- */
+/* ASSIGNMENTS LAYOUT */
+.assignments{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
-.active-assignments, .past-assignments {
-    width: 48%;
+.active-assignments,
+.past-assignments{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+
+    padding: 16px 18px;
+
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    min-width: 0;
 }
 
-.active-assignments h2, .past-assignments h2 {
-    margin-bottom: 10px;
+.active-assignments h2,
+.past-assignments h2{
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
 }
 
-.assignment-list {
-    background-color: #F0F0F0;
-    padding: 10px;
-    border-radius: 8px;
-    flex-grow: 1;
-}
-
-.assignment-item {
+.assignment-list{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* Assignment row */
+.assignment-item{
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 12px;
+
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 10px;
     align-items: center;
-    padding: 8px;
-    background-color: #FFF;
-    border-bottom: 1px solid #CCC;
-    border-radius: 8px;
-    margin-bottom: 10px;
+
+    min-width: 0;
 }
 
-.assignment-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.assignment-item span {
-    margin-right: 10px;
-    flex: 1;
-    text-align: center;
-}
-
-.assignment-item button {
-    background-color: #F7E24E;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
+.assignment-item span{
+    min-width: 0;
     font-size: 14px;
+    color: #111827;
+    overflow-wrap: anywhere;
+}
+
+.assignment-item button{
+    background: var(--yellow);
+    color: #111827;
+
+    border: 0;
+    border-radius: 12px;
+    padding: 10px 12px;
+
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    min-height: 44px;
+
+    transition: transform 0.08s ease, opacity 0.2s ease;
+}
+
+.assignment-item button:hover{ opacity: 0.92; }
+.assignment-item button:active{ transform: scale(0.98); }
+
+/* ----------------------------------------------------------------------------- */
+/* TABLET */
+@media (max-width: 900px){
+    :root{ --sidebarW: 230px; }
+
+    .header{
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .user-settings{
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .user-settings input{
+        width: 100%;
+    }
+
+    .assignments{
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* MOBILE: FIXED BOTTOM NAV (MATCHES YOUR OTHER PAGES) */
+@media (max-width: 700px){
+    .container{ flex-direction: column; }
+
+    /* Main content full width, add bottom padding so nav doesn't cover content */
+    .main-content{
+        margin-left: 0;
+        width: 100%;
+        padding: 12px;
+        padding-bottom: calc(78px + env(safe-area-inset-bottom));
+    }
+
+    /* Sidebar becomes fixed bottom bar */
+    .side-bar{
+        width: 100%;
+        height: 72px;
+        min-height: 0;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        box-shadow: 0 -8px 20px rgba(0,0,0,0.14);
+        z-index: 999;
+    }
+
+    /* Hide logo + logout row on mobile nav */
+    .container-1,
+    .container-3{
+        display: none !important;
+    }
+
+    .container-2{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Bottom nav icons spread evenly */
+    .container-2 .navigations{
+        width: 100%;
+        height: 100%;
+        max-width: 520px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+
+        gap: 6px;
+    }
+
+    .nav-link{
+        width: 52px;
+        height: 52px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 14px;
+    }
+
+    .nav-item-text{ display: none; }
+
+    /* Force icons to match + be readable on all role colors */
+    .nav-link svg,
+    .nav-link i,
+    .nav-link img{
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 28px !important;
+
+        fill: currentColor !important;
+        color: currentColor !important;
+        stroke: currentColor !important;
+    }
+
+    /* Mobile header stack */
+    .header{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .user-info span{ display: none; }
+
+    /* Make assignment rows fit on small screens */
+    .assignment-item{
+        grid-template-columns: 1fr auto;
+    }
+
+    .assignment-item span:nth-child(2){
+        display: none; /* hides middle column if space is too tight */
+    }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce){
+    *{ scroll-behavior: auto; }
 }

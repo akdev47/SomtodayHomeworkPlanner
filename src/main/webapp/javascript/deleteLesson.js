@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 deleteLesson(lessonId);
             }
         } else {
-            alert('Please select a lesson to delete.');
+            showToast('Please select a lesson to delete.',"error",5000);
         }
     });
 
@@ -74,17 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    alert('Lesson deleted successfully!');
+                    showToast('Lesson deleted successfully!',"success",5000);
                     window.location.href = `class.html?classId=${classId}`;
                     fetchLessons();
                     lessonNameSpan.textContent = '';
                 } else {
-                    alert('Error deleting lesson.');
+                    showToast('Error deleting lesson.',"error",);
                 }
             })
             .catch(error => {
                 console.error('Error deleting lesson:', error);
-                alert('Error deleting lesson.');
+                showToast('Error deleting lesson.',"error",5000);
             });
     }
 
@@ -92,11 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const logoutBtn = document.querySelector(".log-out");
     function logoutAndRedirect() {
-        console.log("baba")
         sessionStorage.clear();
 
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
+        const ctx = "/" + window.location.pathname.split("/")[1];
+        window.location.href = `${window.location.origin}${ctx}/login.html`;
     }
 
     logoutBtn.addEventListener("click", logoutAndRedirect)

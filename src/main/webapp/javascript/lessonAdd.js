@@ -96,10 +96,16 @@ function saveLesson() {
         })
         .then(result => {
             if (result.success) {
-                alert('Lesson added successfully!');
-                window.location.href = `class.html?classId=${classId}`;
-            } else {
-                alert('Error adding lesson.');
+                showToast("Lesson added successfully!", "success", 2500);
+
+                // force browser to paint toast first
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        window.location.href = `class.html?classId=${classId}`;
+                    }, 1200);
+                });
+
+                return;
             }
         })
         .catch(error => console.error('Error saving lesson:', error));
@@ -107,11 +113,10 @@ function saveLesson() {
 
 const logoutBtn = document.querySelector(".log-out");
 function logoutAndRedirect() {
-    console.log("baba")
     sessionStorage.clear();
 
-    var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-    window.location.href = baseUrl;
+    const ctx = "/" + window.location.pathname.split("/")[1];
+    window.location.href = `${window.location.origin}${ctx}/login.html`;
 }
 
 logoutBtn.addEventListener("click", logoutAndRedirect)

@@ -50,19 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
         totalTimeIndication = parseInt(timeIndicationElement.innerText.split(" ")[0]); // Get the total time indication
 
         if (totalSplits < 2) {
-            alert('Number of splits must be greater than 1.');
+            showToast('Number of splits must be greater than 1.',"error",5000);
             return;
         }
 
         if (totalTimeIndication <= 0) {
-            alert('Total duration must be greater than 0.');
+            showToast('Total duration must be greater than 0.',"error",5000);
             return;
         }
 
         const splitDuration = Math.floor(totalTimeIndication / totalSplits); // Calculate individual split duration
 
         if (splitDuration <= 0) {
-            alert('Split duration must be greater than 0.');
+            showToast('Split duration must be greater than 0.',"error",5000);
             return;
         }
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const splitDuration = parseInt(document.getElementById('splitDuration').value);
 
         if (splitDuration <= 0) {
-            alert('Split duration must be greater than 0.');
+            showToast('Split duration must be greater than 0.',"error",5000);
             return;
         }
 
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalDuration = splitsData.reduce((acc, split) => acc + split.duration, 0);
 
             if (totalDuration !== totalTimeIndication) {
-                alert(`Total duration of splits must be equal to ${totalTimeIndication}.`);
+                showToast(`Total duration of splits must be equal to ${totalTimeIndication}.`,"error",5000);
                 currentSplitCount--;
                 return;
             }
@@ -162,12 +162,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Success:', data);
-                    alert('Split homework created successfully.');
+                    showToast('Split homework created successfully.',"success",5000);
                     // Redirect or update the UI as needed
                 })
                 .catch((error) => {
                     console.error('Error:', error);
-                    alert('An error occurred while splitting the homework.');
+                    showToast('An error occurred while splitting the homework.',"error",5000);
                 });
         } else if(role === "student"){
             fetch(`/SomtodayHomeworkPlanner_war/api/splitHomeworkStudent?homeworkId=${homeworkId}`, {
@@ -180,12 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Success:', data);
-                    alert('Split homework created successfully.');
+                    showToast('Split homework created successfully.',"success",5000);
                     // Redirect or update the UI as needed
                 })
                 .catch((error) => {
                     console.error('Error:', error);
-                    alert('An error occurred while splitting the homework.');
+                    showToast('An error occurred while splitting the homework.',"error",5000);
                 });
         }
     });

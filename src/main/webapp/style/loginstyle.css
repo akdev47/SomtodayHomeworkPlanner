@@ -1,141 +1,207 @@
-/* SIDEBAR STYLING ---------------------------------------------------------------------*/
-
+/* Reset + base ---------------------------------------------------------------- */
 * {
-  margin: 0;
-  font-family: "Josefin Sans", sans-serif;
+    margin: 0;
+    padding: 0; /* FIX: missing -> avoids weird spacing on some browsers */
+    box-sizing: border-box;
+    font-family: "Josefin Sans", sans-serif;
 }
 
+:root {
+    --bg-red: #db133d;
+    --text-dark: #262f35;
+    --panel-bg: #ffffff;
+    --input-bg: #d9d9d9;
+    --radius-lg: 40px;
+    --radius-md: 16px;
+}
+
+/* Global guards --------------------------------------------------------------- */
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Theme colors ---------------------------------------------------------------- */
 .red {
-  font-optical-sizing: auto;
-  background-color: #db133d;
-  color: #fff;
-}
-
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-  fill: #fff;
+    background-color: var(--bg-red);
+    color: #fff;
 }
 
 .yellow {
-  font-optical-sizing: auto;
-  background-color: #f5e709;
-  color: #262f35;
+    background-color: #f5e709;
+    color: var(--text-dark);
 }
 
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-  fill: #262f35;
-}
-
+/* Page layout ----------------------------------------------------------------- */
 .login-page {
-  width: 100vw;
-  height: 100vh;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    min-height: 100dvh;              /* better on mobile than 100vh */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 24px 16px;              /* mobile breathing room */
+    text-align: center;
 }
 
+/* Top logo block -------------------------------------------------------------- */
 .container-1 {
-  position: fixed;
-  top: 0px;
-  align-self: flex-start;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  margin-top: 15px;
-  margin-left: 15px;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
 }
 
+/* FIX: keep logo clickable/visible but don't cause overlap issues on tiny screens */
 .container-1 > img {
-  width: 90px;
+    width: clamp(56px, 8vw, 90px);
+    height: auto;
 }
 
 .container-1 > p {
-  font-weight: 500;
-  font-size: 26px;
-  letter-spacing: 5px;
-  margin-left: 5px;
-  margin-top: 5px;
+    font-weight: 500;
+    font-size: clamp(16px, 2.8vw, 26px);
+    letter-spacing: 5px;
 }
 
+/* Login card ------------------------------------------------------------------ */
 .container-2 {
-  width: 480px;
-  height: 250px;
-  border-radius: 40px;
-  padding: 10px 20px;
-  background-color: #fff;
-  color: #262f35;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 30px;
+    width: min(480px, 100%);         /* responsive width */
+    border-radius: var(--radius-lg);
+    padding: 22px 20px;
+
+    background-color: var(--panel-bg);
+    color: var(--text-dark);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 72px;                /* so fixed logo never overlaps */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .container-2 > p {
-  font-size: 32px;
-  font-weight: 600;
-  align-self: flex-start;
-  margin-bottom: 20px;
-  color: #000;
+    font-size: clamp(22px, 4.5vw, 32px);
+    font-weight: 700;
+    align-self: flex-start;
+    margin-bottom: 16px;
+    color: #000;
 }
 
+/* Form ------------------------------------------------------------------------ */
 .container-2 > form {
-  width: 100%;
-  height: 60%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .container-2 > form > input {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #d9d9d9;
-  color: #1e1e1e;
-  border: 0;
-  border-radius: 15px;
-  box-sizing: border-box;
+    width: 100%;
+    height: 52px;                    /* good tap target */
+    padding: 12px 14px;
+
+    background-color: var(--input-bg);
+    color: #1e1e1e;
+
+    border: 0;
+    border-radius: var(--radius-md);
+
+    font-size: 16px;                 /* prevents iOS zoom on focus */
+    outline: none;
 }
 
+.container-2 > form > input:focus {
+    outline: 3px solid rgba(219, 19, 61, 0.25);
+}
+
+/* Buttons --------------------------------------------------------------------- */
 .buttons {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
 }
 
 .buttons > button {
-  border: 0;
-  background-color: #fff;
-  font-weight: 550;
-  font-size: 15px;
+    border: 0;
+    background: transparent;
+
+    font-weight: 700;
+    font-size: 16px;
+
+    padding: 10px 14px;              /* touch-friendly */
+    border-radius: 12px;
+    cursor: pointer;
+
+    transition: transform 0.1s ease, opacity 0.2s ease;
 }
 
 .buttons > button:hover {
-  font-weight: 800;
-  color: #db133d;
+    color: var(--bg-red);
 }
 
-.forgotten-password {
-  color: #262f35;
-  text-decoration: underline;
-  cursor: pointer;
+.buttons > button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
 }
 
-.login {
-  padding: 10px 20px;
-  background-color: #262f35;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+/* Error message (optional nicer look) ---------------------------------------- */
+#error-message {
+    margin-top: 10px;
+    font-size: 14px;
 }
 
-/*----------------------------------------------------------------------------- */
+/* Small phones ---------------------------------------------------------------- */
+@media (max-width: 420px) {
+    .container-2 {
+        border-radius: 26px;
+        padding: 18px 16px;
+        margin-top: 84px; /* a bit more so the fixed logo never touches */
+    }
+
+    .container-1 {
+        top: 12px;
+        left: 12px;
+    }
+
+    .container-1 > p {
+        letter-spacing: 3px; /* stops weird overflow on tiny screens */
+    }
+}
+
+/* Reduce motion for accessibility -------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .buttons > button {
+        transition: none;
+    }
+}
+
+/* Switch to signup */
+.switch-auth{
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 14px;
+    font-size: 13.5px;
+    color: rgba(0,0,0,0.75);
+}
+
+.switch-auth a{
+    color: var(--bg-red);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.switch-auth a:hover{
+    text-decoration: underline;
+}

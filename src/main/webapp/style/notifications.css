@@ -1,302 +1,543 @@
-/* SIDEBAR STYLING ---------------------------------------------------------------------*/
-
-*{
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL RESET */
+* {
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
-}
-
-.red {
     font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #DB133D;
-    color: #fff;
-}
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-    fill: #fff;
 }
 
-.yellow {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #F5E709;
-    color: #262F35;
-}
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-    fill: #262F35;
+:root {
+    --red: #DB133D;
+    --yellow: #F5E709;
+    --green: #4CAF50;
+    --dark: #262F35;
+    --bg: #f0f0f0;
+    --card: #ffffff;
 }
 
-.green {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #4CAF50;
-    color: #fff;
-}
-.green > div > ul > li > i > svg,
-.green > div i > svg {
-    fill: #fff;
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL GUARDS */
+html, body {
+    width: 100%;
+    overflow-x: hidden;
 }
 
-.side-bar{
+.container,
+.main-content {
+    min-width: 0;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* THEME COLORS (APPLY TO SIDEBAR + MAKE IT WIN) */
+/* IMPORTANT: target .side-bar.role so it always paints the sidebar itself */
+.side-bar.red {
+    background-color: var(--red) !important;
+    color: #fff !important;
+}
+.side-bar.yellow {
+    background-color: var(--yellow) !important;
+    color: var(--dark) !important;
+}
+.side-bar.green {
+    background-color: var(--green) !important;
+    color: #fff !important;
+}
+
+/* icon colors inside sidebar */
+.side-bar.red svg { fill: #fff !important; }
+.side-bar.green svg { fill: #fff !important; }
+.side-bar.yellow svg { fill: var(--dark) !important; }
+
+/* keep link text same as sidebar text */
+.side-bar .nav-link { color: inherit; }
+
+/* hover highlight works on any role color */
+.side-bar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+.side-bar.yellow .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ----------------------------------------------------------------------------- */
+/* PAGE LAYOUT */
+body {
+    min-height: 100dvh;
+    width: 100%;
+    background: var(--bg);
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* SIDEBAR (DESKTOP DEFAULT) */
+.side-bar {
     width: 300px;
-    height: 100vh;
+    min-height: 100dvh;
     text-align: center;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+    z-index: 100;
 }
 
-.container-1 > img{
+/* logo */
+.container-1 > img {
     width: 100px;
     margin: 15px 0 5px;
 }
 
-.container-1 > p{
+.container-1 > p {
     font-weight: 500;
     font-size: 32px;
     letter-spacing: 5px;
 }
 
-.container-2 .navigations{
+/* nav */
+.container-2 .navigations {
     height: 450px;
     display: flex;
     align-items: center;
 }
 
-.navigations{
-    width: 130px;
+.navigations {
+    width: 170px;
     padding: 0;
-    list-style-type: none;
+    list-style: none;
+
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
+    gap: 10px;
 }
 
-.nav-item{
+.nav-item {
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-.nav-item-text{
-    margin-left: 20px;
-    font-size: 18px;
-}
-
 .nav-link {
+    width: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: inherit;
+
+    padding: 10px 10px;
+    border-radius: 14px;
+    transition: 0.2s;
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.nav-item-text {
+    margin-left: 14px;
+    font-size: 18px;
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-.container-3{
+/* bottom logout row */
+.container-3 {
     width: 170px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
-.container-3 > div{
+.container-3 > div {
     width: 100px;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-/*----------------------------------------------------------------------------- */
-
-
-/* Dashboard styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-body {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-
-}
-
-.container {
-    display: flex;
-    width: 100%;
-}
-
-
+/* ----------------------------------------------------------------------------- */
+/* MAIN CONTENT */
 .main-content {
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #f0f0f0;
+    background-color: var(--bg);
 }
 
+/* ----------------------------------------------------------------------------- */
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
+
+    background-color: var(--card);
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 80px;
+    min-height: 80px;
+    gap: 12px;
 }
 
 .header h1 {
     font-size: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-settings {
     display: flex;
     align-items: center;
-    position: relative;
+    gap: 10px;
+    min-width: 0;
 }
 
 .user-settings input {
-    padding: 5px;
-    margin-right: 10px;
-    width: 500px;
+    padding: 10px 12px;
+    width: min(500px, 40vw);
     max-width: 100%;
-    box-sizing: border-box;
-}
-
-.user-info .language-icon {
-    display: flex;
-    align-items: center;
-
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
 .user-info span {
     margin-right: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
+    padding: 0 10px;
+    white-space: nowrap;
 }
 
-.user-info a {
-    margin-left: 5px;
-}
-
-.language-icon a img {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin-left: 5px;
-}
-
-.user-info a img {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-
-.content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+/* ----------------------------------------------------------------------------- */
+/* NOTIFICATIONS CONTENT */
+.notification-container {
+    flex: 1;
     margin: 20px;
-}
-
-
-
-
-
-.week-table th,
-.week-table td {
+    background: var(--card);
     border: 1px solid #ddd;
-    padding: 20px;
-    text-align: left;
-    vertical-align: top;
-    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
-.week-table td {
-    height: 350px;
-    max-height: 500px;
-    overflow-y: auto;
-}
-
-.week-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    height: 50px;
-    width: 300px;
-}
-
-.week-table .task {
-    display: block;
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 3px;
-    color: #fff;
-    text-align: center;
-}
-
-.week-table .task.red {
-    background-color: red;
-}
-
-.week-table .task.blue {
-    background-color: blue;
-}
-
-.week-table .task.green {
-    background-color: green;
-}
-
-
-.task a {
-    color: white;
-    text-decoration: none;
-}
-
-.task a:hover {
-    text-decoration: underline;
-}
-
-/*----------------------------------------------------------------------------- */
-
-
-
+/* table */
 .notifications-table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 680px; /* enables horizontal scroll on smaller screens */
 }
 
-.notifications-table th,
-.notifications-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
+.notifications-table thead th {
+    height: 44px;
     text-align: left;
+    padding: 10px;
+    background: #f2f2f2;
+    border-bottom: 1px solid #ddd;
 }
 
-.notifications-table th {
-    background-color: #f2f2f2;
-}
-.notification-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin: 20px;
-
+.notifications-table tbody td {
+    height: 40px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
 }
 
-/* CLEAN CSS AND HTML */
+/* scroll wrap if table is wide */
+.buttons {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: TABLET */
+@media (max-width: 900px) {
+    .side-bar { width: 240px; }
+    .header h1 { font-size: 1.6em; }
+    .user-settings input { width: min(380px, 35vw); }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: MOBILE (BOTTOM NAV) */
+@media (max-width: 700px) {
+    .container { flex-direction: column; }
+
+    /* room so bottom nav doesn't cover content */
+    .main-content {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        min-width: 0;
+    }
+
+    /* sidebar becomes bottom nav; IMPORTANT: keep role background */
+    .side-bar {
+        width: 100%;
+        height: 70px;
+        min-height: 0;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+
+        /* DO NOT SET background-color here (role class does it) */
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
+        z-index: 1000;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    /* Hide logo + logout row */
+    .container-1,
+    .container-3 {
+        display: none !important;
+    }
+
+    .container-2 {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container-2 .navigations {
+        height: 100%;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .navigations {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 0;
+        padding: 0 10px;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .nav-item { width: auto; }
+
+    .nav-link {
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-item-text { display: none; }
+
+    /* Force icons to match role */
+    .nav-link svg,
+    .nav-link i,
+    .nav-link img {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 28px !important;
+    }
+
+    /* white icons on red/green; dark on yellow */
+    .side-bar.red .nav-link svg,
+    .side-bar.green .nav-link svg {
+        fill: #fff !important;
+        color: #fff !important;
+        stroke: #fff !important;
+    }
+
+    .side-bar.yellow .nav-link svg {
+        fill: var(--dark) !important;
+        color: var(--dark) !important;
+        stroke: var(--dark) !important;
+    }
+
+    /* header stacks */
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .header h1 { font-size: 1.4em; text-align: left; }
+    .user-info span { display: none; }
+
+    /* content spacing */
+    .notification-container {
+        margin: 12px;
+        padding: 12px;
+    }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto; }
+}
+
+/* =============================================================================
+   NOTIFICATIONS PAGE FIX (DESKTOP/TABLET ONLY)
+   - Sidebar stays stable (does not stretch with tall notifications)
+   - Only notifications panel scrolls
+   - Mobile bottom-nav remains exactly as your current design
+============================================================================= */
+
+@media (min-width: 701px){
+
+    /* Stop flex from stretching sidebar to match main-content height */
+    .container{
+        align-items: flex-start;
+    }
+
+    /* Sidebar pinned to viewport height */
+    .side-bar{
+        height: 100dvh;
+        min-height: 100dvh;
+        overflow-y: auto;      /* if sidebar content ever exceeds screen */
+        align-self: flex-start;
+    }
+
+    /* Main column becomes a viewport-sized layout */
+    .main-content{
+        height: 100dvh;
+        min-height: 100dvh;
+        overflow: hidden;      /* prevent body/page from becoming mega tall */
+        min-width: 0;
+    }
+
+    /* Keep the top header visible while content scrolls */
+    .header{
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    /* This becomes the vertical scroll area */
+    .notification-container{
+        flex: 1;
+        overflow-y: auto;      /* vertical scroll HERE */
+        overflow-x: hidden;    /* horizontal scroll handled by .buttons */
+        min-height: 0;         /* CRITICAL: allows flex child to scroll */
+    }
+
+    /* Keep your horizontal scroll for wide table */
+    .buttons{
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        min-width: 0;
+    }
+
+    /* Optional: sticky table header while scrolling inside notification container */
+    .notifications-table thead th{
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+}
+
+/* =============================================================================
+   MOBILE UX FIX: turn notifications table into stacked cards (no horizontal scroll)
+   Applies only on mobile where you use bottom nav.
+============================================================================= */
+
+@media (max-width: 700px){
+
+    /* Kill horizontal scrolling wrapper on mobile */
+    .buttons{
+        overflow-x: visible !important;
+    }
+
+    /* Let the table shrink to screen */
+    .notifications-table{
+        min-width: 0 !important;
+        width: 100% !important;
+        border-collapse: separate;
+        border-spacing: 0 10px; /* space between "cards" */
+    }
+
+    /* Hide the table header (labels will be inside each row) */
+    .notifications-table thead{
+        display: none;
+    }
+
+    /* Each row becomes a card */
+    .notifications-table tbody tr{
+        display: block;
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    /* Cells stack vertically inside the card */
+    .notifications-table tbody td{
+        display: block;
+        width: 100%;
+        height: auto;          /* override your fixed 40px */
+        padding: 0;            /* we’ll control spacing per cell */
+        border: 0;             /* remove table borders */
+        background: transparent;
+        vertical-align: top;
+    }
+
+    /* Date (1st td) */
+    .notifications-table tbody td:nth-child(1){
+        font-weight: 700;
+        margin-bottom: 6px;
+        font-size: 14px;
+        opacity: 0.85;
+    }
+
+    /* From (2nd td) */
+    .notifications-table tbody td:nth-child(2){
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* Info (3rd td) — main text */
+    .notifications-table tbody td:nth-child(3){
+        font-size: 15px;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+
+    /* Add labels automatically so users know what is what */
+    .notifications-table tbody td:nth-child(1)::before{
+        content: "Date: ";
+        font-weight: 600;
+        opacity: 0.7;
+    }
+    .notifications-table tbody td:nth-child(2)::before{
+        content: "From: ";
+        font-weight: 600;
+        opacity: 0.7;
+    }
+    .notifications-table tbody td:nth-child(3)::before{
+        content: "Info: ";
+        font-weight: 600;
+        opacity: 0.7;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    /* Slightly tighten container spacing on mobile */
+    .notification-container{
+        margin: 12px;
+        padding: 12px;
+    }
+}
+

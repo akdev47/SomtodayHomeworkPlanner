@@ -83,27 +83,57 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `edit_students.html?classId=${classId}`;
     });
 
-    document.querySelector('.delete-class-btn').addEventListener('click', function() {
-        let classIdInt = parseInt(classId);
-        if (confirm('Are you sure you want to delete this class?')) {
-            fetch('api/deleteClass', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ classId: classIdInt })
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        alert('Class deleted successfully.');
-                        window.location.href = 'classes.html';
-                    } else {
-                        alert('Error deleting class');
-                    }
-                })
-                .catch(error => console.error('Error deleting class:', error));
+
+
+    let deleteConfirmTimer = null;
+    let pendingDeleteClassId = null;
+
+    document.querySelector('.delete-class-btn').addEventListener('click', function () {
+        const classIdInt = parseInt(classId, 10);
+
+        // first click -> ask for confirmation using toast
+        if (pendingDeleteClassId !== classIdInt) {
+            pendingDeleteClassId = classIdInt;
+
+            showToast("Tap delete again within 4 seconds to confirm.", "warn", 4000);
+
+            clearTimeout(deleteConfirmTimer);
+            deleteConfirmTimer = setTimeout(() => {
+                pendingDeleteClassId = null;
+            }, 4000);
+
+            return; // stop here on first click
         }
+
+        // second click within time -> proceed
+        pendingDeleteClassId = null;
+        clearTimeout(deleteConfirmTimer);
+
+        fetch('api/deleteClass', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ classId: classIdInt })
+        })
+            .then(async (response) => {
+                // if your backend sometimes returns non-json on error, this prevents crash
+                const contentType = response.headers.get("content-type") || "";
+                const data = contentType.includes("application/json")
+                    ? await response.json()
+                    : { success: response.ok };
+
+                if (data.success) {
+                    showToast("Class deleted successfully.", "success", 2500);
+                    setTimeout(() => {
+                        window.location.href = 'classes.html';
+                    }, 600);
+                } else {
+                    showToast("Error deleting class.", "error", 5000);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting class:', error);
+                showToast("Server error while deleting class.", "error", 5000);
+            });
     });
 
     document.getElementById('lessons-list').addEventListener('click', function(event) {
@@ -125,12 +155,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const logoutBtn = document.querySelector(".log-out");
     function logoutAndRedirect() {
-        console.log("baba")
         sessionStorage.clear();
 
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
+        const ctx = "/" + window.location.pathname.split("/")[1];
+        window.location.href = `${window.location.origin}${ctx}/login.html`;
     }
-
     logoutBtn.addEventListener("click", logoutAndRedirect)
 });

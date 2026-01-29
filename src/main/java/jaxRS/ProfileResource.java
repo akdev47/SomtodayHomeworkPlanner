@@ -3,136 +3,168 @@ package jaxRS;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import somtoday.db.Db;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Path("/profile")
 public class ProfileResource {
 
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
-    private static final String DB_USER = "dab_di23242b_168";
-    private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProfileInfo(@QueryParam("personId") int personId) {
+        if (personId <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"message\":\"Invalid personId\"}")
+                    .build();
+        }
+
         Map<String, Object> profile = new HashMap<>();
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "SELECT person_name, birth_date, person_gender, email_address, username, user_password FROM person WHERE person_id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setInt(1, personId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        profile.put("person_name", rs.getString("person_name"));
-                        profile.put("birth_date", rs.getDate("birth_date") != null ? rs.getDate("birth_date").toString() : null);
-                        profile.put("person_gender", rs.getString("person_gender"));
-                        profile.put("email_address", rs.getString("email_address"));
-                        profile.put("username", rs.getString("username"));
-                        profile.put("user_password", rs.getString("user_password"));
-                    } else {
-                        return Response.status(Response.Status.NOT_FOUND).entity("{\"message\": \"Profile not found\"}").build();
-                    }
+
+        String sql =
+                "SELECT person_name, birth_date, person_gender, email_address, username " +
+                        "FROM person " +
+                        "WHERE person_id = ?";
+
+        try (Connection connection = Db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, personId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) {
+                    return Response.status(Response.Status.NOT_FOUND)
+                            .entity("{\"message\":\"Profile not found\"}")
+                            .build();
                 }
+
+                profile.put("person_name", rs.getString("person_name"));
+                profile.put("birth_date", rs.getDate("birth_date") != null ? rs.getDate("birth_date").toString() : null);
+                profile.put("person_gender", rs.getString("person_gender"));
+                profile.put("email_address", rs.getString("email_address"));
+                profile.put("username", rs.getString("username"));
+
+                // IMPORTANT: do NOT return user_password (even if hashed)
             }
+
+            return Response.ok(profile).build();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"message\": \"Error fetching profile info\"}").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\":\"Error fetching profile info\"}")
+                    .build();
         }
-        return Response.ok(profile).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProfileInfo(@QueryParam("personId") int personId, Map<String, Object> profile) throws NoSuchAlgorithmException {
-        String oldPasswordInput = profile.getOrDefault("old_password", "").toString();
-        String newPassword = profile.getOrDefault("user_password", "").toString();
-        String birthDateString = profile.getOrDefault("birth_date", "").toString();
-        Date birthDate = null;
-
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = messageDigest.digest(oldPasswordInput.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
+    public Response updateProfileInfo(@QueryParam("personId") int personId, Map<String, Object> profile) {
+        if (personId <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"message\":\"Invalid personId\"}")
+                    .build();
         }
-        String oldPasswordInput1 = hexString.toString();
 
-        // Validate and parse birth_date
-        if (!birthDateString.isEmpty()) {
+        String oldPasswordInput = profile.getOrDefault("old_password", "").toString();
+        String newPassword = profile.getOrDefault("user_password", "").toString(); // frontend sends new password here
+        String birthDateString = profile.getOrDefault("birth_date", "").toString();
+
+        if (oldPasswordInput.isBlank() || newPassword.isBlank()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"message\":\"old_password and user_password are required\"}")
+                    .build();
+        }
+
+        Date birthDate = null;
+        if (!birthDateString.isBlank()) {
             try {
                 birthDate = Date.valueOf(birthDateString);
             } catch (IllegalArgumentException e) {
                 return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("{\"message\": \"Invalid birth_date format. Please use YYYY-MM-DD.\"}")
+                        .entity("{\"message\":\"Invalid birth_date format. Please use YYYY-MM-DD.\"}")
                         .build();
             }
         }
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            // Retrieve the current password from the database
+        try (Connection connection = Db.getConnection()) {
+
+            // 1) verify old password
             String sqlGetOldPassword = "SELECT user_password FROM person WHERE person_id = ?";
-            try (PreparedStatement stmtGetOldPassword = connection.prepareStatement(sqlGetOldPassword)) {
-                stmtGetOldPassword.setInt(1, personId);
-                try (ResultSet rs = stmtGetOldPassword.executeQuery()) {
-                    if (rs.next()) {
-                        String currentPassword = rs.getString("user_password");
-                        if (!currentPassword.equals(oldPasswordInput1)) {
-                            return Response.status(Response.Status.NOT_ACCEPTABLE)
-                                    .entity("{\"message\": \"Provided old password does not match the old password.\"}")
-                                    .build();
-                        }
-                    } else {
+            String currentPasswordHash;
+
+            try (PreparedStatement stmt = connection.prepareStatement(sqlGetOldPassword)) {
+                stmt.setInt(1, personId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (!rs.next()) {
                         return Response.status(Response.Status.NOT_FOUND)
-                                .entity("{\"message\": \"Profile not found\"}").build();
+                                .entity("{\"message\":\"Profile not found\"}")
+                                .build();
                     }
+                    currentPasswordHash = rs.getString("user_password");
                 }
             }
 
-            // Proceed with the update if the old password matches
-            String sqlUpdateProfile = "UPDATE person SET person_name = ?, birth_date = ?, person_gender = ?, email_address = ?, username = ?, user_password = ? WHERE person_id = ?";
-            try (PreparedStatement stmtUpdateProfile = connection.prepareStatement(sqlUpdateProfile)) {
-                stmtUpdateProfile.setString(1, profile.getOrDefault("person_name", "").toString());
-                stmtUpdateProfile.setDate(2, birthDate);
-                stmtUpdateProfile.setString(3, profile.getOrDefault("person_gender", "").toString());
-                stmtUpdateProfile.setString(4, profile.getOrDefault("email_address", "").toString());
-                stmtUpdateProfile.setString(5, profile.getOrDefault("username", "").toString());
+            String oldPasswordHash = sha256Hex(oldPasswordInput);
+            if (!currentPasswordHash.equals(oldPasswordHash)) {
+                return Response.status(Response.Status.NOT_ACCEPTABLE)
+                        .entity("{\"message\":\"Provided old password does not match.\"}")
+                        .build();
+            }
 
-                MessageDigest messageDigest1 = MessageDigest.getInstance("SHA-256");
-                byte[] hash1  = messageDigest1.digest(newPassword.getBytes(StandardCharsets.UTF_8));
-                StringBuilder hexString1 = new StringBuilder(2 * hash1.length);
-                for (int i = 0; i < hash1.length; i++) {
-                    String hex = Integer.toHexString(0xff & hash1[i]);
-                    if(hex.length() == 1) {
-                        hexString1.append('0');
-                    }
-                    hexString1.append(hex);
-                }
-                String newPassword1 = hexString1.toString();
+            // 2) update profile
+            String sqlUpdate =
+                    "UPDATE person SET person_name = ?, birth_date = ?, person_gender = ?, email_address = ?, username = ?, user_password = ? " +
+                            "WHERE person_id = ?";
 
-                stmtUpdateProfile.setString(6, newPassword1);
-                stmtUpdateProfile.setInt(7, personId);
+            String newPasswordHash = sha256Hex(newPassword);
 
-                int rowsUpdated = stmtUpdateProfile.executeUpdate();
+            try (PreparedStatement stmt = connection.prepareStatement(sqlUpdate)) {
+                stmt.setString(1, profile.getOrDefault("person_name", "").toString());
+                stmt.setDate(2, birthDate);
+                stmt.setString(3, profile.getOrDefault("person_gender", "").toString());
+                stmt.setString(4, profile.getOrDefault("email_address", "").toString());
+                stmt.setString(5, profile.getOrDefault("username", "").toString());
+                stmt.setString(6, newPasswordHash);
+                stmt.setInt(7, personId);
+
+                int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     return Response.ok("{\"success\": true}").build();
                 } else {
                     return Response.status(Response.Status.NOT_FOUND)
-                            .entity("{\"message\": \"Profile not found\"}").build();
+                            .entity("{\"message\":\"Profile not found\"}")
+                            .build();
                 }
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\": \"Error updating profile info\"}").build();
+                    .entity("{\"message\":\"Error updating profile info\"}")
+                    .build();
         }
+    }
+
+    private String sha256Hex(String input) throws Exception {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = messageDigest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }

@@ -1,136 +1,128 @@
 package jaxRS;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.io.PrintWriter;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import somtoday.model.Class;
-import somtoday.model.Homework;
+import somtoday.db.Db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import somtoday.model.SplitHomework;
+import java.sql.*;
+import java.util.*;
 
 @Path("/fetchAssignments")
 public class FetchAssignmentsResource {
 
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
-    private static final String DB_USER = "dab_di23242b_168";
-    private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchAssignments(@QueryParam("role") String role, @QueryParam("personId") String personId) {
-        Map<Integer, Class> classMap = new HashMap<>();
-        Map<Integer, Homework> assignmentMap = new HashMap<>();
-        List<SplitHomework> splitList = new ArrayList<>();
 
+        if (role == null || personId == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\":\"Missing role or personId\"}")
+                    .build();
+        }
+
+        int personIdInt;
         try {
-            java.lang.Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            personIdInt = Integer.parseInt(personId);
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\":\"personId must be a number\"}")
+                    .build();
+        }
+
+        // Use homework_id as key so we don’t duplicate
+        Map<Integer, JSONObject> homeworkById = new LinkedHashMap<>();
+        List<JSONObject> splits = new ArrayList<>();
+
+        try (Connection connection = Db.getConnection()) {
 
             String sql;
+            boolean needsPersonParam = false;
+
             if ("teacher".equals(role)) {
-                sql = "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date " + "FROM homework h " + "JOIN class c ON h.class_id = c.class_id " + "JOIN teacher t ON h.teacher_id = t.teacher_id " + "WHERE h.student_id IS NULL " + "AND t.person_id = " + personId + " ORDER BY h.publish_date DESC;";
+                sql =
+                        "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date " +
+                                "FROM homework h " +
+                                "JOIN class c ON h.class_id = c.class_id " +
+                                "JOIN teacher t ON h.teacher_id = t.teacher_id " +
+                                "WHERE h.student_id IS NULL AND t.person_id = ? " +
+                                "ORDER BY h.publish_date DESC";
+                needsPersonParam = true;
+
             } else if ("student".equals(role)) {
-                sql = "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date, sh.splitted_homework_id, sh.split_name  " +
-                        "FROM homework h " +
-                        "LEFT JOIN splitted_homework sh ON h.homework_id = sh.homework_id AND sh.accepted = true " +
-                        "JOIN class c ON h.class_id = c.class_id " +
-                        "JOIN student s ON h.student_id = s.student_id " +
-                        "WHERE s.person_id = " + personId +
-                        " ORDER BY h.publish_date DESC ";
+                sql =
+                        "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date, " +
+                                "       sh.splitted_homework_id, sh.split_name " +
+                                "FROM homework h " +
+                                "LEFT JOIN splitted_homework sh ON h.homework_id = sh.homework_id AND sh.accepted = true " +
+                                "JOIN class c ON h.class_id = c.class_id " +
+                                "JOIN student s ON h.student_id = s.student_id " +
+                                "WHERE s.person_id = ? " +
+                                "ORDER BY h.publish_date DESC";
+                needsPersonParam = true;
+
             } else if ("admin".equals(role)) {
-                sql = "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date " + "FROM homework h " + "JOIN class c ON h.class_id = c.class_id " + "WHERE h.student_id IS NULL " + "ORDER BY h.publish_date DESC;";
+                sql =
+                        "SELECT DISTINCT c.class_name, h.homework_id, h.homework_name, h.publish_date, h.due_date " +
+                                "FROM homework h " +
+                                "JOIN class c ON h.class_id = c.class_id " +
+                                "WHERE h.student_id IS NULL " +
+                                "ORDER BY h.publish_date DESC";
+
             } else {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Invalid role\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"error\":\"Invalid role\"}")
+                        .build();
             }
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                int homeworkId = resultSet.getInt("homework_id");
-
-                if (!assignmentMap.containsKey(homeworkId)) {
-                    Class c = new Class();
-                    c.setClassName(resultSet.getString("class_name"));
-                    Homework hw = new Homework();
-                    hw.setHomeworkID(homeworkId);
-                    hw.setHomeworkName(resultSet.getString("homework_name"));
-                    hw.setPublishDate(resultSet.getDate("publish_date"));
-                    hw.setDueDate(resultSet.getDate("due_date"));
-
-                    classMap.put(homeworkId, c);
-                    assignmentMap.put(homeworkId, hw);
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                if (needsPersonParam) {
+                    stmt.setInt(1, personIdInt);
                 }
 
-                if ("student".equals(role) && resultSet.getInt("splitted_homework_id") != 0) {
-                    SplitHomework sh = new SplitHomework();
-                    sh.setSplittedHomeworkId(resultSet.getInt("splitted_homework_id"));
-                    sh.setSplitName(resultSet.getString("split_name"));
-                    sh.setHomeworkId(homeworkId);
-                    splitList.add(sh);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        int homeworkId = rs.getInt("homework_id");
+
+                        // build homework list without duplicates
+                        if (!homeworkById.containsKey(homeworkId)) {
+                            JSONObject hw = new JSONObject();
+                            hw.put("class_name", rs.getString("class_name"));
+                            hw.put("homework_id", homeworkId);
+                            hw.put("homework_name", rs.getString("homework_name"));
+                            hw.put("publish_date", rs.getDate("publish_date").toString());
+                            hw.put("due_date", rs.getDate("due_date").toString());
+                            homeworkById.put(homeworkId, hw);
+                        }
+
+                        // student role: collect splits (if present)
+                        if ("student".equals(role)) {
+                            Integer splitId = (Integer) rs.getObject("splitted_homework_id");
+                            if (splitId != null) {
+                                JSONObject split = new JSONObject();
+                                split.put("split_id", splitId);
+                                split.put("homework_id", homeworkId);
+                                split.put("split_name", rs.getString("split_name"));
+                                splits.add(split);
+                            }
+                        }
+                    }
                 }
             }
 
-            connection.close();
+            JSONObject out = new JSONObject();
+            out.put("homeworks", new JSONArray(homeworkById.values()));
+            out.put("splits", new JSONArray(splits));
 
-            return Response.ok(toJson(new ArrayList<>(classMap.values()), new ArrayList<>(assignmentMap.values()), splitList)).build();
+            return Response.ok(out.toString()).build();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"An error occurred\"}").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"An error occurred\"}")
+                    .build();
         }
-
-
-    }
-
-    private String toJson(List<Class> classList, List<Homework> assignmentList, List<SplitHomework> splitList) {
-        StringBuilder json = new StringBuilder();
-        json.append("{ \"homeworks\": [");
-        for (int i = 0; i < assignmentList.size(); i++) {
-            Homework hw = assignmentList.get(i);
-            Class c = classList.get(i);
-            json.append("{");
-            json.append("\"class_name\":\"").append(c.getClassName()).append("\",");
-            json.append("\"homework_id\":").append(hw.getHomeworkID()).append(",");
-            json.append("\"homework_name\":\"").append(hw.getHomeworkName()).append("\",");
-            json.append("\"publish_date\":\"").append(hw.getPublishDate()).append("\",");
-            json.append("\"due_date\":\"").append(hw.getDueDate()).append("\"");
-            json.append("}");
-
-            if (i < assignmentList.size() - 1) {
-                json.append(",");
-            }
-        }
-        json.append("], \"splits\": [");
-        for (int i = 0; i < splitList.size(); i++) {
-            SplitHomework sh = splitList.get(i);
-            json.append("{");
-            json.append("\"split_id\":").append(sh.getSplittedHomeworkId()).append(",");
-            json.append("\"homework_id\":").append(sh.getHomeworkId()).append(",");
-            json.append("\"split_name\":\"").append(sh.getSplitName()).append("\"");
-            json.append("}");
-
-            if (i < splitList.size() - 1) {
-                json.append(",");
-            }
-        }
-        json.append("] }");
-        return json.toString();
     }
 }
-

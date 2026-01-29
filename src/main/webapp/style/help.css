@@ -1,69 +1,80 @@
-/* SIDEBAR STYLING ---------------------------------------------------------------------*/
-
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL RESET */
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-.red {
     font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #DB133D !important;
-    color: #fff;
 }
 
-.red > div > ul > li > i > svg,
-.red > div i > svg {
-    fill: #fff;
+:root{
+    --red:#DB133D;
+    --yellow:#F5E709;
+    --green:#4CAF50;
+    --dark:#262F35;
+    --bg:#f0f0f0;
+    --card:#ffffff;
+    --sidebarW:250px;
 }
 
-.yellow {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #F5E709 !important;
-    color: #262F35;
+/* ----------------------------------------------------------------------------- */
+/* GLOBAL GUARDS */
+html, body{
+    width: 100%;
+    overflow-x: hidden;
 }
 
-.yellow > div > ul > li > i > svg,
-.yellow > div i > svg {
-    fill: #262F35;
+body{
+    min-height: 100dvh;
+    background: var(--bg);
 }
 
-.green {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    background-color: #4CAF50 !important;
-    color: #fff;
+/* ----------------------------------------------------------------------------- */
+/* THEME COLORS */
+.red{ background-color: var(--red) !important; color:#fff; }
+.yellow{ background-color: var(--yellow) !important; color: var(--dark); }
+.green{ background-color: var(--green) !important; color:#fff; }
+
+.red svg, .green svg{ fill:#fff; }
+.yellow svg{ fill: var(--dark); }
+
+/* ----------------------------------------------------------------------------- */
+/* LAYOUT */
+.container{
+    width: 100%;
+    min-height: 100dvh;
 }
 
-.green > div > ul > li > i > svg,
-.green > div i > svg {
-    fill: #fff;
-}
-
+/* ----------------------------------------------------------------------------- */
+/* SIDEBAR (DESKTOP: FIXED + STABLE) */
 .side-bar{
-    width: 250px;
-    height: 100vh;
+    width: var(--sidebarW);
+    height: 100dvh;
     text-align: center;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    position: fixed;      /* ✅ stable */
+    left: 0;
+    top: 0;
+    z-index: 1000;
 }
 
+/* logo */
 .container-1 > img{
     width: 100px;
     margin: 15px 0 5px;
 }
-
 .container-1 > p{
     font-weight: 500;
     font-size: 32px;
     letter-spacing: 5px;
 }
 
+/* nav */
 .container-2 .navigations{
     height: 450px;
     display: flex;
@@ -71,12 +82,14 @@
 }
 
 .navigations{
-    width: 130px;
+    width: 170px;
     padding: 0;
-    list-style-type: none;
+    list-style: none;
+
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
+    gap: 10px;
 }
 
 .nav-item{
@@ -85,27 +98,31 @@
     align-items: center;
 }
 
-.nav-item-text{
-    margin-left: 20px;
-    font-size: 18px;
-}
-
-.nav-link {
+.nav-link{
+    width: 100%;
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
+
+    padding: 10px 10px;
+    border-radius: 14px;
+    transition: background-color 0.2s ease;
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.nav-item-text{
+    margin-left: 14px;
+    font-size: 18px;
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.nav-link:hover{
+    background-color: rgba(255, 255, 255, 0.12);
+}
+.side-bar.yellow .nav-link:hover{
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
-
+/* bottom logout */
 .container-3{
     width: 170px;
     display: flex;
@@ -120,99 +137,140 @@
     justify-content: space-around;
 }
 
-/*----------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
+/* MAIN CONTENT (OFFSET FOR FIXED SIDEBAR) */
+.main-content{
+    margin-left: var(--sidebarW);   /* ✅ content never goes under sidebar */
+    min-height: 100dvh;
+}
 
-
-/* Container Text Styling */
-.container-text {
-    margin-left: 30px; /* This should be equal to the width of the sidebar */
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-right: 15px;
+/* help card */
+.container-text{
+    margin: 15px;
     padding: 20px;
-    height: 100vh;
-    overflow-y: auto;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 300px;
+
+    background-color: var(--card);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+
+    min-width: 0;
 }
 
-.header {
-    left: 300px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 200px;
-}
-
-.header h1 {
-    font-size: 2em;
-}
-
-.user-settings {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.user-settings input {
-    padding: 5px;
-    margin-right: 10px;
-    width: 500px;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.user-info .language-icon {
-    display: flex;
-    align-items: center;
-
-}
-
-.user-info span {
-    margin-right: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
-.user-info a {
-    margin-left: 5px;
-}
-
-.language-icon a img {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin-left: 5px;
-}
-
-.user-info a img {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-
-
-
-.container-text h1, .container-text h2, .container-text h3 {
+/* ----------------------------------------------------------------------------- */
+/* TEXT STYLING */
+.container-text h1,
+.container-text h2,
+.container-text h3{
     color: #333;
+    margin-bottom: 10px;
 }
 
-.container-text p {
+.container-text p{
     line-height: 1.6;
     color: #555;
+    margin-bottom: 12px;
 }
 
-.container-text p strong {
+.container-text p strong{
     color: #000;
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: TABLET */
+@media (max-width: 900px){
+    :root{ --sidebarW: 220px; }
+    .container-1 > p{ font-size: 26px; }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* RESPONSIVE: MOBILE (BOTTOM NAV) */
+@media (max-width: 700px){
+    /* undo desktop offset */
+    .main-content{
+        margin-left: 0;
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    body{
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    /* sidebar becomes bottom nav */
+    .side-bar{
+        width: 100%;
+        height: 70px;
+        min-height: 0;
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+
+        z-index: 2000;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 10px calc(env(safe-area-inset-bottom));
+    }
+
+    /* hide logo + logout */
+    .container-1,
+    .container-3{
+        display: none !important;
+    }
+
+    .container-2{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container-2 .navigations{
+        height: 100%;
+        width: 100%;
+        max-width: 520px;
+    }
+
+    .navigations{
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .nav-item{ width: auto; }
+
+    .nav-link{
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-item-text{ display: none; }
+
+    .container-text{
+        margin: 12px;
+        padding: 16px;
+    }
+}
+
+/* ----------------------------------------------------------------------------- */
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce){
+    *{ scroll-behavior: auto; }
 }

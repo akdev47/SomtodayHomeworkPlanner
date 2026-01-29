@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 deleteClass(classId);
             }
         } else {
-            alert('Please select a class to delete.');
+            showToast('Please select a class to delete.',"error",5000);
         }
     });
 
@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(result => {
                 if (result.success) {
-                    alert('Class deleted successfully!');
+                    showToast('Class deleted successfully!',"success",5000);
                     window.location.href = 'classes.html';
                 } else {
-                    alert('Error deleting class.');
+                    showToast('Error deleting class.',"error",5000);
                 }
             })
             .catch(error => console.error('Error deleting class:', error));
@@ -98,11 +98,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const logoutBtn = document.querySelector(".log-out");
     function logoutAndRedirect() {
-        console.log("baba")
         sessionStorage.clear();
 
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
+        const ctx = "/" + window.location.pathname.split("/")[1];
+        window.location.href = `${window.location.origin}${ctx}/login.html`;
     }
 
     logoutBtn.addEventListener("click", logoutAndRedirect)

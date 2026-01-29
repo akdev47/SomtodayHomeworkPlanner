@@ -108,10 +108,10 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    alert('Students updated successfully');
+                    showToast('Students updated successfully',"success",5000);
                     window.location.href = `class.html?classId=${classId}`;
                 } else {
-                    alert('Error updating students');
+                    showToast('Error updating students',"error",5000);
                 }
             })
             .catch(error => console.error('Error updating students:', error));
@@ -119,11 +119,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const logoutBtn = document.querySelector(".log-out");
     function logoutAndRedirect() {
-        console.log("baba")
         sessionStorage.clear();
 
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
+        const ctx = "/" + window.location.pathname.split("/")[1];
+        window.location.href = `${window.location.origin}${ctx}/login.html`;
     }
 
     logoutBtn.addEventListener("click", logoutAndRedirect)

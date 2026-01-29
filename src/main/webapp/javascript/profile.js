@@ -106,12 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchProfileInfo();
 
     const logoutBtn = document.querySelector(".log-out");
+    const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
 
-    function logoutAndRedirect() {
+    function logoutAndRedirect(e) {
+        if (e) e.preventDefault();
         sessionStorage.clear();
-        var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-        window.location.href = baseUrl;
+
+        const ctx = "/" + window.location.pathname.split("/")[1];
+        window.location.href = `${window.location.origin}${ctx}/login.html`;
     }
 
-    logoutBtn.addEventListener("click", logoutAndRedirect)
+    if (logoutBtn) logoutBtn.addEventListener("click", logoutAndRedirect);
+    if (mobileLogoutBtn) mobileLogoutBtn.addEventListener("click", logoutAndRedirect);
 });

@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign-up</title>
+
     <link rel="stylesheet" href="style/signup_style.css" />
+    <link rel="stylesheet" href="style/toast.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
@@ -16,32 +19,56 @@
         <img src="./res/WhatsApp_Image_2024-05-24_at_12.26.37-removebg-preview.png" alt="Somtoday logo" class="logo" />
         <p class="logo-text">somtoday</p>
     </div>
+
     <div class="container-2">
         <p class="sign-up">Sign Up</p>
-        <form class="signupForm">
-            <input type="text" id="person-name" name="person-name" placeholder="Name" required />
+
+        <form class="signupForm" id="signupForm">
+            <input type="text" id="person-name" name="personName" placeholder="Name" required />
             <input type="email" id="email" name="email" placeholder="Email" required />
             <input type="text" id="username" name="username" placeholder="Username" required />
             <input type="password" id="password" name="password" placeholder="Password" required />
-            Introduce your birthdate:
-            <input type="date" id="birth-date" name="birth-date" placeholder="Birth date" required />
-            Introduce your gender:
-            <select id="gender">
+
+            <label class="field-label" for="birth-date">Birthdate</label>
+            <input type="date" id="birth-date" name="birthDate" required />
+
+            <label class="field-label" for="gender">Gender</label>
+            <select id="gender" name="gender" required>
                 <option value="F">Female</option>
                 <option value="M">Male</option>
                 <option value="O">Other</option>
-
             </select>
 
-            <div class="buttons">
+            <label class="field-label" for="role">Role (demo)</label>
+            <select id="role" name="role" required>
+                <option value="student" selected>Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option>
+            </select>
 
+            <details class="demo-note">
+                <summary>Why can I choose a role? </summary>
+                Sample USERNAMES: admin,teacher,student; PASSWORD: test123
+                <br>
+                <br>
+                Role selection is enabled for demonstration purposes. In a real system, users normally cannot choose their role during signup. Only admin can do this.
+            </details>
+
+            <div class="buttons">
                 <button type="submit" aria-label="Sign-up">Sign up</button>
             </div>
         </form>
 
-        <div id="error-message" style="color: red; display: none;">Invalid username or password</div>
+        <div class="switch-auth">
+            <span>Already have an account?</span>
+            <a href="login.html">Log in</a>
+        </div>
+
+        <div id="error-message" style="color: red; display: none;">Something went wrong</div>
     </div>
 </div>
 
+<script src="javascript/toast.js"></script>
+<script src="javascript/signup.js"></script>
 </body>
 </html>
