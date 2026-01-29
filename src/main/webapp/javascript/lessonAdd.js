@@ -107,11 +107,10 @@ function saveLesson() {
 
 const logoutBtn = document.querySelector(".log-out");
 function logoutAndRedirect() {
-    console.log("baba")
     sessionStorage.clear();
 
-    var baseUrl = window.location.origin + "/SomtodayHomeworkPlanner_war/";
-    window.location.href = baseUrl;
+    const ctx = "/" + window.location.pathname.split("/")[1];
+    window.location.href = `${window.location.origin}${ctx}/login.html`;
 }
 
 logoutBtn.addEventListener("click", logoutAndRedirect)

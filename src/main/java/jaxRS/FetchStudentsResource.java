@@ -8,55 +8,50 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import somtoday.db.Db;
 import somtoday.model.Student;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 @Path("/fetchStudents")
 public class FetchStudentsResource {
 
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
-    private static final String DB_USER = "dab_di23242b_168";
-    private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchStudents(@QueryParam("unassigned") String unassigned) {
         List<Student> studentList = new ArrayList<>();
 
-        try {
-            Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        boolean onlyUnassigned = "true".equalsIgnoreCase(unassigned);
 
-            String sql = "SELECT s.student_id, p.person_name " +
-                    "FROM somtoday6.Student s " +
-                    "JOIN somtoday6.Person p ON s.person_id = p.person_id";
+        String sql =
+                "SELECT s.student_id, p.person_name " +
+                        "FROM student s " +
+                        "JOIN person p ON s.person_id = p.person_id " +
+                        (onlyUnassigned ? "WHERE s.class_id IS NULL " : "") +
+                        "ORDER BY p.person_name ASC";
 
-            if ("true".equals(unassigned)) {
-                sql += " WHERE s.class_id IS NULL";
-            }
+        try (Connection connection = Db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
+            while (rs.next()) {
                 Student student = new Student();
-                student.setStudentID(resultSet.getInt("student_id"));
-                student.setPersonName(resultSet.getString("person_name"));
+                student.setStudentID(rs.getInt("student_id"));
+                student.setPersonName(rs.getString("person_name"));
                 studentList.add(student);
             }
 
-            connection.close();
             return Response.ok(toJson(studentList)).build();
+
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred while fetching students.").build();
+                    .entity("{\"error\":\"An error occurred while fetching students.\"}")
+                    .build();
         }
     }
 

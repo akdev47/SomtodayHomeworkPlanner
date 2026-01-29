@@ -3,15 +3,13 @@ package jaxRS;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.json.JSONObject;
+import somtoday.db.Db;
 
 import java.sql.*;
 import java.time.LocalDate;
 
 @Path("/deleteClass")
 public class DeleteClassResource {
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
-    private static final String DB_USER = "dab_di23242b_168";
-    private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
@@ -20,99 +18,131 @@ public class DeleteClassResource {
         JSONObject jsonRequest = new JSONObject(classData);
         int classId = jsonRequest.getInt("classId");
 
-        try {
-            Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        if (classId <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\":\"Invalid classId\"}")
+                    .build();
+        }
 
+        try (Connection connection = Db.getConnection()) {
             connection.setAutoCommit(false);
 
-            // Fetch related data
-            String fetchStudentsSql = "SELECT student_id, person_id FROM somtoday6.Student WHERE class_id = ?";
+            // Fetch class name (needed for notifications)
+            String className;
+            String fetchClassNameSql = "SELECT class_name FROM class WHERE class_id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(fetchClassNameSql)) {
+                stmt.setInt(1, classId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (!rs.next()) {
+                        connection.rollback();
+                        return Response.status(Response.Status.BAD_REQUEST)
+                                .entity("{\"error\":\"Class not found\"}")
+                                .build();
+                    }
+                    className = rs.getString("class_name");
+                }
+            }
+
+            // Fetch students in this class (for notifications later)
+            String fetchStudentsSql = "SELECT student_id, person_id FROM student WHERE class_id = ?";
             PreparedStatement fetchStudentsStmt = connection.prepareStatement(fetchStudentsSql);
             fetchStudentsStmt.setInt(1, classId);
             ResultSet studentResultSet = fetchStudentsStmt.executeQuery();
 
-            String fetchTeachersSql = "SELECT t.person_id FROM somtoday6.Teacher t " +
-                    "JOIN somtoday6.Lesson l ON t.teacher_id = l.teacher_id " +
-                    "WHERE l.class_id = ?";
+            // Fetch teachers linked through lessons (for notifications later)
+            String fetchTeachersSql =
+                    "SELECT DISTINCT t.person_id " +
+                            "FROM teacher t " +
+                            "JOIN lesson l ON t.teacher_id = l.teacher_id " +
+                            "WHERE l.class_id = ?";
             PreparedStatement fetchTeachersStmt = connection.prepareStatement(fetchTeachersSql);
             fetchTeachersStmt.setInt(1, classId);
             ResultSet teacherResultSet = fetchTeachersStmt.executeQuery();
 
-            String fetchClassNameSql = "SELECT class_name FROM somtoday6.Class WHERE class_id = ?";
-            PreparedStatement fetchClassNameStmt = connection.prepareStatement(fetchClassNameSql);
-            fetchClassNameStmt.setInt(1, classId);
-            ResultSet classResultSet = fetchClassNameStmt.executeQuery();
+            // Delete dependent rows that reference homework in this class
+            // (Order matters if you add foreign keys in Supabase)
 
-            String className = "";
-            if (classResultSet.next()) {
-                className = classResultSet.getString("class_name");
-            } else {
-                throw new SQLException("Class not found for classId: " + classId);
+            // 1) splitted_homework
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM splitted_homework " +
+                            "WHERE homework_id IN (SELECT homework_id FROM homework WHERE class_id = ?)")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
             }
 
-            // Delete related entries in splitted_homework
-            String deleteSplittedHomeworkSQL = "DELETE FROM somtoday6.splitted_homework WHERE homework_id IN (SELECT homework_id FROM somtoday6.homework WHERE class_id = ?)";
-            PreparedStatement deleteSplittedHomeworkStmt = connection.prepareStatement(deleteSplittedHomeworkSQL);
-            deleteSplittedHomeworkStmt.setInt(1, classId);
-            deleteSplittedHomeworkStmt.executeUpdate();
-
-            // Delete related entries in split_request
-            String deleteSplitRequestSQL = "DELETE FROM somtoday6.split_request WHERE homework_id IN (SELECT homework_id FROM somtoday6.homework WHERE class_id = ?)";
-            PreparedStatement deleteSplitRequestStmt = connection.prepareStatement(deleteSplitRequestSQL);
-            deleteSplitRequestStmt.setInt(1, classId);
-            deleteSplitRequestStmt.executeUpdate();
-
-            // Delete related entries in homework
-            String deleteHomeworkSQL = "DELETE FROM somtoday6.homework WHERE class_id = ?";
-            PreparedStatement deleteHomeworkStmt = connection.prepareStatement(deleteHomeworkSQL);
-            deleteHomeworkStmt.setInt(1, classId);
-            deleteHomeworkStmt.executeUpdate();
-
-            // Update students to set class_id to NULL
-            String updateStudentsSql = "UPDATE somtoday6.Student SET class_id = NULL WHERE class_id = ?";
-            try (PreparedStatement updateStudentsStmt = connection.prepareStatement(updateStudentsSql)) {
-                updateStudentsStmt.setInt(1, classId);
-                updateStudentsStmt.executeUpdate();
+            // 2) split_request
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM split_request " +
+                            "WHERE homework_id IN (SELECT homework_id FROM homework WHERE class_id = ?)")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
             }
 
-            // Delete lessons associated with the class
-            String deleteLessonsSql = "DELETE FROM somtoday6.Lesson WHERE class_id = ?";
-            try (PreparedStatement deleteLessonsStmt = connection.prepareStatement(deleteLessonsSql)) {
-                deleteLessonsStmt.setInt(1, classId);
-                deleteLessonsStmt.executeUpdate();
+            // 3) goal  ✅ important if goal.homework_id has FK
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM goal " +
+                            "WHERE homework_id IN (SELECT homework_id FROM homework WHERE class_id = ?)")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
             }
 
-            // Delete the class
-            String deleteClassSql = "DELETE FROM somtoday6.Class WHERE class_id = ?";
-            try (PreparedStatement deleteClassStmt = connection.prepareStatement(deleteClassSql)) {
-                deleteClassStmt.setInt(1, classId);
-                deleteClassStmt.executeUpdate();
+            // 4) homework
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM homework WHERE class_id = ?")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
             }
 
-            // Send notifications for students
+            // 5) set students.class_id = NULL (detach students)
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE student SET class_id = NULL WHERE class_id = ?")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
+            }
+
+            // 6) delete lessons for the class
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM lesson WHERE class_id = ?")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
+            }
+
+            // 7) delete class row itself
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM class WHERE class_id = ?")) {
+                stmt.setInt(1, classId);
+                stmt.executeUpdate();
+            }
+
+            // Notifications (after deletes are scheduled)
             while (studentResultSet.next()) {
                 int studentPersonId = studentResultSet.getInt("person_id");
                 insertNotification(connection, studentPersonId, "Admin removed you from class: " + className);
             }
-
-            // Send notifications for teachers
             while (teacherResultSet.next()) {
                 int teacherPersonId = teacherResultSet.getInt("person_id");
                 insertNotification(connection, teacherPersonId, "Admin removed you from class: " + className);
             }
 
-            connection.commit();
+            // close the two ResultSets + Statements we left open intentionally
+            teacherResultSet.close();
+            fetchTeachersStmt.close();
+            studentResultSet.close();
+            fetchStudentsStmt.close();
 
+            connection.commit();
             return Response.ok("{\"success\": true}").build();
+
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\": \"An error occurred.\"}").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"An error occurred.\"}")
+                    .build();
         }
     }
 
     private void insertNotification(Connection connection, int personId, String info) throws Exception {
-        String sql = "INSERT INTO somtoday6.notification (date, sender, info, person_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO notification (date, sender, info, person_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setDate(1, Date.valueOf(LocalDate.now()));
             pstmt.setString(2, "Admin");
@@ -125,12 +155,7 @@ public class DeleteClassResource {
     public static class DeleteClassRequest {
         private String classId;
 
-        public String getClassId() {
-            return classId;
-        }
-
-        public void setClassId(String classId) {
-            this.classId = classId;
-        }
+        public String getClassId() { return classId; }
+        public void setClassId(String classId) { this.classId = classId; }
     }
 }

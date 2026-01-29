@@ -1,73 +1,109 @@
 package jaxRS;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import somtoday.db.Db;
 import somtoday.model.Class;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 @Path("/fetchClasses")
 public class FetchClassesResource {
 
-    private static final String DB_URL = "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di23242b_168?currentSchema=somtoday6";
-    private static final String DB_USER = "dab_di23242b_168";
-    private static final String DB_PASSWORD = "f39egyiyL6ph4m/k";
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchClasses(@QueryParam("role") String role, @QueryParam("personId") String personId) {
+        if (role == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\":\"role is required\"}")
+                    .build();
+        }
+
+        Integer personIdInt = null;
+        if (!"admin".equals(role)) {
+            if (personId == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"error\":\"personId is required for this role\"}")
+                        .build();
+            }
+            try {
+                personIdInt = Integer.parseInt(personId);
+            } catch (NumberFormatException e) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"error\":\"personId must be a number\"}")
+                        .build();
+            }
+        }
+
         List<Class> classList = new ArrayList<>();
 
-        try {
-            java.lang.Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        try (Connection connection = Db.getConnection()) {
 
             String sql;
+            boolean needsPersonParam = false;
+
             if ("teacher".equals(role)) {
-                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity, c.profile_picture IS NOT NULL AS has_profile_picture " +
-                        "FROM somtoday6.Class c " +
-                        "JOIN somtoday6.Lesson l ON c.class_id = l.class_id " +
-                        "JOIN somtoday6.Teacher t ON l.teacher_id = t.teacher_id " +
-                        "WHERE t.person_id = " + personId;
+                sql =
+                        "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity, " +
+                                "       (c.profile_picture IS NOT NULL) AS has_profile_picture " +
+                                "FROM class c " +
+                                "JOIN lesson l ON c.class_id = l.class_id " +
+                                "JOIN teacher t ON l.teacher_id = t.teacher_id " +
+                                "WHERE t.person_id = ?";
+                needsPersonParam = true;
+
             } else if ("student".equals(role)) {
-                sql = "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity, c.profile_picture IS NOT NULL AS has_profile_picture " +
-                        "FROM somtoday6.Class c " +
-                        "JOIN somtoday6.Student s ON c.class_id = s.class_id " +
-                        "WHERE s.person_id = " + personId;
+                sql =
+                        "SELECT DISTINCT c.class_id, c.class_name, c.class_capacity, " +
+                                "       (c.profile_picture IS NOT NULL) AS has_profile_picture " +
+                                "FROM class c " +
+                                "JOIN student s ON c.class_id = s.class_id " +
+                                "WHERE s.person_id = ?";
+                needsPersonParam = true;
+
             } else if ("admin".equals(role)) {
-                sql = "SELECT c.class_id, c.class_name, c.class_capacity, c.profile_picture IS NOT NULL AS has_profile_picture FROM somtoday6.Class c";
+                sql =
+                        "SELECT c.class_id, c.class_name, c.class_capacity, " +
+                                "       (c.profile_picture IS NOT NULL) AS has_profile_picture " +
+                                "FROM class c";
+
             } else {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Invalid role\"}").build();
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"error\":\"Invalid role\"}")
+                        .build();
             }
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                if (needsPersonParam) {
+                    stmt.setInt(1, personIdInt);
+                }
 
-            while (resultSet.next()) {
-                Class cls = new Class();
-                cls.setClassID(resultSet.getInt("class_id"));
-                cls.setClassName(resultSet.getString("class_name"));
-                cls.setClassCapacity(resultSet.getInt("class_capacity"));
-                cls.setHasProfilePicture(resultSet.getBoolean("has_profile_picture"));
-                classList.add(cls);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Class cls = new Class();
+                        cls.setClassID(rs.getInt("class_id"));
+                        cls.setClassName(rs.getString("class_name"));
+                        cls.setClassCapacity(rs.getInt("class_capacity"));
+                        cls.setHasProfilePicture(rs.getBoolean("has_profile_picture"));
+                        classList.add(cls);
+                    }
+                }
             }
 
-            connection.close();
             return Response.ok(toJson(classList)).build();
+
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"An error occurred\"}").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"An error occurred\"}")
+                    .build();
         }
     }
 

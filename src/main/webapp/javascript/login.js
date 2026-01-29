@@ -4,7 +4,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    fetch('/SomtodayHomeworkPlanner_war/api/login', {
+    fetch('api/login', {   // ✅ relative URL (works everywhere)
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
