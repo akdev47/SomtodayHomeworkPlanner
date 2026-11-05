@@ -94,4 +94,114 @@ git clone https://github.com/akdev47/SomtodayHomeworkPlanner.git
 cd SomtodayHomeworkPlanner
 ```
 
-### 2. Configure the database
+
+The application expects these environment variables:
+
+| Variable | Description | Example |
+| --- | --- | --- |
+| `DB_HOST` | PostgreSQL hostname | `db.example.com` |
+| `DB_PORT` | PostgreSQL port | `5432` |
+| `DB_NAME` | Database name | `somtoday` |
+| `DB_USER` | Database user | `postgres` |
+| `DB_PASSWORD` | Database password | `change-me` |
+
+Never commit real credentials to the repository.
+
+### 3. Run with Docker
+
+Build the image:
+
+```bash
+docker build -t somtoday-homework-planner .
+```
+
+Start the app with your database configuration:
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e DB_HOST=db.example.com \
+  -e DB_PORT=5432 \
+  -e DB_NAME=somtoday \
+  -e DB_USER=postgres \
+  -e DB_PASSWORD=change-me \
+  somtoday-homework-planner
+```
+
+Open [http://localhost:8080](http://localhost:8080) in your browser.
+
+### Run with Maven and Tomcat
+
+Build the WAR with the included Maven wrapper:
+
+```bash
+./mvnw clean package
+```
+
+On Windows, use `mvnw.cmd clean package` instead. The generated file is:
+
+```text
+target/jaxrs-tomcat-example.war
+```
+
+Set the database environment variables for your Tomcat process, copy the WAR into Tomcat's `webapps` directory, and start Tomcat. The URL depends on the deployed context name; renaming the file to `ROOT.war` serves the app at the server root.
+
+## API overview
+
+All endpoints are served below `/api`.
+
+| Area | Example endpoints |
+| --- | --- |
+| Authentication | `POST /login`, `POST /signup` |
+| Profiles | `GET /profile`, `PUT /profile` |
+| Classes | `GET /fetchClasses`, `POST /addToClass`, `DELETE /deleteClass` |
+| Students | `GET /fetchStudents`, `POST /editStudentsInClass` |
+| Lessons | `GET /fetchLessonsPage`, `POST /addLesson`, `DELETE /deleteLesson` |
+| Assignments | `GET /fetchAssignments`, `POST /addAssignment`, `POST /editAssignment` |
+| Homework splitting | `POST /splitHomeworkStudent`, `POST /splitHomeworkTeacher` |
+| Notifications | `GET /fetchNotifications` |
+
+See the resource classes in [`src/main/java/jaxRS`](src/main/java/jaxRS) for request parameters and response formats.
+
+## Project structure
+
+```text
+.
+├── src/main/java
+│   ├── jaxRS/              # REST resources and API configuration
+│   └── somtoday/
+│       ├── db/             # PostgreSQL connection helper
+│       └── model/          # Domain models
+├── src/main/webapp
+│   ├── javascript/         # Page behavior and API calls
+│   ├── style/              # Page and component styles
+│   ├── res/                # Logos, icons, and images
+│   └── WEB-INF/web.xml     # Web application configuration
+├── Dockerfile
+├── pom.xml
+└── mvnw / mvnw.cmd
+```
+
+## Development notes
+
+- The frontend calls relative `api/...` URLs, so it should be served by the same Tomcat application as the REST API.
+- Authentication state is currently stored in browser session storage.
+- Passwords are hashed with SHA-256 before being stored. For a production deployment, use a password-specific adaptive hashing algorithm such as Argon2id or bcrypt and add server-managed sessions.
+- Add migrations or a schema export before expecting new contributors to run the project from a clean database.
+
+## Contributing
+
+Contributions are welcome. To propose a change:
+
+1. Fork the repository.
+2. Create a branch: `git checkout -b feature/your-feature`.
+3. Make and test your changes.
+4. Commit with a clear message.
+5. Open a pull request describing what changed and why.
+
+For bugs, include the steps to reproduce the problem, the expected behavior, and screenshots or logs when useful.
+
+---
+
+<div align="center">
+  Built to make homework planning clearer for students and teachers.
+</div>
