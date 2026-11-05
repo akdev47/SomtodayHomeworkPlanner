@@ -93,7 +93,7 @@ The browser keeps the signed-in user's `personId`, `personName`, and `role` in s
 git clone https://github.com/akdev47/SomtodayHomeworkPlanner.git
 cd SomtodayHomeworkPlanner
 ```
-
+### 2. Configure the database
 
 The application expects these environment variables:
 
